@@ -6,19 +6,17 @@
 #'
 #' @return A data frame consisting of \code{holiday} labels and their associated
 #'    dates in the year(s).
+#'
+#' @author Earo Wang
+#' @references 
+#'    \url{http://www.business.vic.gov.au/victorian-public-holidays-and-daylight-saving/victorian-public-holidays-2014}
+#'    \url{http://www.business.vic.gov.au/victorian-public-holidays-and-daylight-saving/victorian-public-holidays}
 #' @export
 #'
 #' @examples
 #'    au_holiday(2016, state = "VIC")
 #'    au_holiday(2013:2016, state = "VIC")
 #'
-#' @importFrom lubridate as_date wday days month weeks
-#' @importFrom timeDate GoodFriday Easter
-#' @importFrom dplyr if_else
-#' @importFrom tibble tibble
-## VIC public holidays
-# http://www.business.vic.gov.au/victorian-public-holidays-and-daylight-saving/victorian-public-holidays-2014
-# http://www.business.vic.gov.au/victorian-public-holidays-and-daylight-saving/victorian-public-holidays
 au_holiday <- function(year, state = "VIC") {
   year_length <- length(year)
   state <- match.arg(state)
