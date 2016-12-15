@@ -7,10 +7,17 @@ Authors@R: c(
     person("Rob", "Hyndman", email = "rob.hyndman@monash.edu", role = "aut")
     )
 Description: The goal of "sugrrants" is to provide supporting graphs with R for
-  analysing time series. 
-Depends: R (>= 3.3.2)
+    analysing time series.
+Depends:
+    R (>= 3.3.2)
 License: GPL (>= 2)
 URL: https://github.com/earowang/sugrrants
 BugReports: https://github.com/earowang/sugrrants/issues
 Encoding: UTF-8
 LazyData: true
+Imports:
+    lubridate,
+    dplyr,
+    tibble,
+    timeDate
+RoxygenNote: 5.0.1
