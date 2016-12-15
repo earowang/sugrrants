@@ -7,7 +7,7 @@ Authors@R: c(
     person("Rob", "Hyndman", email = "rob.hyndman@monash.edu", role = "aut")
     )
 Description: The goal of "sugrrants" is to provide supporting graphs with R for
-    analysing time series.
+    analysing time series. It extends ggplot to time series data.
 Depends:
     R (>= 3.3.2)
 License: GPL (>= 2)
