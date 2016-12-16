@@ -163,8 +163,6 @@ by_week <- function(.data, .index, .value, .f, ..., .label = ".out",
            .label = .label, date_format = date_format)
 }
 
-#' @rdname by_month
-#' @export
 # apply to daily data
 # SE
 by_day_ <- function(.data, .index, .value, .f, ..., .label = ".out") {
@@ -189,6 +187,9 @@ by_day_ <- function(.data, .index, .value, .f, ..., .label = ".out") {
 
   return(.data)
 }
+
+#' @rdname by_month
+#' @export
 # NSE
 by_day <- function(.data, .index, .value, .f, ..., .label = ".out") {
   by_day_(.data, f_capture(.index), f_capture(.value), .f, ..., 
