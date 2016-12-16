@@ -1,0 +1,43 @@
+---
+title: "Aggregate over fixed calendar periods"
+author: "Earo Wang"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r load, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(sugrrants)
+data(pedestrian)
+```
+
+```{r m3}
+m3 <- function(x) {
+  average <- mean(x)
+  lower <- min(x)
+  upper <- max(x)
+  return(c(lower, average, upper))
+}
+```
+
+```{r init}
+day_ped <- pedestrian %>%
+  group_by(Sensor_Name) %>%
+  by_day(Date_Time, Hourly_Counts, .f = m3, .label = "stats") %>%
+  frame_ribbon(stats)
+day_ped
+```
+
+```{r ribbon, fig.width = 7, fig.height = 8, fig.align = "center"}
+day_ped %>% 
+  ggplot(aes(x = .day)) +
+  geom_ribbon(aes(ymin = lower, ymax = upper, fill = Sensor_Name)) +
+  geom_line(aes(y = middle)) +
+  facet_grid(Sensor_Name ~ ., scale = "free_y") +
+  scale_x_date(date_breaks = "1 months", date_labels = "%Y-%m") +
+  theme(legend.position = "none")
+```

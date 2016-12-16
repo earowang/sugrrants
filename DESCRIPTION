@@ -19,6 +19,10 @@ Imports:
     magrittr,
     purrr,
     tidyr
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
 License: GPL (>= 2)
 URL: https://github.com/earowang/sugrrants
 BugReports: https://github.com/earowang/sugrrants/issues
