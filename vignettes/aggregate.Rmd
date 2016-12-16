@@ -10,7 +10,8 @@ vignette: >
 ---
 
 ```{r load, message = FALSE, warning = FALSE}
-library(tidyverse)
+library(dplyr)
+library(ggplot2)
 library(sugrrants)
 data(pedestrian)
 ```
