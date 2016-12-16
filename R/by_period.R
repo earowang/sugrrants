@@ -77,6 +77,7 @@ by_month_ <- function(.data, .index, .value, .f, ..., .label = ".out",
 #' @name by_month
 #' @aliases by_season
 #' @aliases by_week
+#' @aliases by_day
 #'
 #' @title Aggregate over fixed calendar periods
 #'
@@ -162,6 +163,8 @@ by_week <- function(.data, .index, .value, .f, ..., .label = ".out",
            .label = .label, date_format = date_format)
 }
 
+#' @rdname by_month
+#' @export
 # apply to daily data
 # SE
 by_day_ <- function(.data, .index, .value, .f, ..., .label = ".out") {
