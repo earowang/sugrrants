@@ -83,8 +83,8 @@ by_month_ <- function(.data, .index, .value, .f, ..., .label = ".out",
 #' @description Aggregate over calendar periods
 #'
 #' @param .data A data frame.
-#' @param .index The variable of date-time objects in the \code{.data}.
-#' @param .value The variable of numerics in the \code{.data} to be aggregated.
+#' @param .index A variable of date-time objects in the \code{.data}.
+#' @param .value A variable of numerics in the \code{.data} to be aggregated.
 #' @param .f A function applied to aggregation over the fixed calendar periods.
 #' @param ... The extra arguments passed to \code{.f}.
 #' @param .label a character string to be labelled for the aggregated values.

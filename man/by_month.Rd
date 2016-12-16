@@ -18,9 +18,9 @@ by_week(.data, .index, .value, .f, ..., .label = ".out", date_format = TRUE)
 \arguments{
 \item{.data}{A data frame.}
 
-\item{.index}{The variable of date-time objects in the \code{.data}.}
+\item{.index}{A variable of date-time objects in the \code{.data}.}
 
-\item{.value}{The variable of numerics in the \code{.data} to be aggregated.}
+\item{.value}{A variable of numerics in the \code{.data} to be aggregated.}
 
 \item{.f}{A function applied to aggregation over the fixed calendar periods.}
 
