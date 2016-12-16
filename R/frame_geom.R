@@ -26,7 +26,7 @@ frame_ribbon_ <- function(.data, .value) {
   .data <- .data %>% 
     mutate_(.rank = f_interp(~ row_number(uq(.value)))) %>% 
     ungroup() %>% # case_when doesn't support group_by()
-    mutate_(.lu = case_when( 
+    mutate(.lu = case_when( 
       .$.rank %in% pairs_lower ~ "lower",
       .$.rank %in% pairs_upper ~ "upper",
       TRUE ~ "middle"
