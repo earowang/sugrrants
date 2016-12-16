@@ -19,5 +19,9 @@ Imports:
     lubridate,
     dplyr,
     tibble,
-    timeDate
+    timeDate,
+    lazyeval,
+    magrittr,
+    purrr,
+    tidyr
 RoxygenNote: 5.0.1
