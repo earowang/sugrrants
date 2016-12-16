@@ -39,4 +39,7 @@ Extract the calendar period components from a date-time
 \author{
 Earo Wang
 }
+\references{
+Barnett, A. G. and Dobson A. J. (2010) Analysing seasonal health data. Springer.
+}
 

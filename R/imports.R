@@ -5,6 +5,6 @@
 #' @importFrom tibble tibble
 #' @importFrom tidyr unnest spread_
 #' @importFrom purrr by_slice
-#' @importFrom lazyeval f_interp f_eval_rhs f_capture
+#' @importFrom lazyeval f_interp f_eval_rhs f_capture uq
 #' @importFrom magrittr %>%
 NULL

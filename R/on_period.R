@@ -51,6 +51,9 @@ season <- function(x, hemisphere = c("N", "S"),
 #' @param definition A character vector that defines the season range. "meterological"
 #'    is the only one supported at the stage.
 #'
+#' @references 
+#'    Barnett, A. G. and Dobson A. J. (2010) Analysing seasonal health data. Springer.
+#'
 #' @export
 on_season <- function(x, hemisphere = c("N", "S"), 
                       definition = c("meterological", "astronomical", 
