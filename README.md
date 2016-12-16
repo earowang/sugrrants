@@ -12,5 +12,5 @@ the development version using
 
 ```r
 # install.packages("devtools")
-devtools::install_github("earowang/sugrrants")
+devtools::install_github("earowang/sugrrants", build_vignettes = TRUE)
 ```
