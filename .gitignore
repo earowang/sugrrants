@@ -3,3 +3,4 @@
 .RData
 .Ruserdata
 inst/doc
+data-raw/Pedestrian_Counts_Oct16.csv
