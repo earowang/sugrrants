@@ -1,5 +1,7 @@
 # sugrrants
 
+[![Travis-CI Build Status](https://travis-ci.org/earowang/sugrrants.svg?branch=master)](https://travis-ci.org/earowang/sugrrants)
+
 **SU**pporting **GR**aphs with **R** for **AN**alysing **T**ime **S**eries
 
 `sugrrants` is pronounced as "sugar ants" that are a species of ant endemic to 
