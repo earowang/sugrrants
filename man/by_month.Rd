@@ -46,6 +46,13 @@ A data frame that contains the calendar periods and the aggregated values.
 \description{
 Aggregate over calendar periods
 }
+\examples{
+   library(dplyr)
+   pedestrian \%>\%
+     group_by(Sensor_Name, Sensor_ID) \%>\% 
+     by_month(.index = Date_Time, .value = Hourly_Counts, .f = quantile)
+
+}
 \author{
 Earo Wang
 }

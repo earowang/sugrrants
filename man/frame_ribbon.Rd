@@ -18,6 +18,14 @@ A data frame consisting of new \code{lower}, \code{upper}, possiblly
 \description{
 Prepare a data frame for a ribbon plot using \code{ggplot2}
 }
+\examples{
+   library(dplyr)
+   pedestrian \%>\%
+     group_by(Sensor_Name, Sensor_ID) \%>\% 
+     by_month(.index = Date_Time, .value = Hourly_Counts, .f = quantile) \%>\% 
+     frame_ribbon(.value = .out)
+
+}
 \author{
 Earo Wang
 }

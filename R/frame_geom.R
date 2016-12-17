@@ -83,6 +83,13 @@ frame_ribbon_ <- function(.data, .value) {
 #'
 #' @author Earo Wang
 #'
+#' @examples
+#'    library(dplyr)
+#'    pedestrian %>%
+#'      group_by(Sensor_Name, Sensor_ID) %>% 
+#'      by_month(.index = Date_Time, .value = Hourly_Counts, .f = quantile) %>% 
+#'      frame_ribbon(.value = .out)
+#'
 #' @export
 #'
 frame_ribbon <- function(.data, .value) {

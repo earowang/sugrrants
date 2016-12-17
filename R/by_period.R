@@ -95,7 +95,13 @@ by_month_ <- function(.data, .index, .value, .f, ..., .label = ".out",
 #' @return A data frame that contains the calendar periods and the aggregated values.
 #'
 #' @author Earo Wang
-#' 
+#'
+#' @examples
+#'    library(dplyr)
+#'    pedestrian %>%
+#'      group_by(Sensor_Name, Sensor_ID) %>% 
+#'      by_month(.index = Date_Time, .value = Hourly_Counts, .f = quantile)
+#'
 #' @rdname by_month
 #' @export
 #'
