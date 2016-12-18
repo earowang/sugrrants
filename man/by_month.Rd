@@ -7,9 +7,8 @@
 \alias{by_week}
 \title{Aggregate over fixed calendar periods}
 \usage{
-by_season(.data, .index, .value, .f, ..., .label = ".out",
-  hemisphere = c("N", "S"), definition = c("meterological", "astronomical",
-  "midsolstice"), date_format = TRUE)
+by_season(.data, .index, .value, .f, ..., .label = ".out", hemisphere = "N",
+  definition = "meterological", date_format = TRUE)
 
 by_month(.data, .index, .value, .f, ..., .label = ".out",
   date_format = TRUE)

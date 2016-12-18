@@ -8,7 +8,7 @@
 #'
 #' @return The season of \code{x} as character string.
 #'
-#' @seealso on_season
+#' @seealso as_season
 #'
 #' @author Earo Wang
 #' @references 
@@ -44,7 +44,7 @@ season <- function(x, hemisphere = c("N", "S"),
   return(season_x)
 }
 
-#' @rdname on_month
+#' @rdname as_month
 #'
 #' @param hemisphere A character vector that specifies the hemisphere. "N" refers
 #'    to the Northern hemisphere, and "S" to the Souther hemisphere.
@@ -55,12 +55,12 @@ season <- function(x, hemisphere = c("N", "S"),
 #'    Barnett, A. G. and Dobson A. J. (2010) Analysing seasonal health data. Springer.
 #'
 #' @export
-on_season <- function(x, hemisphere = c("N", "S"), 
-                      definition = c("meterological", "astronomical", 
-                                     "midsolstice"),
+as_season <- function(x, hemisphere = "N", definition = "meterological",
                       date_format = TRUE) {
-  hemisphere <- match.arg(hemisphere)
-  definition <- match.arg(definition)
+  hemisphere <- match.arg(hemisphere, c("N", "S"))
+  definition <- match.arg(
+    definition, c("meterological", "astronomical", "midsolstice")
+  )
 
   year_x <- year(x)
   season_x <- season(x, hemisphere = hemisphere, definition = definition)
@@ -87,9 +87,9 @@ on_season <- function(x, hemisphere = c("N", "S"),
   return(output)
 }
 
-#' @name on_month
-#' @aliases on_season
-#' @aliases on_week
+#' @name as_month
+#' @aliases as_season
+#' @aliases as_week
 #'
 #' @title Extract the calendar period components from a date-time
 #'
@@ -103,16 +103,16 @@ on_season <- function(x, hemisphere = c("N", "S"),
 #'
 #' @author Earo Wang
 #' 
-#' @rdname on_month
+#' @rdname as_month
 #' @export
 #'
 #' @examples
 #'    x <- as.POSIXct(c("2014-01-31", "2015-07-31", "2016-10-31"))
-#'    on_month(x)
+#'    as_month(x)
 #'
 # apply to monthly data
 # x takes datetime stamp and return the year-month-first of day
-on_month <- function(x, date_format = TRUE) {
+as_month <- function(x, date_format = TRUE) {
   year_x <- year(x)
   if (date_format) {
     month_x <- formatC(month(x), width = 2, flag = "0")
@@ -124,11 +124,11 @@ on_month <- function(x, date_format = TRUE) {
   return(output)
 }
 
-#' @rdname on_month
+#' @rdname as_month
 #' @export
 # apply to weekly data
 # x takes datetime stamp and return the first date of the week
-on_week <- function(x, date_format = TRUE) {
+as_week <- function(x, date_format = TRUE) {
   wday_x <- wday(x, label = FALSE, abbr = FALSE)
   if (date_format) {
     diff_wday <- if_else(wday_x == 1, -6, 2 - wday_x) # find first date in the week

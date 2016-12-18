@@ -1,18 +1,18 @@
 # SE
 by_season_ <- function(.data, .index, .value, .f, ..., .label = ".out",
-                       hemisphere = c("N", "S"),
-                       definition = c("meterological", "astronomical", 
-                                      "midsolstice"),
+                       hemisphere = "N", definition = "meterological",
                        date_format = TRUE) {
   .f <- match.fun(uq(.f))
-  hemisphere <- match.arg(hemisphere)
-  definition <- match.arg(definition)
+  hemisphere <- match.arg(hemisphere, c("N", "S"))
+  definition <- match.arg(
+    definition, c("meterological", "astronomical", "midsolstice")
+  )
   add <- if_else(is.grouped_df(.data), TRUE, FALSE)
   # fun_name <- expr_text(.f)
 
   .data <- .data %>% 
     mutate_(.season = f_interp(
-      ~ on_season(uq(.index), hemisphere = hemisphere, definition = definition,
+      ~ as_season(uq(.index), hemisphere = hemisphere, definition = definition,
                   date_format = date_format))) %>% 
     group_by_(~ .season, add = add)
 
@@ -40,9 +40,7 @@ by_season_ <- function(.data, .index, .value, .f, ..., .label = ".out",
 #' @export
 # NSE
 by_season <- function(.data, .index, .value, .f, ..., .label = ".out",
-                       hemisphere = c("N", "S"),
-                       definition = c("meterological", "astronomical", 
-                                      "midsolstice"),
+                      hemisphere = "N", definition = "meterological",
                       date_format = TRUE) {
   by_season_(.data, f_capture(.index), f_capture(.value), .f, ..., 
              .label = .label, hemisphere = hemisphere, definition = definition,
@@ -57,7 +55,7 @@ by_month_ <- function(.data, .index, .value, .f, ..., .label = ".out",
   # fun_name <- expr_text(.f)
 
   .data <- .data %>% 
-    mutate_(.month = f_interp(~ on_month(uq(.index), date_format = date_format))) %>% 
+    mutate_(.month = f_interp(~ as_month(uq(.index), date_format = date_format))) %>% 
     group_by_(~ .month, add = add)
 
   # retrieve the grouping variables for later
@@ -114,7 +112,7 @@ by_month <- function(.data, .index, .value, .f, ..., .label = ".out",
 
 # by_week is a window function that applying a function to a fixed window of 
 # a week.
-# If .f returns only one value, it's better to use on_week and summarise
+# If .f returns only one value, it's better to use as_week and summarise
 # SE
 by_week_ <- function(.data, .index, .value, .f, ..., .label = ".out",
                      date_format = TRUE) {
@@ -123,7 +121,7 @@ by_week_ <- function(.data, .index, .value, .f, ..., .label = ".out",
   # fun_name <- expr_text(.f)
 
   .data <- .data %>% 
-    mutate_(.week = f_interp(~ on_week(uq(.index), date_format = date_format))) %>% 
+    mutate_(.week = f_interp(~ as_week(uq(.index), date_format = date_format))) %>% 
     group_by_(~ .week, add = add)
 
   # retrieve the grouping variables for later
