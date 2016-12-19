@@ -4,19 +4,19 @@
 \alias{wday2}
 \title{Get weekdays component of a date-time}
 \usage{
-wday2(x, label = TRUE, start = "Mon")
+wday2(x, label = FALSE, abbr = TRUE)
 }
 \arguments{
 \item{x}{A date-time object.}
 
 \item{label}{Logical. If TRUE, it displays the day of the week as an ordered
-character strings.}
+character strings; otherwise, an integer returns}
 
-\item{start}{A vector of character. Only supports the abbreviations of the
-weekday.}
+\item{abbr}{Logical. If TRUE, it returns an abbreviated version the label.}
 }
 \value{
-The day of the week
+The day of the week as a number (Monday is 1) or an ordered factor
+   (Monday is first).
 }
 \description{
 A wrapper of \code{lubridate::wday()}, but allows to define the
@@ -24,7 +24,7 @@ A wrapper of \code{lubridate::wday()}, but allows to define the
 }
 \examples{
    x <- as.POSIXct(c("2014-01-31", "2015-07-31", "2016-10-31"))
-   wday2(x)
+   wday2(x, label = TRUE)
 
 }
 \author{
