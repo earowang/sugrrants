@@ -140,3 +140,36 @@ as_week <- function(x, date_format = TRUE) {
   }
   return(output)
 }
+
+#' @title Get weekdays component of a date-time
+#'
+#' @description A wrapper of \code{lubridate::wday()}, but allows to define the
+#'    starting weekday.
+#'
+#' @param x A date-time object.
+#' @param label Logical. If TRUE, it displays the day of the week as an ordered
+#'    character strings.
+#' @param start A vector of character. Only supports the abbreviations of the
+#'    weekday.
+#'
+#' @return The day of the week
+#'
+#' @seealso \link[lubridate]{wday}
+#'
+#' @author Earo Wang
+#' 
+#' @export
+#'
+#' @examples
+#'    x <- as.POSIXct(c("2014-01-31", "2015-07-31", "2016-10-31"))
+#'    wday2(x)
+#'
+# Allow reorder the wday levels (Starting from Monday by default)
+wday2 <- function(x, label = TRUE, start = "Mon") {
+  wdays <- wday(x, label = label)
+  levels_wdays <- levels(wdays)
+  start_idx <- which(levels_wdays == start)
+  ro_seq <- levels_wdays[c(start_idx:7, 1:(start_idx - 1))]
+  wdays <- factor(wdays, levels = ro_seq)
+  return(wdays)
+}
