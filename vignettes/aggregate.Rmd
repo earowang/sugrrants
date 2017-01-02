@@ -1,5 +1,5 @@
 ---
-title: "Aggregate over fixed calendar periods"
+title: "Compute summary statistics over fixed calendar periods"
 author: "Earo Wang"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -9,36 +9,39 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+In base R, the `ts` function provides an easy way to create a time series object
+consisting of input values and user-specified time attributes of
+starting/ending time points and frequency. Its extension to manage multivariate
+time series is `mts`. There are many built-in functions and R packages for
+analysing and forecasting time series data based on the `ts` and `mts` objects,
+for example, `aggregate` applying a function to each time block and the
+widely-used `forecast` package aiming at time series forecast. The simplicity
+achieves at the expense of some flexibilities. The attribute `frequency` implies
+input data over regular time intervals, which makes no room for irregular time
+series. The `mts` class does not cater for longitudinal data recording the same
+subjects at different points in time, as longitudinal data usually comes in long
+form whereas `mts` requires a wide data format. (ToDo: `xts` and `zoo`)
+
+Time series data structure in conjunction with data frame.
+
 ```{r load, message = FALSE, warning = FALSE}
 library(dplyr)
 library(ggplot2)
 library(sugrrants)
-data(pedestrian)
+data(sweden_temp)
 ```
 
 ```{r m3}
-m3 <- function(x) {
-  average <- mean(x)
-  lower <- min(x)
-  upper <- max(x)
-  return(c(lower, average, upper))
+m3 <- function(x, na.rm = TRUE) {
+  average <- mean(x, na.rm = na.rm)
+  minimum <- min(x, na.rm = na.rm)
+  maximum <- max(x, na.rm = na.rm)
+  return(c(minimum, average, maximum))
 }
 ```
 
-```{r init}
-day_ped <- pedestrian %>%
-  group_by(Sensor_Name) %>%
-  by_day(Date_Time, Hourly_Counts, .f = m3, .label = "stats") %>%
-  frame_ribbon(stats)
-day_ped
-```
-
-```{r ribbon, fig.width = 7, fig.height = 8, fig.align = "center"}
-day_ped %>% 
-  ggplot(aes(x = .day)) +
-  geom_ribbon(aes(ymin = lower, ymax = upper, fill = Sensor_Name)) +
-  geom_line(aes(y = middle)) +
-  facet_grid(Sensor_Name ~ ., scale = "free_y") +
-  scale_x_date(date_breaks = "1 months", date_labels = "%Y-%m") +
-  theme(legend.position = "none")
+```{r aggregate}
+sweden_temp_month <- sweden_temp %>% 
+  group_by(locations) %>% 
+  by_month(date, temp, .f = m3, na.rm = TRUE, .label = "Stats")
 ```

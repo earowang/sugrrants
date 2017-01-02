@@ -20,6 +20,7 @@ lat_level <- sort(unique(sweden_temp$lat), decreasing = TRUE)
 sweden_temp <- sweden_temp %>% 
   filter(!is.na(temp)) %>% 
   mutate(date = as_date(date)) %>% 
+  filter(date >= ymd("1998-01-01")) %>% 
   mutate(locations = as.factor(as.integer(factor(lat, levels = lat_level))))
 
 devtools::use_data(sweden_temp, overwrite = TRUE)
