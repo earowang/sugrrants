@@ -1,5 +1,8 @@
+# Loading libraries -----------------------------------------------------------
 library(dplyr)
 library(lubridate)
+
+# Pedestrian data
 ped_counts <- readr::read_csv("data-raw/Pedestrian_Counts_Oct16.csv")
 
 pedestrian <- ped_counts %>% 
@@ -9,3 +12,14 @@ pedestrian <- ped_counts %>%
   mutate(Date_Time = dmy_hm(Date_Time))
 
 devtools::use_data(pedestrian, overwrite = TRUE)
+
+# Sweden pedestrian data
+sweden_temp <- readRDS("data-raw/sweden.stn.loc.melt.rds")
+# Assign location index from north to south
+lat_level <- sort(unique(sweden_temp$lat), decreasing = TRUE)
+sweden_temp <- sweden_temp %>% 
+  filter(!is.na(temp)) %>% 
+  mutate(date = as_date(date)) %>% 
+  mutate(locations = as.factor(as.integer(factor(lat, levels = lat_level))))
+
+devtools::use_data(sweden_temp, overwrite = TRUE)
