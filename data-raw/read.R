@@ -1,5 +1,6 @@
 # Loading libraries -----------------------------------------------------------
 library(dplyr)
+library(tibble)
 library(lubridate)
 
 # Pedestrian data
@@ -14,10 +15,11 @@ pedestrian <- ped_counts %>%
 devtools::use_data(pedestrian, overwrite = TRUE)
 
 # Sweden pedestrian data
-sweden_temp <- readRDS("data-raw/sweden.stn.loc.melt.rds")
+sweden_temp <- as_tibble(readRDS("data-raw/sweden.stn.loc.melt.rds"))
 # Assign location index from north to south
 lat_level <- sort(unique(sweden_temp$lat), decreasing = TRUE)
 sweden_temp <- sweden_temp %>% 
+  select(-time) %>% 
   filter(!is.na(temp)) %>% 
   mutate(date = as_date(date)) %>% 
   filter(date >= ymd("1998-01-01")) %>% 
