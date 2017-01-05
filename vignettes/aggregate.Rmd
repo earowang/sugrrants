@@ -15,21 +15,39 @@ starting/ending time points and frequency. Its extension to manage multivariate
 time series is `mts`. There are many built-in functions and R packages for
 analysing and forecasting time series data based on the `ts` and `mts` objects,
 for example, `aggregate` applying a function to each time block and the
-widely-used `forecast` package aiming at time series forecast. The simplicity
+widely-used `forecast` package helping with time series forecast. The simplicity
 achieves at the expense of some flexibilities. The attribute `frequency` implies
 input data over regular time intervals, which makes no room for irregular time
 series. The `mts` class does not cater for longitudinal data recording the same
 subjects at different points in time, as longitudinal data usually comes in long
-form whereas `mts` requires a wide data format. (ToDo: `xts` and `zoo`)
+form whereas `mts` requires a wide data format. Although R represents calendar
+dates and times in `POSIXlt` and `POSIXct` classes, `ts` and `mts` do not
+generate such date-time classes. By contrast, actual temporal data always come
+with the measurements of a particular time stamp. One of the data sets shipped
+with the package is counting pedestrian passing by at 8 sensors in the city of
+Melbourne every hour over the course of 2015.
 
-Time series data structure in conjunction with data frame.
-
-```{r load, message = FALSE, warning = FALSE}
+```{r load_ped, message = FALSE, warning = FALSE}
 library(dplyr)
 library(ggplot2)
 library(sugrrants)
-data(sweden_temp)
+data(pedestrian)
+pedestrian
 ```
+
+By creating a `ts` object for further time series analysis,
+
+The data set used in the vignette is daily temperatures at 17 weather stations
+across Sweden. It describes the observed temperature on a daily basis over 10
+years between 1998 and 2008 along with 17 weather stations of longitudes and
+latitudes. 
+
+```{r load_temp, message = FALSE, warning = FALSE}
+data(sweden_temp)
+sweden_temp
+```
+
+Time series data structure in conjunction with data frame.
 
 ```{r m3}
 m3 <- function(x, na.rm = TRUE) {

@@ -4,7 +4,7 @@ globalVariables(c(".lu", ".rank"))
 # SE
 frame_ribbon_ <- function(.data, .value) {
   grouped_vars <- groups(.data)
-  # tidy::spread_() doesn't support formular yet, convert to string first
+  # tidy::spread_() doesn't support formula yet, convert to string first
   tidy_value <- deparse(as_name(.value))
 
   # set up basic info to find the pair of (lower, upper)
@@ -75,10 +75,10 @@ frame_ribbon_ <- function(.data, .value) {
 
 #' Prepare a data frame for a ribbon plot using \code{ggplot2}
 #'
-#' @param .data A data frame in a long form
+#' @param .data A grouped data frame in a long form in conjunction with \code{group_by}.
 #' @param .value A variable containing numerics in order to produce the ribbon.
 #'
-#' @return A data frame consisting of new \code{lower}, \code{upper}, possiblly
+#' @return A data frame consisting of new \code{lower}, \code{upper}, possibly
 #'    \code{middle} and \code{pair} columns.
 #'
 #' @author Earo Wang
@@ -93,5 +93,8 @@ frame_ribbon_ <- function(.data, .value) {
 #' @export
 #'
 frame_ribbon <- function(.data, .value) {
+  if (!is.grouped_df(.data)) {
+    stop(".data must be a grouped data frame", call. = FALSE)
+  }
   frame_ribbon_(.data, f_capture(.value))
 }

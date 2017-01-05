@@ -7,12 +7,12 @@
 frame_ribbon(.data, .value)
 }
 \arguments{
-\item{.data}{A data frame in a long form}
+\item{.data}{A grouped data frame in a long form in conjunction with \code{group_by}.}
 
 \item{.value}{A variable containing numerics in order to produce the ribbon.}
 }
 \value{
-A data frame consisting of new \code{lower}, \code{upper}, possiblly
+A data frame consisting of new \code{lower}, \code{upper}, possibly
    \code{middle} and \code{pair} columns.
 }
 \description{
