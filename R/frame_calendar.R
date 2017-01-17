@@ -42,11 +42,10 @@ frame_calendar_ <- function(.data, x, y, date, nrow = NULL, ncol = NULL) {
   id_range <- rep(seq_len(end_date - start_date + 1), each = length(unique(x)))
   id_dates <- id_range[match(id_actual, id_range)]
   .data <- .data %>% 
-    mutate_(.group_id = id_dates)
+    mutate(.group_id = id_dates)
 
   # Set up the calendar layout and panels
-  full_layout <- setup_calendar_layout(dates, 
-    nrow = nrow, ncol = ncol)
+  full_layout <- setup_calendar_layout(dates, nrow = nrow, ncol = ncol)
   sel_panels <- setup_calendar_panel(dates)
   sel_layout <- full_layout %>% 
     filter(PANEL %in% sel_panels) %>% 
