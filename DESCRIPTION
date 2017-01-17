@@ -18,11 +18,11 @@ Imports:
     lazyeval,
     magrittr,
     purrr,
-    tidyr
+    tidyr,
+    ggplot2
 Suggests:
     knitr,
-    rmarkdown,
-    ggplot2
+    rmarkdown
 VignetteBuilder: knitr
 License: GPL (>= 2)
 URL: https://github.com/earowang/sugrrants
