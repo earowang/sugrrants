@@ -74,10 +74,20 @@
 #' @export
 #'
 #' @examples
+#'    # x is a vector of class POSIXct
 #'    x <- as.POSIXct(c("2014-01-31", "2015-07-31", "2016-10-31"))
 #'    as_month(x)
 #'    as_week(x)
 #'
+#'    # an example of a data frame
+#'    # compute average pedestrian counts for every week
+#'    library(dplyr)
+#'    pedestrian %>% 
+#'      filter(Sensor_ID == 13) %>% 
+#'      mutate(Week = as_week(Date_Time)) %>% 
+#'      group_by(Week) %>% 
+#'      summarise(Average = mean(Hourly_Counts, na.rm = TRUE))
+#'    
 # apply to monthly data
 # x takes datetime stamp and return the year-month-first of day
 as_month <- function(x) {
@@ -118,6 +128,7 @@ as_week <- function(x) {
 #' @export
 #'
 #' @examples
+#'    # x is a vector of class POSIXct
 #'    x <- as.POSIXct(c("2014-01-31", "2015-07-31", "2016-10-31"))
 #'    wday2(x, label = TRUE)
 #'

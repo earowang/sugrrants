@@ -25,15 +25,21 @@ apply.}
 
 \item{...}{The extra arguments passed to \code{.f}.}
 
-\item{.label}{a character string indicates the output column name.}
+\item{.label}{a character string indicates the name of output column.}
 }
 \value{
 An aggregated data frame with the added variables of calendar periods 
-   and the aggregated values in conjunction with grouped variables.
+   (e.g. \code{.month}, \code{.week}, \code{.day}) and the aggregated values 
+   while keeping grouped variables if present.
 }
 \description{
 Apply a specified function to each fixed calendar periods of
-   a data frame that contains a date-times variable
+   a data frame that contains a date-times variable. It can be used in
+   conjunction with \code{dplyr::group_by}.
+}
+\details{
+When a specified function \code{.f} generates more than one values,
+   it returns a long data form with one stack on the rest.
 }
 \examples{
    library(dplyr)

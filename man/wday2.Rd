@@ -23,6 +23,7 @@ A simple wrapper of \code{lubridate::wday()}, but starts with
    Monday instead of Sunday.
 }
 \examples{
+   # x is a vector of class POSIXct
    x <- as.POSIXct(c("2014-01-31", "2015-07-31", "2016-10-31"))
    wday2(x, label = TRUE)
 

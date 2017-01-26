@@ -1,4 +1,49 @@
 globalVariables(c(".lu", ".rank"))
+
+#' @title Get a data frame of long form ready for \code{ggplot2::geom_ribbon}
+#'  
+#' @description \code{ggplot2::geom_ribbon} requires at least two aesthetics mapping of 
+#'    \code{ymin} and \code{ymax} to make a ribbon plot. \code{frame_ribbon} lubricates
+#'    the transition from a long data form to the basic data form that is wanted for
+#'    \code{ggplot2::geom_ribbon}. 
+#'
+#' @param .data A grouped data frame in a long form in conjunction with \code{group_by}.
+#' @param .value A variable of numerics in order to produce the ribbon bounds.
+#'
+#' @return A data frame with new columns of \code{lower}, \code{upper}, possibly
+#'    \code{middle} and \code{pair}.
+#'
+#' @details A ribbon plot can be seen as a simplified version of boxplot. However,
+#'    the ribbon plot employs a smoother view if the continuous variable is used
+#'    as one of the axes compared to the boxplot does for the categorical one.
+#'
+#' @author Earo Wang
+#'
+#' @examples
+#'    # convert the summarised data frame to the ribbon format
+#'    library(dplyr)
+#'    ped_ribbon <- pedestrian %>%
+#'      group_by(Sensor_Name, Sensor_ID) %>% 
+#'      by_month(.index = Date_Time, .value = Hourly_Counts, .f = quantile) %>% 
+#'      frame_ribbon(.value = .out)
+#'    
+#'    # use ggplot2 to produce the ribbon plot
+#'    library(ggplot2)
+#'      ggplot(ped_ribbon, aes(x = .month)) +
+#'      geom_ribbon(aes(ymin = lower, ymax = upper, 
+#'        alpha = .pair, colour = Sensor_Name)) +
+#'      geom_line(aes(y = middle)) +
+#'      facet_grid(Sensor_Name ~ ., scales = "free_y")
+#'
+#' @export
+#'
+frame_ribbon <- function(.data, .value) {
+  if (!is.grouped_df(.data)) {
+    stop(".data must be a grouped data frame", call. = FALSE)
+  }
+  frame_ribbon_(.data, f_capture(.value))
+}
+
 # frame_ribbon prepares a long data format for the use of geom_ribbon()
 # ToDo: consider no grouping vars case
 # SE
@@ -71,30 +116,4 @@ frame_ribbon_ <- function(.data, .value) {
       spread_(".lu", tidy_value)
   }
   return(.data)
-}
-
-#' Prepare a data frame for a ribbon plot using \code{ggplot2}
-#'
-#' @param .data A grouped data frame in a long form in conjunction with \code{group_by}.
-#' @param .value A variable containing numerics in order to produce the ribbon.
-#'
-#' @return A data frame consisting of new \code{lower}, \code{upper}, possibly
-#'    \code{middle} and \code{pair} columns.
-#'
-#' @author Earo Wang
-#'
-#' @examples
-#'    library(dplyr)
-#'    pedestrian %>%
-#'      group_by(Sensor_Name, Sensor_ID) %>% 
-#'      by_month(.index = Date_Time, .value = Hourly_Counts, .f = quantile) %>% 
-#'      frame_ribbon(.value = .out)
-#'
-#' @export
-#'
-frame_ribbon <- function(.data, .value) {
-  if (!is.grouped_df(.data)) {
-    stop(".data must be a grouped data frame", call. = FALSE)
-  }
-  frame_ribbon_(.data, f_capture(.value))
 }

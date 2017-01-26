@@ -1,0 +1,17 @@
+---
+title: "Get data frame ready for ggplot2"
+author: "Earo Wang"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## ToDo
+
+* `frame_ribbon` should also takes a wide data form in addition to a long data
+  form. If only one variable is passed to the argument `.value`, it implies a
+  long data form and run the current existing code. If multiple variable, then
+  gather them properly to have a ribbon form.

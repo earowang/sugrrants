@@ -39,6 +39,50 @@
 #              date_format = date_format)
 # }
 
+#' @name by_month
+#' @aliases by_week
+#' @aliases by_day
+#'
+#' @title Aggregate over fixed calendar periods
+#'
+#' @description Apply a specified function to each fixed calendar periods of
+#'    a data frame that contains a date-times variable. It can be used in
+#'    conjunction with \code{dplyr::group_by}.
+#'
+#' @param .data A data frame.
+#' @param .index A variable of date-times in the \code{.data}.
+#' @param .value A variable in the \code{.data} that a specified function to
+#'    apply.
+#' @param .f A specified function applied to the fixed calendar windows of the
+#'    \code{.value}.
+#' @param ... The extra arguments passed to \code{.f}.
+#' @param .label a character string indicates the name of output column.
+#'
+#' @return An aggregated data frame with the added variables of calendar periods 
+#'    (e.g. \code{.month}, \code{.week}, \code{.day}) and the aggregated values 
+#'    while keeping grouped variables if present.
+#'
+#' @details When a specified function \code{.f} generates more than one values,
+#'    it returns a long data form with one stack on the rest.
+#'
+#' @author Earo Wang
+#'
+#' @examples
+#'    library(dplyr)
+#'    pedestrian %>%
+#'      group_by(Sensor_Name) %>% 
+#'      by_month(.index = Date_Time, .value = Hourly_Counts, .f = quantile,
+#'        na.rm = TRUE)
+#'
+#' @rdname by_month
+#' @export
+#'
+# NSE
+by_month <- function(.data, .index, .value, .f, ..., .label = ".out") {
+  by_month_(.data, f_capture(.index), f_capture(.value), .f, ..., 
+           .label = .label)
+}
+
 # SE
 by_month_ <- function(.data, .index, .value, .f, ..., .label = ".out") {
   .f <- match.fun(uq(.f))
@@ -63,42 +107,11 @@ by_month_ <- function(.data, .index, .value, .f, ..., .label = ".out") {
   return(.data)
 }
 
-#' @name by_month
-#' @aliases by_week
-#' @aliases by_day
-#'
-#' @title Aggregate over fixed calendar periods
-#'
-#' @description Apply a specified function to each fixed calendar periods of
-#'    a data frame that contains a date-times variable
-#'
-#' @param .data A data frame.
-#' @param .index A variable of date-times in the \code{.data}.
-#' @param .value A variable in the \code{.data} that a specified function to
-#'    apply.
-#' @param .f A specified function applied to the fixed calendar windows of the
-#'    \code{.value}.
-#' @param ... The extra arguments passed to \code{.f}.
-#' @param .label a character string indicates the output column name.
-#'
-#' @return An aggregated data frame with the added variables of calendar periods 
-#'    and the aggregated values in conjunction with grouped variables.
-#'
-#' @author Earo Wang
-#'
-#' @examples
-#'    library(dplyr)
-#'    pedestrian %>%
-#'      group_by(Sensor_Name) %>% 
-#'      by_month(.index = Date_Time, .value = Hourly_Counts, .f = quantile,
-#'        na.rm = TRUE)
-#'
 #' @rdname by_month
 #' @export
-#'
 # NSE
-by_month <- function(.data, .index, .value, .f, ..., .label = ".out") {
-  by_month_(.data, f_capture(.index), f_capture(.value), .f, ..., 
+by_week <- function(.data, .index, .value, .f, ..., .label = ".out") {
+  by_week_(.data, f_capture(.index), f_capture(.value), .f, ..., 
            .label = .label)
 }
 
@@ -152,8 +165,8 @@ by_week_ <- function(.data, .index, .value, .f, ..., .label = ".out") {
 #' @rdname by_month
 #' @export
 # NSE
-by_week <- function(.data, .index, .value, .f, ..., .label = ".out") {
-  by_week_(.data, f_capture(.index), f_capture(.value), .f, ..., 
+by_day <- function(.data, .index, .value, .f, ..., .label = ".out") {
+  by_day_(.data, f_capture(.index), f_capture(.value), .f, ..., 
            .label = .label)
 }
 
@@ -180,12 +193,4 @@ by_day_ <- function(.data, .index, .value, .f, ..., .label = ".out") {
     group_by_(.dots = grouped_vars)
 
   return(.data)
-}
-
-#' @rdname by_month
-#' @export
-# NSE
-by_day <- function(.data, .index, .value, .f, ..., .label = ".out") {
-  by_day_(.data, f_capture(.index), f_capture(.value), .f, ..., 
-           .label = .label)
 }
