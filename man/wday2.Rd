@@ -2,15 +2,15 @@
 % Please edit documentation in R/as_period.R
 \name{wday2}
 \alias{wday2}
-\title{Get weekdays component of a date-time}
+\title{Get weekdays component of datetimea}
 \usage{
 wday2(x, label = FALSE, abbr = TRUE)
 }
 \arguments{
-\item{x}{A date-time object.}
+\item{x}{Date-times.}
 
 \item{label}{Logical. If TRUE, it displays the day of the week as an ordered
-character strings; otherwise, an integer returns}
+character strings; otherwise, an integer returns.}
 
 \item{abbr}{Logical. If TRUE, it returns an abbreviated version the label.}
 }
@@ -19,8 +19,8 @@ The day of the week as a number (Monday is 1) or an ordered factor
    (Monday is first).
 }
 \description{
-A wrapper of \code{lubridate::wday()}, but allows to define the
-   starting weekday.
+A simple wrapper of \code{lubridate::wday()}, but starts with
+   Monday instead of Sunday.
 }
 \examples{
    x <- as.POSIXct(c("2014-01-31", "2015-07-31", "2016-10-31"))
