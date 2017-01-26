@@ -15,27 +15,32 @@ by_day(.data, .index, .value, .f, ..., .label = ".out")
 \arguments{
 \item{.data}{A data frame.}
 
-\item{.index}{A variable of date-time objects in the \code{.data}.}
+\item{.index}{A variable of date-times in the \code{.data}.}
 
-\item{.value}{A variable of numerics in the \code{.data} to be aggregated.}
+\item{.value}{A variable in the \code{.data} that a specified function to
+apply.}
 
-\item{.f}{A function applied to aggregation over the fixed calendar periods.}
+\item{.f}{A specified function applied to the fixed calendar windows of the
+\code{.value}.}
 
 \item{...}{The extra arguments passed to \code{.f}.}
 
-\item{.label}{a character string to be labelled for the aggregated values.}
+\item{.label}{a character string indicates the output column name.}
 }
 \value{
-A data frame that contains the calendar periods and the aggregated values.
+An aggregated data frame with the added variables of calendar periods 
+   and the aggregated values in conjunction with grouped variables.
 }
 \description{
-Aggregate over calendar periods
+Apply a specified function to each fixed calendar periods of
+   a data frame that contains a date-times variable
 }
 \examples{
    library(dplyr)
    pedestrian \%>\%
-     group_by(Sensor_Name, Sensor_ID) \%>\% 
-     by_month(.index = Date_Time, .value = Hourly_Counts, .f = quantile)
+     group_by(Sensor_Name) \%>\% 
+     by_month(.index = Date_Time, .value = Hourly_Counts, .f = quantile,
+       na.rm = TRUE)
 
 }
 \author{

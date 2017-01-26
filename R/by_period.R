@@ -69,24 +69,29 @@ by_month_ <- function(.data, .index, .value, .f, ..., .label = ".out") {
 #'
 #' @title Aggregate over fixed calendar periods
 #'
-#' @description Aggregate over calendar periods
+#' @description Apply a specified function to each fixed calendar periods of
+#'    a data frame that contains a date-times variable
 #'
 #' @param .data A data frame.
-#' @param .index A variable of date-time objects in the \code{.data}.
-#' @param .value A variable of numerics in the \code{.data} to be aggregated.
-#' @param .f A function applied to aggregation over the fixed calendar periods.
+#' @param .index A variable of date-times in the \code{.data}.
+#' @param .value A variable in the \code{.data} that a specified function to
+#'    apply.
+#' @param .f A specified function applied to the fixed calendar windows of the
+#'    \code{.value}.
 #' @param ... The extra arguments passed to \code{.f}.
-#' @param .label a character string to be labelled for the aggregated values.
+#' @param .label a character string indicates the output column name.
 #'
-#' @return A data frame that contains the calendar periods and the aggregated values.
+#' @return An aggregated data frame with the added variables of calendar periods 
+#'    and the aggregated values in conjunction with grouped variables.
 #'
 #' @author Earo Wang
 #'
 #' @examples
 #'    library(dplyr)
 #'    pedestrian %>%
-#'      group_by(Sensor_Name, Sensor_ID) %>% 
-#'      by_month(.index = Date_Time, .value = Hourly_Counts, .f = quantile)
+#'      group_by(Sensor_Name) %>% 
+#'      by_month(.index = Date_Time, .value = Hourly_Counts, .f = quantile,
+#'        na.rm = TRUE)
 #'
 #' @rdname by_month
 #' @export

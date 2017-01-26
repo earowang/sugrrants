@@ -63,3 +63,13 @@ sweden_temp_month <- sweden_temp %>%
   group_by(locations) %>% 
   by_month(date, temp, .f = m3, na.rm = TRUE, .label = "Stats")
 ```
+
+## ToDo
+
+* All the aggregate functions `by_month`, `by_week` and `by_day`:
+    + If the argument `.index` is not supplied, it should look for a variable of
+    date-times in the `.data`.
+    + The argument `.value` now only takes one variable, but should
+    aggregate over a few variables.
+    + An additional argument `n` is needed to indicate the number of fixed
+    calendar periods to be aggregated. The default is `n = 1`.
