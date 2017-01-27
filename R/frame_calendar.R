@@ -1,24 +1,44 @@
 globalVariables(c(".group_id", ".x", ".y", ".gx", ".gy", "COL", "MCOL",
   "MPANEL", "MROW", "PANEL"))
-#' Prepare a data frame for a ribbon plot using \code{ggplot2}
+
+#' @title Build a calendar view for a time series data frame
+#'
+#' @description A calendar view is useful to visualise time series at daily intervals
+#'    or higher frequency levels. \code{frame_calendar} sets up the calendar
+#'    layout for the input data frame, and the results is ready for \code{ggplot2}.
+#'    Each row represents a week and the first cell in the row indicates Mondays.
 #'
 #' @param .data A data frame.
-#' @param x,y  A variable to be passed to \code{ggplot2(aes(x, y))}.
-#' @param nrow,ncol Number of rows and columns.
-#' @param date  A variable that defines the calendar.
+#' @param x,y  Variables to be passed to \code{ggplot2(aes(x, y))}.
+#' @param date  A variable of date-times that helps to tell the days in the
+#'    calendar.
+#' @param nrow,ncol Number of rows and columns for the calendar layout.
 #'
-#' @return A data frame consisting of new \code{.x}, \code{.y}, and \code{.group_id}
-#'    columns.
+#' @return A data frame with newly added columns of \code{.x}, \code{.y}, and 
+#'    \code{.group_id}
+#'
+#' @details Calendar view is a special ordered layout that \code{ggplot2::facet_grid} 
+#'    and \code{ggplot2::facet_wrap} currently do not support. This creates new
+#'    coordinates of \code{(.x, .y)} to place to the correct panel in the calendar 
+#'    and new grouped sequence of \code{.group_id} from \code{date} using some 
+#'    linear algebra.
 #'
 #' @author Earo Wang
 #'
 #' @examples
-#'    library(dplyr); library(lubridate)
-#'    pedestrian %>%
+#'    library(dplyr)
+#'    # get the calendar layout for the data frame
+#'    ped_calendar <- pedestrian %>%
 #'      filter(Sensor_ID == 13) %>% 
-#'      mutate(Time = hour(Date_Time)) %>% 
+#'      mutate(Time = lubridate::hour(Date_Time)) %>% 
 #'      frame_calendar(x = Time, y = Hourly_Counts, date = Date_Time,
 #'        nrow = 3, ncol = 4)
+#'
+#'    # plot
+#'    library(ggplot2)
+#'    ped_calendar %>% 
+#'      ggplot(aes(x = .x, y = .y, group = .group_id)) +
+#'      geom_line()
 #'
 #' @export
 #'

@@ -15,3 +15,9 @@ vignette: >
   form. If only one variable is passed to the argument `.value`, it implies a
   long data form and run the current existing code. If multiple variable, then
   gather them properly to have a ribbon form.
+* More arguments in the `frame_calendar`:
+    + `scales = c("global", "individual")`
+    + `polar = FALSE`
+    + `start = "Monday"`
+    + `height, width = rel(0.95)`
+    + `margin = 0.1`
