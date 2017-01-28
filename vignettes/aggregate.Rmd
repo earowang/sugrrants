@@ -1,5 +1,5 @@
 ---
-title: "Compute summary statistics over fixed calendar periods"
+title: "Aggregate temporal data over fixed calendar periods"
 author: "Earo Wang"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -13,19 +13,26 @@ In base R, the `ts` function provides an easy way to create a time series object
 consisting of input values and user-specified time attributes of
 starting/ending time points and frequency. Its extension to manage multivariate
 time series is `mts`. There are many built-in functions and R packages for
-analysing and forecasting time series data based on the `ts` and `mts` objects,
-for example, `aggregate` applying a function to each time block and the
-widely-used `forecast` package helping with time series forecast. The simplicity
+analysing and forecasting time series data based on the `ts` and `mts` objects.
+For example, `aggregate.ts` applies a function to each time block and the
+widely-used `forecast` package helps with time series forecast. The simplicity
 achieves at the expense of some flexibilities. The attribute `frequency` implies
 input data over regular time intervals, which makes no room for irregular time
 series. The `mts` class does not cater for longitudinal data recording the same
 subjects at different points in time, as longitudinal data usually comes in long
-form whereas `mts` requires a wide data format. Although R represents calendar
-dates and times in `POSIXlt` and `POSIXct` classes, `ts` and `mts` do not
-generate such date-time classes. By contrast, actual temporal data always come
-with the measurements of a particular time stamp. One of the data sets shipped
-with the package is counting pedestrian passing by at 8 sensors in the city of
-Melbourne every hour over the course of 2015.
+form whereas `mts` calls for a wide data format. Although R represents calendar
+date-times in `POSIXlt`, `POSIXct` and `Date` classes, `ts` and `mts` do not
+generate such date-time classes. The packages, `zoo` and `xts`, fill the gap here.
+
+However, time series analysis starts off as a general data frame with at least
+one date-time variable. It is necessary to convert `data.frame` to `ts`, `zoo`
+or `xts` classes in order to analyse and model temporal data. In doing so, the
+external information attached to a time series is lost, since a wide data format
+is employed by these objects. Wickham's `tidyverse` package lubricates the work 
+flow for data analysis. Compared to `data.frame`, temporal data is a special
+case with the ordering of time. To leverage the power of `tidyverse` and reduce the 
+hassles of classes conversion, more functionality are brought into time series
+data while staying in the `tidyverse` expertise.
 
 ```{r load_ped, message = FALSE, warning = FALSE}
 library(dplyr)
@@ -35,7 +42,27 @@ data(pedestrian)
 pedestrian
 ```
 
-By creating a `ts` object for further time series analysis,
+## Extract the upper-level of date-times
+
+One of the data sets shipped with the package is counting pedestrian passing by 
+at 8 sensors in the downtown of Melbourne every hour over the course of 2015.
+
+```{r town_hall1, message = FALSE, warning = FALSE}
+town_hall <- pedestrian %>%
+  filter(Sensor_ID == 4)
+town_hall %>%
+  mutate(Week = as_week(Date_Time)) %>%
+  group_by(Week) %>%
+  summarise(Max_Counts = max(Hourly_Counts, na.rm = TRUE))
+```
+
+## Apply a function to fixed calendar periods
+
+```{r town_hall2, message = FALSE, warning = FALSE}
+town_hall %>%
+  by_week(.index = Date_Time, .value = Hourly_Counts, 
+    .f = max, na.rm = TRUE, .label = "Max_Counts")
+```
 
 The data set used in the vignette is daily temperatures at 17 weather stations
 across Sweden. It describes the observed temperature on a daily basis over 10
@@ -71,5 +98,7 @@ sweden_temp_month <- sweden_temp %>%
     date-times in the `.data`.
     + The argument `.value` now only takes one variable, but should
     aggregate over a few variables.
+    + Probably unnecessary to have `.value` argument. Could think about
+      something `.f = FUN(.value)`.
     + An additional argument `n` is needed to indicate the number of fixed
     calendar periods to be aggregated. The default is `n = 1`.
