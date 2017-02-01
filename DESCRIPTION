@@ -3,8 +3,8 @@ Title: Supporting Graphs with R for Analysing Time Series
 Version: 0.0.0.9000
 Authors@R: c(
     person("Earo", "Wang", email = "earo.wang@gmail.com", role = c("aut", "cre")),
-    person("Di", "Cook", email = "dicook@monash.edu", role = "aut"),
-    person("Rob", "Hyndman", email = "rob.hyndman@monash.edu", role = "aut")
+    person("Di", "Cook", role = "ths"),
+    person("Rob", "Hyndman", role = "ths")
     )
 Description: The goal of "sugrrants" is to provide supporting graphs with R for
     analysing time series. It extends ggplot to time series data.
