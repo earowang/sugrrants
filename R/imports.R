@@ -6,7 +6,7 @@
 #' @importFrom tibble tibble
 #' @importFrom tidyr unnest spread_
 #' @importFrom purrr by_slice map2
-#' @importFrom ggplot2 resolution
+#' @importFrom ggplot2 resolution layer ggproto
 #' @importFrom lazyeval f_interp f_eval_rhs f_capture uq as_name
 #' @importFrom magrittr %>%
 NULL

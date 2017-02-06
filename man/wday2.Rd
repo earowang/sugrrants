@@ -28,10 +28,9 @@ A simple wrapper of \code{lubridate::wday()}, but starts with
    wday2(x, label = TRUE)
 
 }
-\author{
-Earo Wang
-}
 \seealso{
 \link[lubridate]{wday}
 }
-
+\author{
+Earo Wang
+}

@@ -52,4 +52,3 @@ Calendar view is a special ordered layout that \code{ggplot2::facet_grid}
 \author{
 Earo Wang
 }
-

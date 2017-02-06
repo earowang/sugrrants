@@ -3,6 +3,7 @@
 \name{as_month}
 \alias{as_month}
 \alias{as_week}
+\alias{as_week}
 \title{Extract the calendar period components from date-times}
 \usage{
 as_month(x)
@@ -39,4 +40,3 @@ Extract the higher-level calendar period components from date-times
 \author{
 Earo Wang
 }
-

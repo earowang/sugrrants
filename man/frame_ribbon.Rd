@@ -46,4 +46,3 @@ A ribbon plot can be seen as a simplified version of boxplot. However,
 \author{
 Earo Wang
 }
-

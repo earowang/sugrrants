@@ -21,4 +21,3 @@ of 2015 at 8 sensors in the city of Melbourne. The variables are as follows:
 \examples{
 pedestrian
 }
-

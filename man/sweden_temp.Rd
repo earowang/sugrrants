@@ -22,4 +22,3 @@ across Sweden. The variables are as follows:
 \examples{
 sweden_temp
 }
-
