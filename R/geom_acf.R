@@ -8,6 +8,7 @@
 #' @param lag.max An integer indicating the maximum lag at which to calculate the
 #'    acf.
 #' @param type A character string giving the type of the acf to be computed. The
+#' @param na.rm Logical. If \code{TRUE}, missing values are removed.
 #'    default is the "correlation" and other options are "covariance" and "partial".
 #'
 #' @author Earo Wang
