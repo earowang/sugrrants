@@ -54,8 +54,8 @@ StatAcf <- ggproto("StatAcf", Stat,
 
     if (!is.null(level)) {
       ci <- qnorm((1 + level) / 2) / sqrt(acf_y$n.used)
-      ci <- c(-ci, ci)
-      acf_df <- transform(acf_df, yintercept = rep(ci, c(n_upper, n_lower)))
+      ci2 <- c(-ci, ci)
+      acf_df <- transform(acf_df, yintercept = rep(ci2, c(n_upper, n_lower)))
     }
     return(acf_df)
   }
