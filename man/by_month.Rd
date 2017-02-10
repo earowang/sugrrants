@@ -29,18 +29,18 @@ apply.}
 \item{.label}{a character string indicates the name of output column.}
 }
 \value{
-An aggregated data frame with the added variables of calendar periods 
-   (e.g. \code{.month}, \code{.week}, \code{.day}) and the aggregated values 
-   while keeping grouped variables if present.
+An aggregated data frame with the added variables of calendar periods
+(e.g. \code{.month}, \code{.week}, \code{.day}) and the aggregated values
+while keeping grouped variables if present.
 }
 \description{
 Apply a specified function to each fixed calendar periods of
-   a data frame that contains a date-times variable. It can be used in
-   conjunction with \code{dplyr::group_by}.
+a data frame that contains a date-times variable. It can be used in
+conjunction with \code{dplyr::group_by}.
 }
 \details{
 When a specified function \code{.f} generates more than one values,
-   it returns a long data form with one stack on the rest.
+it returns a long data form with one stack on the rest.
 }
 \examples{
    library(dplyr)

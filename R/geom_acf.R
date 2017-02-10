@@ -1,16 +1,16 @@
 #' @title Compute autocorrelation for temporal data
 #'
-#' @description Since the data input is \code{data.frame}, it's better to sort
+#' @description Since the data input is `data.frame`, it's better to sort
 #'  the date-times from early to recent and make implicit missing values explicit
-#'  before using \code{geom_acfbar}.
+#'  before using `geom_acfbar`.
 #'  
 #' @inheritParams ggplot2::geom_bar
 #' @param lag.max An integer indicating the maximum lag at which to calculate the
 #'    acf.
 #' @param type A character string giving the type of the acf to be computed. The
-#' @param level A numeric defining the confidence level. If \code{NULL}, no significant
+#' @param level A numeric defining the confidence level. If `NULL`, no significant
 #'    line to be drawn.
-#' @param na.rm Logical. If \code{TRUE}, missing values are removed.
+#' @param na.rm Logical. If `TRUE`, missing values are removed.
 #'    default is the "correlation" and other options are "covariance" and "partial".
 #'
 #' @author Earo Wang

@@ -15,8 +15,8 @@ as_week(x)
 }
 \value{
 The period of \code{x} as date format or character string. It always
-   returns the first day of the month (\code{as_month}) and the first day of
-   the week (\code{as_week}).
+returns the first day of the month (\code{as_month}) and the first day of
+the week (\code{as_week}).
 }
 \description{
 Extract the higher-level calendar period components from date-times

@@ -16,11 +16,11 @@ character strings; otherwise, an integer returns.}
 }
 \value{
 The day of the week as a number (Monday is 1) or an ordered factor
-   (Monday is first).
+(Monday is first).
 }
 \description{
 A simple wrapper of \code{lubridate::wday()}, but starts with
-   Monday instead of Sunday.
+Monday instead of Sunday.
 }
 \examples{
    # x is a vector of class POSIXct
@@ -29,7 +29,7 @@ A simple wrapper of \code{lubridate::wday()}, but starts with
 
 }
 \seealso{
-\link[lubridate]{wday}
+\link[lubridate:wday]{lubridate::wday}
 }
 \author{
 Earo Wang

@@ -47,22 +47,22 @@
 #'
 #' @description Apply a specified function to each fixed calendar periods of
 #'    a data frame that contains a date-times variable. It can be used in
-#'    conjunction with \code{dplyr::group_by}.
+#'    conjunction with `dplyr::group_by`.
 #'
 #' @param .data A data frame.
-#' @param .index A variable of date-times in the \code{.data}.
-#' @param .value A variable in the \code{.data} that a specified function to
+#' @param .index A variable of date-times in the `.data`.
+#' @param .value A variable in the `.data` that a specified function to
 #'    apply.
 #' @param .f A specified function applied to the fixed calendar windows of the
-#'    \code{.value}.
-#' @param ... The extra arguments passed to \code{.f}.
+#'    `.value`.
+#' @param ... The extra arguments passed to `.f`.
 #' @param .label a character string indicates the name of output column.
 #'
 #' @return An aggregated data frame with the added variables of calendar periods 
-#'    (e.g. \code{.month}, \code{.week}, \code{.day}) and the aggregated values 
+#'    (e.g. `.month`, `.week`, `.day`) and the aggregated values 
 #'    while keeping grouped variables if present.
 #'
-#' @details When a specified function \code{.f} generates more than one values,
+#' @details When a specified function `.f` generates more than one values,
 #'    it returns a long data form with one stack on the rest.
 #'
 #' @author Earo Wang

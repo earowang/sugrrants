@@ -4,23 +4,23 @@ globalVariables(c(".group_id", ".x", ".y", ".gx", ".gy", "COL", "MCOL",
 #' @title Build a calendar view for a time series data frame
 #'
 #' @description A calendar view is useful to visualise time series at daily intervals
-#'    or higher frequency levels. \code{frame_calendar} sets up the calendar
-#'    layout for the input data frame, and the results is ready for \code{ggplot2}.
+#'    or higher frequency levels. `frame_calendar` sets up the calendar
+#'    layout for the input data frame, and the results is ready for `ggplot2`.
 #'    Each row represents a week and the first cell in the row indicates Mondays.
 #'
 #' @param .data A data frame.
-#' @param x,y  Variables to be passed to \code{ggplot2(aes(x, y))}.
+#' @param x,y  Variables to be passed to `ggplot2(aes(x, y))`.
 #' @param date  A variable of date-times that helps to tell the days in the
 #'    calendar.
 #' @param nrow,ncol Number of rows and columns for the calendar layout.
 #'
-#' @return A data frame with newly added columns of \code{.x}, \code{.y}, and 
-#'    \code{.group_id}
+#' @return A data frame with newly added columns of `.x`, `.y`, and 
+#'    `.group_id`
 #'
-#' @details Calendar view is a special ordered layout that \code{ggplot2::facet_grid} 
-#'    and \code{ggplot2::facet_wrap} currently do not support. This creates new
-#'    coordinates of \code{(.x, .y)} to place to the correct panel in the calendar 
-#'    and new grouped sequence of \code{.group_id} from \code{date} using some 
+#' @details Calendar view is a special ordered layout that `ggplot2::facet_grid` 
+#'    and `ggplot2::facet_wrap` currently do not support. This creates new
+#'    coordinates of `(.x, .y)` to place to the correct panel in the calendar 
+#'    and new grouped sequence of `.group_id` from `date` using some 
 #'    linear algebra.
 #'
 #' @author Earo Wang

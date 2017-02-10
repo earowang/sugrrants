@@ -1,17 +1,17 @@
 globalVariables(c(".lu", ".rank"))
 
-#' @title Get a data frame of long form ready for \code{ggplot2::geom_ribbon}
+#' @title Get a data frame of long form ready for `ggplot2::geom_ribbon`
 #'  
-#' @description \code{ggplot2::geom_ribbon} requires at least two aesthetics mapping of 
-#'    \code{ymin} and \code{ymax} to make a ribbon plot. \code{frame_ribbon} lubricates
+#' @description `ggplot2::geom_ribbon` requires at least two aesthetics mapping of 
+#'    `ymin` and `ymax` to make a ribbon plot. `frame_ribbon` lubricates
 #'    the transition from a long data form to the basic data form that is wanted for
-#'    \code{ggplot2::geom_ribbon}. 
+#'    `ggplot2::geom_ribbon`. 
 #'
-#' @param .data A grouped data frame in a long form in conjunction with \code{group_by}.
+#' @param .data A grouped data frame in a long form in conjunction with `group_by`.
 #' @param .value A variable of numerics in order to produce the ribbon bounds.
 #'
-#' @return A data frame with new columns of \code{lower}, \code{upper}, possibly
-#'    \code{middle} and \code{pair}.
+#' @return A data frame with new columns of `lower`, `upper`, possibly
+#'    `middle` and `pair`.
 #'
 #' @details A ribbon plot can be seen as a simplified version of boxplot. However,
 #'    the ribbon plot employs a smoother view if the continuous variable is used

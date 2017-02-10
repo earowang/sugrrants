@@ -4,7 +4,7 @@
 #' @param state A state in Australia. The abbreviation of the states in the upper
 #'    letter cases is required. Currently supports "VIC" (i.e. Victoria) only.
 #'
-#' @return A data frame consisting of \code{holiday} labels and their associated
+#' @return A data frame consisting of `holiday` labels and their associated
 #'    dates in the year(s).
 #'
 #' @author Earo Wang

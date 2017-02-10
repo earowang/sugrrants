@@ -14,7 +14,7 @@ letter cases is required. Currently supports "VIC" (i.e. Victoria) only.}
 }
 \value{
 A data frame consisting of \code{holiday} labels and their associated
-   dates in the year(s).
+dates in the year(s).
 }
 \description{
 Australia public holidays
@@ -26,7 +26,7 @@ Australia public holidays
 }
 \references{
 \url{http://www.business.vic.gov.au/victorian-public-holidays-and-daylight-saving/victorian-public-holidays-2014}
-   \url{http://www.business.vic.gov.au/victorian-public-holidays-and-daylight-saving/victorian-public-holidays}
+\url{http://www.business.vic.gov.au/victorian-public-holidays-and-daylight-saving/victorian-public-holidays}
 }
 \author{
 Earo Wang

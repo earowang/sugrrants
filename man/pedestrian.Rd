@@ -6,10 +6,10 @@
 \title{Pedestrian counts in Melbourne city}
 \format{A data frame with 70072 rows and 4 variables:
 \describe{
-  \item{Date_Time}{Date time in 2015}
-  \item{Sensor_ID}{Sensor identifiers}
-  \item{Sensor_Name}{Sensor names}
-  \item{Hourly_Counts}{Pedestrian Counts at hourly intervals}
+\item{Date_Time}{Date time in 2015}
+\item{Sensor_ID}{Sensor identifiers}
+\item{Sensor_Name}{Sensor names}
+\item{Hourly_Counts}{Pedestrian Counts at hourly intervals}
 }}
 \usage{
 pedestrian

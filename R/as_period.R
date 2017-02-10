@@ -63,9 +63,9 @@
 #'
 #' @param x Date-times.
 #'
-#' @return The period of \code{x} as date format or character string. It always
-#'    returns the first day of the month (\code{as_month}) and the first day of
-#'    the week (\code{as_week}).
+#' @return The period of `x` as date format or character string. It always
+#'    returns the first day of the month (`as_month`) and the first day of
+#'    the week (`as_week`).
 #'
 #' @author Earo Wang
 #' 
@@ -110,7 +110,7 @@ as_week <- function(x) {
 
 #' @title Get weekdays component of datetimea
 #'
-#' @description A simple wrapper of \code{lubridate::wday()}, but starts with
+#' @description A simple wrapper of `lubridate::wday()`, but starts with
 #'    Monday instead of Sunday.
 #'
 #' @param x Date-times.
@@ -121,7 +121,7 @@ as_week <- function(x) {
 #' @return The day of the week as a number (Monday is 1) or an ordered factor
 #'    (Monday is first).
 #'
-#' @seealso \link[lubridate]{wday}
+#' @seealso [lubridate::wday]
 #'
 #' @author Earo Wang
 #' 

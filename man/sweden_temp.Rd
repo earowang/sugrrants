@@ -6,11 +6,11 @@
 \title{Daily temperature recorded at 17 stations across Sweden}
 \format{A data frame with 64979 rows and 5 variables:
 \describe{
-  \item{lon}{Longitude of the weather stations}
-  \item{lat}{Latitude of the weather stations}
-  \item{date}{Recorded dates}
-  \item{temp}{Daily temperature in Celsius degree}
-  \item{locations}{Location index}
+\item{lon}{Longitude of the weather stations}
+\item{lat}{Latitude of the weather stations}
+\item{date}{Recorded dates}
+\item{temp}{Daily temperature in Celsius degree}
+\item{locations}{Location index}
 }}
 \usage{
 sweden_temp

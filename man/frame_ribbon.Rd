@@ -13,18 +13,18 @@ frame_ribbon(.data, .value)
 }
 \value{
 A data frame with new columns of \code{lower}, \code{upper}, possibly
-   \code{middle} and \code{pair}.
+\code{middle} and \code{pair}.
 }
 \description{
-\code{ggplot2::geom_ribbon} requires at least two aesthetics mapping of 
-   \code{ymin} and \code{ymax} to make a ribbon plot. \code{frame_ribbon} lubricates
-   the transition from a long data form to the basic data form that is wanted for
-   \code{ggplot2::geom_ribbon}.
+\code{ggplot2::geom_ribbon} requires at least two aesthetics mapping of
+\code{ymin} and \code{ymax} to make a ribbon plot. \code{frame_ribbon} lubricates
+the transition from a long data form to the basic data form that is wanted for
+\code{ggplot2::geom_ribbon}.
 }
 \details{
 A ribbon plot can be seen as a simplified version of boxplot. However,
-   the ribbon plot employs a smoother view if the continuous variable is used
-   as one of the axes compared to the boxplot does for the categorical one.
+the ribbon plot employs a smoother view if the continuous variable is used
+as one of the axes compared to the boxplot does for the categorical one.
 }
 \examples{
    # convert the summarised data frame to the ribbon format

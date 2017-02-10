@@ -17,21 +17,21 @@ calendar.}
 \item{nrow, ncol}{Number of rows and columns for the calendar layout.}
 }
 \value{
-A data frame with newly added columns of \code{.x}, \code{.y}, and 
-   \code{.group_id}
+A data frame with newly added columns of \code{.x}, \code{.y}, and
+\code{.group_id}
 }
 \description{
 A calendar view is useful to visualise time series at daily intervals
-   or higher frequency levels. \code{frame_calendar} sets up the calendar
-   layout for the input data frame, and the results is ready for \code{ggplot2}.
-   Each row represents a week and the first cell in the row indicates Mondays.
+or higher frequency levels. \code{frame_calendar} sets up the calendar
+layout for the input data frame, and the results is ready for \code{ggplot2}.
+Each row represents a week and the first cell in the row indicates Mondays.
 }
 \details{
-Calendar view is a special ordered layout that \code{ggplot2::facet_grid} 
-   and \code{ggplot2::facet_wrap} currently do not support. This creates new
-   coordinates of \code{(.x, .y)} to place to the correct panel in the calendar 
-   and new grouped sequence of \code{.group_id} from \code{date} using some 
-   linear algebra.
+Calendar view is a special ordered layout that \code{ggplot2::facet_grid}
+and \code{ggplot2::facet_wrap} currently do not support. This creates new
+coordinates of \code{(.x, .y)} to place to the correct panel in the calendar
+and new grouped sequence of \code{.group_id} from \code{date} using some
+linear algebra.
 }
 \examples{
    library(dplyr)
