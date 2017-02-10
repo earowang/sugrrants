@@ -6,7 +6,8 @@
 #' @importFrom tibble tibble
 #' @importFrom tidyr unnest spread_
 #' @importFrom purrr by_slice map2
-#' @importFrom ggplot2 resolution layer ggproto
+#' @importFrom ggplot2 resolution layer ggproto draw_key_rect draw_key_path
 #' @importFrom lazyeval f_interp f_eval_rhs f_capture uq as_name
 #' @importFrom magrittr %>%
+#' @importFrom grid grobTree gList
 NULL

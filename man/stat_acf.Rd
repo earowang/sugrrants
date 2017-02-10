@@ -6,7 +6,8 @@
 \usage{
 stat_acf(mapping = NULL, data = NULL, geom = "bar",
   position = "identity", na.rm = FALSE, show.legend = NA,
-  inherit.aes = TRUE, lag.max = NULL, type = "correlation", ...)
+  inherit.aes = TRUE, lag.max = NULL, type = "correlation",
+  level = 0.95, ...)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link{aes}} or
@@ -33,8 +34,7 @@ plot. You must supply \code{mapping} if there is no plot mapping.}
 \item{position}{Position adjustment, either as a string, or the result of
 a call to a position adjustment function.}
 
-\item{na.rm}{Logical. If \code{TRUE}, missing values are removed.
-default is the "correlation" and other options are "covariance" and "partial".}
+\item{na.rm}{Logical. If \code{TRUE}, missing values are removed.}
 
 \item{show.legend}{logical. Should this layer be included in the legends?
 \code{NA}, the default, includes if any aesthetics are mapped.
@@ -48,7 +48,11 @@ the default plot specification, e.g. \code{\link{borders}}.}
 \item{lag.max}{An integer indicating the maximum lag at which to calculate the
 acf.}
 
-\item{type}{A character string giving the type of the acf to be computed. The}
+\item{type}{A character string giving the type of the acf to be computed. The
+default is the "correlation" and other options are "covariance" and "partial".}
+
+\item{level}{A numeric defining the confidence level. If \code{NULL}, no significant
+line to be drawn.}
 
 \item{...}{other arguments passed on to \code{\link{layer}}. These are
 often aesthetics, used to set an aesthetic to a fixed value, like

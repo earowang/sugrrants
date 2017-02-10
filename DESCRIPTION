@@ -19,7 +19,8 @@ Imports:
     lazyeval,
     magrittr,
     purrr,
-    tidyr
+    tidyr,
+    grid
 Suggests:
     knitr,
     rmarkdown
