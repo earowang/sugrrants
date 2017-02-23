@@ -1,5 +1,6 @@
 globalVariables(c(".group_id", ".x", ".y", ".gx", ".gy", "COL", "MCOL",
-  "MPANEL", "MROW", "PANEL"))
+  "MPANEL", "MROW", "PANEL", ".xminor_min", ".xmajor_min", ".ymajor_max",
+  ".ymajor_min", ".yminor_min", "ROW", "minor_breaks"))
 
 #' @title Build a calendar view for a time series data frame
 #'
@@ -13,6 +14,8 @@ globalVariables(c(".group_id", ".x", ".y", ".gx", ".gy", "COL", "MCOL",
 #' @param date  A variable of date-times that helps to tell the days in the
 #'    calendar.
 #' @param nrow,ncol Number of rows and columns for the calendar layout.
+#' @param reference_frames Logical. If `TRUE`, it returns reference lines for days
+#'    and months blocks, and month labels.
 #'
 #' @return A data frame with newly added columns of `.x`, `.y`, and 
 #'    `.group_id`
@@ -42,12 +45,14 @@ globalVariables(c(".group_id", ".x", ".y", ".gx", ".gy", "COL", "MCOL",
 #'
 #' @export
 #'
-frame_calendar <- function(.data, x, y, date, nrow = NULL, ncol = NULL) {
+frame_calendar <- function(.data, x, y, date, nrow = NULL, ncol = NULL,
+  reference_frames = FALSE) {
   frame_calendar_(.data, f_capture(x), f_capture(y), f_capture(date),
-    nrow = nrow, ncol = ncol)
+    nrow = nrow, ncol = ncol, reference_frames = reference_frames)
 }
 
-frame_calendar_ <- function(.data, x, y, date, nrow = NULL, ncol = NULL) {
+frame_calendar_ <- function(.data, x, y, date, nrow = NULL, ncol = NULL,
+  reference_frames = FALSE) {
   # Prepare the important information
   grouped_vars <- groups(.data)
   x <- f_eval_rhs(x, .data)
@@ -91,17 +96,88 @@ frame_calendar_ <- function(.data, x, y, date, nrow = NULL, ncol = NULL) {
       .gx = .gx + MCOL * margins,
       .gy = .gy - MROW * margins
     ) %>% 
-    group_by_(.dots = grouped_vars)
-  .data$.x <- .data$.gx + normalise(x) * width
-  .data$.y <- .data$.gy + normalise(y) * height
+    ungroup() %>% 
+    mutate(
+      .x = .gx + normalise(x) * width,
+      .y = .gy + normalise(y) * height
+    )
+    # group_by_(.dots = grouped_vars)
 
-  .data$.x <- normalise(.data$.x) * max(x, na.rm = TRUE) * ncol * 7
-  .data$.y <- normalise(.data$.y) * max(y, na.rm = TRUE)
+  if (reference_frames) { # add reference lines around days and months
+    # Month breaks
+    xbreaks_df <- .data %>% 
+      group_by(MCOL) %>% 
+      summarise(
+        .xmajor_min = min(.x, na.rm = TRUE)
+      ) %>% 
+      distinct(.xmajor_min)
+    xbreaks <- fast_unlist(xbreaks_df)
+    ybreaks_df <- .data %>% 
+      group_by(MROW) %>% 
+      summarise(
+        .ymajor_min = min(.y, na.rm = TRUE)
+      ) %>% 
+      distinct(.ymajor_min)
+    ybreaks <- fast_unlist(ybreaks_df)
 
-  .data <- .data %>% 
-    select(-(COL:.gy))
+    # day breaks
+    minor_xbreaks_df <- .data %>% 
+      group_by(COL) %>% 
+      summarise(
+        .xminor_min = min(.x, na.rm = TRUE)
+      ) %>% 
+      distinct(.xminor_min)
+    minor_xbreaks <- fast_unlist(minor_xbreaks_df)
+    minor_ybreaks_df <- .data %>% 
+      group_by(ROW) %>% 
+      summarise(
+        .yminor_min = min(.y, na.rm = TRUE)
+      ) %>% 
+      distinct(.yminor_min)
+    minor_ybreaks <- fast_unlist(minor_ybreaks_df)
 
-  return(.data)
+    .breaks <- expand.grid(x = xbreaks, y = ybreaks,
+      KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
+    .minor_breaks <- expand.grid(x = minor_xbreaks, y = minor_ybreaks,
+      KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
+    breaks <- list(breaks = .breaks, minor_breaks = .minor_breaks)
+
+    # Month text
+    xtext_df <- .data %>% 
+      group_by(MCOL) %>% 
+      summarise(
+        .xmajor_min = min(.x, na.rm = TRUE)
+      ) %>% 
+      distinct(.xmajor_min)
+    xtext <- fast_unlist(xtext_df)
+    ytext_df <- .data %>% 
+      group_by(MROW) %>% 
+      summarise(
+        .ymajor_max = max(.y, na.rm = TRUE) + margins / 2
+      ) %>% 
+      distinct(.ymajor_max)
+    ytext <- sort(fast_unlist(ytext_df), decreasing = TRUE)
+
+    yrs <- year(dates)
+    nyears <- unique(yrs)
+    month_labels <- paste(yrs, month(dates, label = TRUE), sep = "-")
+    unique_labels <- substr(unique(month_labels), start = 6, stop = 8)
+
+    .text <- expand.grid(x = xtext, y = ytext, 
+      KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
+    .text$label <- unique_labels
+
+    .data <- .data %>% 
+      select(-(COL:.gy))
+
+    out <- list(data = .data, breaks = breaks, label = .text)
+    return(out)
+  } else {
+    .data <- .data %>% 
+      select(-(COL:.gy))
+
+    return(.data)
+  }
 }
 
 # Extract the number of days for a month
@@ -228,4 +304,9 @@ assign_grids <- function(ROW, COL) {
 # Normalise the numerics to range from 0 to 1
 normalise <- function(x) {
   return((x - min(x, na.rm = TRUE)) / diff(range(x, na.rm = TRUE)))
+}
+
+# Fast unlist (a wrapper of unlist)
+fast_unlist <- function(x) {
+  return(unlist(x, recursive = FALSE, use.names = FALSE))
 }

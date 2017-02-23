@@ -4,7 +4,8 @@
 \alias{frame_calendar}
 \title{Build a calendar view for a time series data frame}
 \usage{
-frame_calendar(.data, x, y, date, nrow = NULL, ncol = NULL)
+frame_calendar(.data, x, y, date, nrow = NULL, ncol = NULL,
+  reference_frames = FALSE)
 }
 \arguments{
 \item{.data}{A data frame.}
@@ -15,6 +16,9 @@ frame_calendar(.data, x, y, date, nrow = NULL, ncol = NULL)
 calendar.}
 
 \item{nrow, ncol}{Number of rows and columns for the calendar layout.}
+
+\item{reference_frames}{Logical. If \code{TRUE}, it returns reference lines for days
+and months blocks, and month labels.}
 }
 \value{
 A data frame with newly added columns of \code{.x}, \code{.y}, and

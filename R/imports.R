@@ -2,7 +2,7 @@
 #' @importFrom timeDate GoodFriday Easter
 #' @importFrom dplyr if_else case_when mutate mutate_ group_by group_by_
 #' @importFrom dplyr is.grouped_df groups ungroup select filter group_size
-#' @importFrom dplyr bind_rows left_join
+#' @importFrom dplyr bind_rows left_join summarise distinct
 #' @importFrom tibble tibble
 #' @importFrom tidyr unnest spread_
 #' @importFrom purrr by_slice map2
