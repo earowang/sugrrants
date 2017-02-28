@@ -89,6 +89,7 @@ frame_calendar_ <- function(.data, x, y, date, nrow = NULL, ncol = NULL,
   height <- resolution(.data$.gy, zero = FALSE) * 0.95
   margins <- mean(c(width, height)) # Month by month margin
 
+  check <- length(unique(x)) == 1 # x is constant, cannot be normalised
   # Rescale using some linear algebra
   .data <- .data %>% 
     group_by(MPANEL) %>% 
@@ -96,12 +97,21 @@ frame_calendar_ <- function(.data, x, y, date, nrow = NULL, ncol = NULL,
       .gx = .gx + MCOL * margins,
       .gy = .gy - MROW * margins
     ) %>% 
-    ungroup() %>% 
-    mutate(
-      .x = .gx + normalise(x) * width,
-      .y = .gy + normalise(y) * height
-    )
-    # group_by_(.dots = grouped_vars)
+    ungroup()
+  if (check) {
+    .data <- .data %>% 
+      mutate(
+        .x = .gx + x * width,
+        .y = .gy + normalise(y) * height
+      )
+  } else {
+    .data <- .data %>% 
+      mutate(
+        .x = .gx + normalise(x) * width,
+        .y = .gy + normalise(y) * height
+      )
+  }
+  # group_by_(.dots = grouped_vars)
 
   if (reference_frames) { # add reference lines around days and months
     # Month breaks
