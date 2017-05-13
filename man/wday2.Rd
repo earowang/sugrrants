@@ -2,7 +2,7 @@
 % Please edit documentation in R/as_period.R
 \name{wday2}
 \alias{wday2}
-\title{Get weekdays component of datetimea}
+\title{Get weekdays component of datetime}
 \usage{
 wday2(x, label = FALSE, abbr = TRUE)
 }
