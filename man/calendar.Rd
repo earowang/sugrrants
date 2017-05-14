@@ -2,23 +2,39 @@
 % Please edit documentation in R/frame_calendar.R
 \name{frame_calendar}
 \alias{frame_calendar}
+\alias{prettify}
 \title{Build a calendar view for a time series data frame}
 \usage{
-frame_calendar(.data, x, y, date, nrow = NULL, ncol = NULL,
-  reference_frames = FALSE)
+frame_calendar(data, x, y, date, calendar = "monthly", dir = "h",
+  sunday = FALSE, nrow = NULL, ncol = NULL, polar = FALSE,
+  scale = "global")
+
+prettify(plot, ...)
 }
 \arguments{
-\item{.data}{A data frame.}
+\item{data}{A data frame.}
 
 \item{x, y}{Variables to be passed to \code{ggplot2(aes(x, y))}.}
 
 \item{date}{A variable of date-times that helps to tell the days in the
 calendar.}
 
-\item{nrow, ncol}{Number of rows and columns for the calendar layout.}
+\item{calendar}{Character. Type of calendar.}
 
-\item{reference_frames}{Logical. If \code{TRUE}, it returns reference lines for days
-and months blocks, and month labels.}
+\item{dir}{Direction: "h" for horizontal (the default) or "v" for vertical.}
+
+\item{sunday}{Logical. FALSE (the default) for starting the weekday as Monday
+in the monthly calendar, or TRUE for Sunday.}
+
+\item{nrow, ncol}{Integer. Number of rows and columns for the calendar layout.}
+
+\item{polar}{Logical. Cartesian (FALSE, the default) or polar (TRUE) coordinates.}
+
+\item{scale}{"global" (the default) for scaling globally, or "local" for scaling}
+
+\item{plot}{ggplot object}
+
+\item{...}{Extra arguments passed to geom_label and geom_text}
 }
 \value{
 A data frame with newly added columns of \code{.x}, \code{.y}, and
@@ -51,6 +67,7 @@ linear algebra.
    ped_calendar \%>\% 
      ggplot(aes(x = .x, y = .y, group = .group_id)) +
      geom_line()
+   prettify()
 
 }
 \author{
