@@ -10,17 +10,15 @@ Description: The goal of "sugrrants" is to provide supporting graphs with R for
     analysing time series. It extends ggplot to time series data.
 Depends:
     R (>= 3.1.3),
-    ggplot2
+    ggplot2 (>= 2.2.0)
 Imports:
-    lubridate,
-    dplyr,
+    rlang,
+    dplyr (>= 0.5.0.9000),
+    grid,
     tibble,
     timeDate,
-    lazyeval,
     magrittr,
-    purrr,
-    tidyr,
-    grid
+    lubridate
 Suggests:
     knitr,
     rmarkdown

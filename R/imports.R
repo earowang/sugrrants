@@ -1,13 +1,12 @@
-#' @importFrom lubridate as_date wday days month weeks ymd year leap_year
+#' @importFrom lubridate as_date wday year days weeks mday month days_in_month
 #' @importFrom timeDate GoodFriday Easter
-#' @importFrom dplyr if_else case_when mutate mutate_ group_by group_by_
-#' @importFrom dplyr is.grouped_df groups ungroup select filter group_size
-#' @importFrom dplyr bind_rows left_join summarise distinct
+#' @importFrom dplyr group_by is.grouped_df groups ungroup group_size arrange
+#' @importFrom dplyr if_else mutate select filter left_join summarise distinct
 #' @importFrom tibble tibble
-#' @importFrom tidyr unnest spread_
-#' @importFrom purrr by_slice map2
-#' @importFrom ggplot2 resolution layer ggproto draw_key_rect draw_key_path
-#' @importFrom lazyeval f_interp f_eval_rhs f_capture uq as_name
+#' @importFrom ggplot2 resolution layer ggproto draw_key_rect draw_key_path 
+#' @importFrom ggplot2 geom_label geom_text scale_x_continuous scale_y_continuous
+#' @importFrom ggplot2 theme element_blank aes last_plot
+#' @importFrom rlang eval_tidy quo enquo !! !!! :=
 #' @importFrom magrittr %>%
 #' @importFrom grid grobTree gList
 NULL
