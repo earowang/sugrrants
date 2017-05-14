@@ -271,6 +271,9 @@ prettify <- function(plot, ...) {
   if (missing(plot)) {
     plot <- last_plot()
   }
+  if (!is.ggplot(plot)) {
+    abort("'plot' must be a ggplot object.")
+  }
   mlabel_df <- get_mlabel(plot$data)
   dlabel_df <- get_dlabel(plot$data)
   breaks_df <- get_breaks(plot$data)
