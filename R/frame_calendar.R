@@ -255,7 +255,7 @@ gen_reference <- function(data, date, margins, calendar = "monthly", dir = "h",
   }
   wday_labels <- c("M", "T", "W", "T", "F", "S", "S")
   if (sunday) {
-    wday_labels <- wday_labels[c(2:7, 1)]
+    wday_labels <- wday_labels[c(7, 1:6)]
   }
   dtext$label <- wday_labels
   return(list(
