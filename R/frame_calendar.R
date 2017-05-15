@@ -117,7 +117,8 @@ frame_calendar <- function(data, x, y, date, calendar = "monthly", dir = "h",
       )
   }
   # generate breaks and labels for prettify()
-  data_ref <- gen_reference(data, date = date_eval, margins)
+  data_ref <- gen_reference(data, date = date_eval, margins, calendar = calendar,
+    sunday = sunday, dir = dir, polar = polar)
 
   data <- data %>% 
     select(-(COL:.gy))
