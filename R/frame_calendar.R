@@ -121,7 +121,7 @@ frame_calendar <- function(data, x, y, date, calendar = "monthly", dir = "h",
     sunday = sunday, dir = dir, polar = polar)
 
   data <- data %>% 
-    select(-(COL:.gy))
+    select(-(ROW:.gy))
 
   attr(data, "breaks") <- data_ref$breaks
   attr(data, "minor_breaks") <- data_ref$minor_breaks
@@ -227,7 +227,7 @@ gen_reference <- function(data, date, margins, calendar = "monthly", dir = "h",
   ytext_df <- data %>% 
     group_by(MROW) %>% 
     summarise(
-      .ymajor_max = max_na(.y) + margins / 2
+      .ymajor_max = max_na(.y)
     ) %>% 
     distinct(.ymajor_max)
   ytext <- sort(unlist2(ytext_df), decreasing = TRUE)
@@ -280,25 +280,21 @@ prettify <- function(plot, ...) {
   breaks_df <- get_breaks(plot$data)
   minors_df <- get_minor_breaks(plot$data)
   dir <- get_dir(plot$data)
+
+  plot <- plot + 
+    geom_label(
+      aes(x, y, label = label), data = mlabel_df,
+      nudge_y = 0.01, hjust = 0, vjust = 0, 
+      inherit.aes = FALSE,
+      ...
+    )
   if (dir == "h") {
-    plot <- plot + 
-      geom_label(
-        aes(x, y, label = label), data = mlabel_df,
-        hjust = 0, vjust = 0, inherit.aes = FALSE,
-        ...
-      )
     plot <- plot + 
       geom_text(
         aes(x, y, label = label), data = dlabel_df,
         vjust = 1, inherit.aes = FALSE, ...
       )
   } else {
-    plot <- plot + 
-      geom_label(
-        aes(x, y, label = label), data = mlabel_df,
-        hjust = 0, vjust = 0, inherit.aes = FALSE,
-        ...
-      )
     plot <- plot + 
       geom_text(
         aes(x, y, label = label), data = dlabel_df,
