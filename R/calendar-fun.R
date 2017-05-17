@@ -41,7 +41,7 @@ setup_calendar.cal_monthly <- function(x, dir = "h", sunday = FALSE,
   seq_facets <- seq_len(nfacets)
   m_idx <- ifelse(seq_facets %% ncol == 0, ncol, seq_facets %% ncol)
   last_rep <- m_idx[nfacets]
-  n_idx <- rep(1:nrow, times = c(rep(ncol, nrow - 1), last_rep))
+  n_idx <- rep.int(1:nrow, times = c(rep.int(ncol, nrow - 1), last_rep))
   if (dir == "h") {
     row_idx[] <- mapply2(
       function(x, y) x + max_wks * (y - 1), x = row_idx, y = n_idx
@@ -60,10 +60,10 @@ setup_calendar.cal_monthly <- function(x, dir = "h", sunday = FALSE,
   cal_table <- data.frame(
     ROW = unlist2(row_idx),
     COL = unlist2(col_idx),
-    MROW = rep(n_idx, days_x),
-    MCOL = rep(m_idx, days_x),
+    MROW = rep.int(n_idx, days_x),
+    MCOL = rep.int(m_idx, days_x),
     PANEL = seq_along(unlist2(counter)),
-    MPANEL = rep(seq_len(nfacets), days_x)
+    MPANEL = rep.int(seq_len(nfacets), days_x)
   )
   return(cal_table)
 }
