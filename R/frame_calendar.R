@@ -121,6 +121,7 @@ frame_calendar <- function(data, x, y, date, calendar = "monthly", dir = "h",
     sunday = sunday, dir = dir, polar = polar)
 
   data <- data %>% 
+    ungroup() %>% 
     select(-(ROW:.gy))
 
   attr(data, "breaks") <- data_ref$breaks
