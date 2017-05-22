@@ -20,7 +20,7 @@ mapply2 <- function(FUN, ...) {
 }
 
 is_constant <- function(x) {
-  return(diff(range(x)) < .Machine$double.eps ^ 0.5)
+  return(diff(range(x, na.rm = TRUE)) < .Machine$double.eps ^ 0.5)
 }
 
 # Normalise the numerics to range from 0 to 1
