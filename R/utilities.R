@@ -24,7 +24,9 @@ is_constant <- function(x) {
 }
 
 # Normalise the numerics to range from 0 to 1
-normalise <- function(x) {
+normalise <- function(x, xmin = NULL, xmax = NULL) {
   if (is_constant(x)) return(x)
-  return((x - min_na(x)) / diff(range(x, na.rm = TRUE)))
+  if (is.null(xmin)) xmin <- min_na(x)
+  if (is.null(xmax)) xmax <- max_na(x)
+  return((x - xmin) / (xmax - xmin))
 }

@@ -103,8 +103,8 @@ frame_calendar <- function(data, x, y, date, calendar = "monthly", dir = "h",
   if (polar) {
     data <- data %>% 
       mutate(
-        theta = 2 * pi * normalise(!!x),
-        radius = normalise(!!y),
+        theta = 2 * pi * normalise(!!x, xmax = max_na(!!x)),
+        radius = normalise(!!y, xmax = max_na(!!y)),
         .x = .gx + width * radius * sin(theta),
         .y = .gy + height * radius * cos(theta)
       ) %>% 
@@ -112,8 +112,8 @@ frame_calendar <- function(data, x, y, date, calendar = "monthly", dir = "h",
   } else {
     data <- data %>% 
       mutate(
-        .x = .gx + normalise(!!x) * width,
-        .y = .gy + normalise(!!y) * height
+        .x = .gx + normalise(!!x, xmax = max_na(!!x)) * width,
+        .y = .gy + normalise(!!y, xmax = max_na(!!y)) * height
       )
   }
   # generate breaks and labels for prettify()
