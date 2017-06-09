@@ -29,7 +29,7 @@
 #'
 #' @author Earo Wang
 #'
-#' @rdname calendar
+#' @rdname frame-calendar
 #' 
 #' @examples
 #'    library(dplyr)
@@ -185,58 +185,62 @@ gen_reference <- function(grids, date, margins, calendar = "monthly", dir = "h",
   calendar <- match.arg(calendar, c("monthly", "weekly", "daily"))
   dir <- match.arg(dir, c("h", "v"))
 
+  # Month breaks
+  if (calendar == "monthly") {
+    # Month breaks (if calendar == "monthly")
+    grids <- grids %>% 
+      group_by(MPANEL) %>% 
+      mutate(
+        .gx = .gx + MCOL * margins,
+        .gy = .gy - MROW * margins
+      ) 
+    xbreaks_df <- grids %>% 
+      group_by(MCOL) %>% 
+      summarise(
+        .xmajor_min = min(.gx),
+        .xmajor_max = max(.gx)
+      )
+    ybreaks_df <- grids %>% 
+      group_by(MROW) %>% 
+      summarise(
+        .ymajor_min = min(.gy),
+        .ymajor_max = max(.gy)
+      )
+  }
+
   # day breaks
-  minor_xbreaks_df <- cal_ref %>% 
+  minor_xbreaks_df <- grids %>% 
     group_by(COL) %>% 
     summarise(
       .xminor_min = min(.gx)
     )
   minor_xbreaks <- minor_xbreaks_df$.xminor_min
-  minor_ybreaks_df <- cal_ref %>% 
+  minor_ybreaks_df <- grids %>% 
     group_by(ROW) %>% 
     summarise(
       .yminor_min = min(.gy)
     )
   minor_ybreaks <- minor_ybreaks_df$.yminor_min
   minor_breaks <- list(x = minor_xbreaks, y = minor_ybreaks)
-  min_width <- min(diff(minor_xbreaks))
+  min_width <- min(abs(diff(minor_xbreaks)))
   min_height <- min(abs(diff(minor_ybreaks)))
 
-  # Month breaks
+  # month breaks update
   if (calendar == "monthly") {
-    # Month breaks (if calendar == "month")
-    cal_ref <- grids %>% 
-      group_by(MPANEL) %>% 
-      mutate(
-        .gx = .gx + MCOL * margins,
-        .gy = .gy - MROW * margins
-      ) 
-    xbreaks_df <- cal_ref %>% 
-      group_by(MCOL) %>% 
-      summarise(
-        .xmajor_min = min(.gx),
-        .xmajor_max = max(.gx) + min_width
-      )
-    xbreaks <- c(xbreaks_df$.xmajor_min, xbreaks_df$.xmajor_max)
-    ybreaks_df <- cal_ref %>% 
-      group_by(MROW) %>% 
-      summarise(
-        .ymajor_min = min(.gy),
-        .ymajor_max = max(.gy) + min_height
-      )
-    ybreaks <- c(ybreaks_df$.ymajor_min, ybreaks_df$.ymajor_max)
+    xbreaks <- c(xbreaks_df$.xmajor_min, xbreaks_df$.xmajor_max + min_width)
+    ybreaks <- c(ybreaks_df$.ymajor_min, ybreaks_df$.ymajor_max + min_height)
     breaks <- list(x = xbreaks, y = ybreaks)
   }
 
   # Prepare for the string texts
-  yrs <- year(date_eval)
+  yrs <- year(date)
   nyears <- unique(yrs)
-  month_labels <- paste(yrs, month(date_eval, label = TRUE), sep = "-")
+  month_labels <- paste(yrs, month(date, label = TRUE), sep = "-")
   unique_labels <- substr(unique(month_labels), start = 6, stop = 8)
 
   # Month label positioned at the top left of each month panel
   xtext <- sort(xbreaks_df$.xmajor_min)
-  ytext <- sort(ybreaks_df$.ymajor_max, decreasing = TRUE)
+  ytext <- sort(ybreaks_df$.ymajor_max + min_height, decreasing = TRUE)
   mtext <- expand.grid2(x = xtext, y = ytext)
   mtext <- mtext[seq_along(unique_labels), , drop = FALSE]
   mtext$label <- unique_labels
@@ -265,7 +269,7 @@ gen_reference <- function(grids, date, margins, calendar = "monthly", dir = "h",
   ))
 }
 
-#' @rdname calendar
+#' @rdname frame-calendar
 #' @param plot ggplot object
 #' @param ... Extra arguments passed to geom_label and geom_text
 #' @export
@@ -279,7 +283,7 @@ prettify <- function(plot, ...) {
   mlabel <- get_mlabel(plot$data)
   dlabel <- get_dlabel(plot$data)
   breaks <- get_breaks(plot$data)
-  minors <- get_minor_breaks(plot$data)
+  minor_breaks <- get_minor_breaks(plot$data)
   dir <- get_dir(plot$data)
 
   plot <- plot + 
@@ -298,7 +302,7 @@ prettify <- function(plot, ...) {
     plot <- plot + 
       geom_text(
         aes(x, y, label = label), data = dlabel,
-        inherit.aes = FALSE, ...
+        nudge_x = -0.01, hjust = 1, inherit.aes = FALSE, ...
       )
   }
   plot <- plot + 
