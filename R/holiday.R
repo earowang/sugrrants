@@ -54,7 +54,7 @@ au_holiday <- function(year, state = "VIC") {
   public_holidays[[i]] <- australia
 
   i <- i + 1
-  lubridate::month(starting) <- 3 # switch to March
+  month(starting) <- 3 # switch to March
   starting_wday <- wday(starting)
   diff_mon <- 2 - starting_wday
   # Find the first Monday in March
@@ -78,7 +78,7 @@ au_holiday <- function(year, state = "VIC") {
   public_holidays[[i]] <- anzac
 
   i <- i + 1
-  lubridate::month(starting) <- 6 # switch to June
+  month(starting) <- 6 # switch to June
   starting_wday <- wday(starting)
   diff_mon <- 2 - starting_wday
   # Find the first Monday in June
@@ -96,7 +96,7 @@ au_holiday <- function(year, state = "VIC") {
   # }
 
   i <- i + 1
-  lubridate::month(starting) <- 11 # switch to Nov
+  month(starting) <- 11 # switch to Nov
   starting_wday <- wday(starting)
   diff_tue <- 3 - starting_wday
   # Find the first Tuesday in Nov (Melbourne cup)
@@ -144,9 +144,10 @@ au_holiday <- function(year, state = "VIC") {
     "ANZAC Day", "Queen's Birthday", "Melbourne Cup",
     "Christmas Day", "Boxing Day"
   )
-  hdays_df <- tibble(
+  hdays_df <- data.frame(
     holiday = rep(hdays_labels, each = year_length),
-    date = public_holidays
+    date = public_holidays,
+    stringsAsFactors = FALSE
   )
   hdays_df <- hdays_df[sort_idx, ]
 
