@@ -1,4 +1,5 @@
 #' @importFrom lubridate as_date wday year days weeks mday month days_in_month
+#' @importFrom lubridate isoweek
 #' @importFrom timeDate GoodFriday Easter
 #' @importFrom dplyr group_by is.grouped_df groups ungroup group_size arrange
 #' @importFrom dplyr if_else mutate select filter left_join summarise distinct

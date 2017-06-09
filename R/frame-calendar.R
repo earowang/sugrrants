@@ -69,7 +69,13 @@ frame_calendar <- function(data, x, y, date, calendar = "monthly", dir = "h",
     arrange(!!date) %>% 
     mutate(.group_id = gen_group_id(!!date, start_date))
 
-  class(date_eval) <- c("cal_monthly", class(date_eval))
+  if (calendar == "monthly") {
+    class(date_eval) <- c("monthly", class(date_eval))
+  } else if (calendar == "weekly") {
+    class(date_eval) <- c("weekly", class(date_eval))
+  } else {
+    class(date_eval) <- c("daily", class(date_eval))
+  }
 
   cal_layout <- setup_calendar(date_eval, dir = dir, sunday = sunday,
     nrow = nrow, ncol = ncol)
@@ -87,12 +93,14 @@ frame_calendar <- function(data, x, y, date, calendar = "monthly", dir = "h",
   height <- resolution(data$.gy, zero = FALSE) * 0.95
   margins <- mean(c(width, height)) # Month by month margin
 
-  data <- data %>% 
-    group_by(MPANEL) %>% 
-    mutate(
-      .gx = .gx + MCOL * margins,
-      .gy = .gy - MROW * margins
-    ) 
+  if (calendar == "monthly") {
+    data <- data %>% 
+      group_by(MPANEL) %>% 
+      mutate(
+        .gx = .gx + MCOL * margins,
+        .gy = .gy - MROW * margins
+      ) 
+  }
 
   if (scale == "global") {
     data <- ungroup(data)
@@ -117,8 +125,15 @@ frame_calendar <- function(data, x, y, date, calendar = "monthly", dir = "h",
       )
   }
   # generate breaks and labels for prettify()
-  data_ref <- gen_reference(data, date = date_eval, margins, calendar = calendar,
-    sunday = sunday, dir = dir, polar = polar)
+  # !!! ToDo
+  if (calendar == "monthly") {
+    data_ref <- gen_reference(
+      cal_grids, date = date_eval, margins, calendar = calendar, 
+      sunday = sunday, dir = dir, polar = polar
+    )
+  } else {
+    data_ref <- list()
+  }
 
   data <- data %>% 
     ungroup() %>% 
@@ -138,7 +153,8 @@ frame_calendar <- function(data, x, y, date, calendar = "monthly", dir = "h",
 }
 
 ## calendar functions -------------------
-# Generate group_id for each series identifier, but need the same starting point
+# Generate group_id for each series, but the same starting point is required 
+# across different series. It's determined by empirical data.
 gen_group_id <- function(x, start_date) {
   # x is a date object
   date_x <- as_date(x)
@@ -164,101 +180,85 @@ assign_grids <- function(ROW, COL) {
 }
 
 # The following snippet for linear coord
-gen_reference <- function(data, date, margins, calendar = "monthly", dir = "h", 
+gen_reference <- function(grids, date, margins, calendar = "monthly", dir = "h", 
   sunday = FALSE, polar = FALSE) {
-  # Month breaks
-  xbreaks_df <- data %>% 
-    group_by(MCOL) %>% 
-    summarise(
-      .xmajor_min = min_na(.x)
-    ) %>% 
-    distinct(.xmajor_min)
-  xbreaks <- unlist2(xbreaks_df)
-  ybreaks_df <- data %>% 
-    group_by(MROW) %>% 
-    summarise(
-      .ymajor_min = min_na(.y)
-    ) %>% 
-    distinct(.ymajor_min)
-  ybreaks <- unlist2(ybreaks_df)
+  calendar <- match.arg(calendar, c("monthly", "weekly", "daily"))
+  dir <- match.arg(dir, c("h", "v"))
 
   # day breaks
-  minor_xbreaks_df <- data %>% 
+  minor_xbreaks_df <- cal_ref %>% 
     group_by(COL) %>% 
     summarise(
-      .xminor_min = min_na(.x)
-    ) %>% 
-    distinct(.xminor_min)
-  minor_xbreaks <- unlist2(minor_xbreaks_df)
-  minor_xbreaks_df2 <- data %>% # used for horizontal labelling
-    group_by(COL) %>% 
-    summarise(
-      .xminor_max = max_na(.x)
-    ) %>% 
-    distinct(.xminor_max)
-  minor_xbreaks2 <- unlist2(minor_xbreaks_df2)
-  minor_ybreaks_df <- data %>% 
+      .xminor_min = min(.gx)
+    )
+  minor_xbreaks <- minor_xbreaks_df$.xminor_min
+  minor_ybreaks_df <- cal_ref %>% 
     group_by(ROW) %>% 
     summarise(
-      .yminor_min = min_na(.y)
-    ) %>% 
-    distinct(.yminor_min)
-  minor_ybreaks <- unlist2(minor_ybreaks_df)
-  minor_ybreaks_df2 <- data %>% 
-    group_by(ROW) %>% 
-    summarise(
-      .yminor_max = max_na(.y)
-    ) %>% 
-    distinct(.yminor_max)
-  minor_ybreaks2 <- unlist2(minor_ybreaks_df2)
+      .yminor_min = min(.gy)
+    )
+  minor_ybreaks <- minor_ybreaks_df$.yminor_min
+  minor_breaks <- list(x = minor_xbreaks, y = minor_ybreaks)
+  min_width <- min(diff(minor_xbreaks))
+  min_height <- min(abs(diff(minor_ybreaks)))
 
-  # Month break
-  breaks <- expand.grid2(x = xbreaks, y = ybreaks) 
-  # Day break
-  minor_breaks <- expand.grid2(x = minor_xbreaks, y = minor_ybreaks)
+  # Month breaks
+  if (calendar == "monthly") {
+    # Month breaks (if calendar == "month")
+    cal_ref <- grids %>% 
+      group_by(MPANEL) %>% 
+      mutate(
+        .gx = .gx + MCOL * margins,
+        .gy = .gy - MROW * margins
+      ) 
+    xbreaks_df <- cal_ref %>% 
+      group_by(MCOL) %>% 
+      summarise(
+        .xmajor_min = min(.gx),
+        .xmajor_max = max(.gx) + min_width
+      )
+    xbreaks <- c(xbreaks_df$.xmajor_min, xbreaks_df$.xmajor_max)
+    ybreaks_df <- cal_ref %>% 
+      group_by(MROW) %>% 
+      summarise(
+        .ymajor_min = min(.gy),
+        .ymajor_max = max(.gy) + min_height
+      )
+    ybreaks <- c(ybreaks_df$.ymajor_min, ybreaks_df$.ymajor_max)
+    breaks <- list(x = xbreaks, y = ybreaks)
+  }
 
-  # Month text
-  xtext_df <- data %>% 
-    group_by(MCOL) %>% 
-    summarise(
-      .xmajor_min = min_na(.x)
-    ) %>% 
-    distinct(.xmajor_min)
-  xtext <- unlist2(xtext_df)
-  ytext_df <- data %>% 
-    group_by(MROW) %>% 
-    summarise(
-      .ymajor_max = max_na(.y)
-    ) %>% 
-    distinct(.ymajor_max)
-  ytext <- sort(unlist2(ytext_df), decreasing = TRUE)
-
-  yrs <- year(date)
+  # Prepare for the string texts
+  yrs <- year(date_eval)
   nyears <- unique(yrs)
-  month_labels <- paste(yrs, month(date, label = TRUE), sep = "-")
+  month_labels <- paste(yrs, month(date_eval, label = TRUE), sep = "-")
   unique_labels <- substr(unique(month_labels), start = 6, stop = 8)
 
+  # Month label positioned at the top left of each month panel
+  xtext <- sort(xbreaks_df$.xmajor_min)
+  ytext <- sort(ybreaks_df$.ymajor_max, decreasing = TRUE)
   mtext <- expand.grid2(x = xtext, y = ytext)
   mtext <- mtext[seq_along(unique_labels), , drop = FALSE]
   mtext$label <- unique_labels
 
   # Weekday text
   if (dir == "h") {
-    dtext <- tibble(
-      x = (minor_xbreaks + minor_xbreaks2) / 2, 
-      y = min(ybreaks) - margins / 2
+    dtext <- data.frame(
+      x = minor_xbreaks + min_width / 2,
+      y = min(minor_ybreaks)
     )
   } else {
-    dtext <- tibble(
-      x = min(xbreaks) - margins / 2,
-      y = (minor_ybreaks + minor_ybreaks2) / 2
+    dtext <- data.frame(
+      x = min(minor_xbreaks),
+      y = minor_ybreaks + min_height / 2
     )
   }
   wday_labels <- c("M", "T", "W", "T", "F", "S", "S")
   if (sunday) {
-    wday_labels <- wday_labels[c(7, 1:6)]
+    wday_labels <- wday_labels[c(2:7, 1)]
   }
   dtext$label <- wday_labels
+
   return(list(
     breaks = breaks, minor_breaks = minor_breaks,
     mlabel = mtext, dlabel = dtext
@@ -276,36 +276,35 @@ prettify <- function(plot, ...) {
   if (!is.ggplot(plot)) {
     abort("'plot' must be a ggplot object.")
   }
-  mlabel_df <- get_mlabel(plot$data)
-  dlabel_df <- get_dlabel(plot$data)
-  breaks_df <- get_breaks(plot$data)
-  minors_df <- get_minor_breaks(plot$data)
+  mlabel <- get_mlabel(plot$data)
+  dlabel <- get_dlabel(plot$data)
+  breaks <- get_breaks(plot$data)
+  minors <- get_minor_breaks(plot$data)
   dir <- get_dir(plot$data)
 
   plot <- plot + 
     geom_label(
-      aes(x, y, label = label), data = mlabel_df,
-      nudge_y = 0.01, hjust = 0, vjust = 0, 
-      inherit.aes = FALSE,
+      aes(x, y, label = label), data = mlabel,
+      hjust = 0, vjust = 0, inherit.aes = FALSE,
       ...
     )
   if (dir == "h") {
     plot <- plot + 
       geom_text(
-        aes(x, y, label = label), data = dlabel_df,
-        vjust = 1, inherit.aes = FALSE, ...
+        aes(x, y, label = label), data = dlabel,
+        nudge_y = -0.01, vjust = 1, inherit.aes = FALSE, ...
       )
   } else {
     plot <- plot + 
       geom_text(
-        aes(x, y, label = label), data = dlabel_df,
+        aes(x, y, label = label), data = dlabel,
         inherit.aes = FALSE, ...
       )
   }
   plot <- plot + 
-    scale_x_continuous(breaks = breaks_df$x, minor_breaks = minors_df$x)
+    scale_x_continuous(breaks = breaks$x, minor_breaks = minor_breaks$x)
   plot <- plot + 
-    scale_y_continuous(breaks = breaks_df$y, minor_breaks = minors_df$y) 
+    scale_y_continuous(breaks = breaks$y, minor_breaks = minor_breaks$y) 
   plot <- plot + 
     theme(
       axis.text = element_blank(), 

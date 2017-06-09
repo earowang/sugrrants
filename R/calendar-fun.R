@@ -1,9 +1,69 @@
 ## Setting up different calendar layouts
+# It builds a complete calendar layout, whilst using "left_join" with 
+# "gen_group_id"
 setup_calendar <- function(x, ...) {
   UseMethod("setup_calendar")
 }
 
-setup_calendar.cal_monthly <- function(x, dir = "h", sunday = FALSE, 
+setup_calendar.daily <- function(x, dir = "h", ...) {
+  # x is a vector of unique dates
+  date_x <- unique(as_date(x))
+  mday_x <- mday(date_x)
+  dir <- match.arg(dir, choices = c("h", "v"))
+
+  month_x <- unique(date_x - mday_x + 1)
+  nfacets <- length(month_x)
+  seq_facets <- seq_len(nfacets)
+  days_x <- days_in_month(month_x) # d
+  counter <- mapply2( # g
+    function(x, y) x + 0:(y - 1), x = 1, y = days_x
+  )
+  # if dir == "h"
+  row_idx <- rep(seq_facets, days_x)
+  col_idx <- lapply(days_x, seq_len)
+  if (dir == "v") { # reverse col_idx and row_idx when direction is vertical
+    col_tmp <- row_idx
+    row_idx <- col_idx
+    col_idx <- col_tmp
+  }
+  cal_table <- data.frame(
+    ROW = unlist2(row_idx),
+    COL = unlist2(col_idx),
+    PANEL = seq_along(unlist2(counter))
+  )
+  return(cal_table)
+}
+
+setup_calendar.weekly <- function(x, dir = "h", sunday = FALSE, ...) {
+  # x is a vector of unique dates
+  date_x <- unique(as_date(x))
+  init_counter <- mday(min_na(date_x))
+  wk_x <- isoweek(date_x)
+  dir <- match.arg(dir, choices = c("h", "v"))
+
+  if (sunday) { # Weekday starts with Sunday
+    col_idx <- wday(date_x)
+  } else { # starts with Monday
+    col_idx <- wday2(date_x)
+  }
+  counter <- init_counter - 1 + seq_along(date_x)
+  # if dir == "h"
+  rle_x <- rle(wk_x)
+  row_idx <- rep(seq_along(rle_x$values), rle_x$lengths)
+  if (dir == "v") { # reverse col_idx and row_idx when direction is vertical
+    col_tmp <- row_idx
+    row_idx <- col_idx
+    col_idx <- col_tmp
+  }
+  cal_table <- data.frame(
+    ROW = row_idx,
+    COL = col_idx,
+    PANEL = counter
+  )
+  return(cal_table)
+}
+
+setup_calendar.monthly <- function(x, dir = "h", sunday = FALSE, 
   nrow = NULL, ncol = NULL, ...) {
   # x is a vector of unique dates
   date_x <- unique(as_date(x))
