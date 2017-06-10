@@ -64,7 +64,9 @@ setup_calendar.monthly <- function(x, dir = "h", sunday = FALSE,
   x <- unique(as_date(x))
   month_x <- unique(x - mday(x) + 1)
   nfacets <- length(month_x)
-  nrow <- ceiling(nfacets / ncol) # overwrite user's row arg
+  dims <- wrap_dims(nfacets, nrow = nrow, ncol = ncol)
+  nrow <- dims[1]
+  ncol <- dims[2]
   days_x <- days_in_month(month_x) # d
   ndays <- 7
   max_wks <- 5
