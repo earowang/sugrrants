@@ -7,7 +7,9 @@ output:
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ```{r, echo = FALSE}
-knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.path = "figure/")
+knitr::opts_chunk$set(
+  collapse = TRUE, comment = "#>", fig.path = "figure/", dev = "svglite"
+)
 ```
 
 # sugrrants
@@ -43,11 +45,12 @@ calendar_df <- pedestrian %>%
 calendar_df
 ```
 
-```{r calendar-plot, echo = TRUE}
-calendar_df %>%
+```{r calendar-plot, echo = TRUE, fig.height = 8}
+p <- calendar_df %>%
   ggplot(aes(x = .x, y = .y, group = .group_id)) +
   geom_line() +
   facet_grid(Sensor_Name ~ .)
+prettify(p, label = "text")
 ```
 
 ## Acknowledgements

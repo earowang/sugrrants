@@ -63,13 +63,14 @@ calendar_df
 ```
 
 ``` r
-calendar_df %>%
+p <- calendar_df %>%
   ggplot(aes(x = .x, y = .y, group = .group_id)) +
   geom_line() +
   facet_grid(Sensor_Name ~ .)
+prettify(p, label = "text")
 ```
 
-![](figure/calendar-plot-1.png)
+![](figure/calendar-plot-1.svg)
 
 Acknowledgements
 ----------------
