@@ -15,8 +15,9 @@
 #'    in the monthly calendar, or TRUE for Sunday.
 #' @param nrow,ncol Integer. Number of rows and columns for the calendar layout.
 #' @param polar Logical. Cartesian (FALSE, the default) or polar (TRUE) coordinates.
-#' @param scale "global" (the default) for scaling globally, or "local" for scaling
-#     at each day cell.
+#' @param scale "fixed" (the default) for fixed scale. or "free" for scaling
+#'    conditional on each daily cell, "free_wday" for scaling on weekdays, 
+#'    "free_mday" for scaling on day of month.
 #'
 #' @return A data frame with newly added columns of `.x`, `.y`, and 
 #'    `.group_id`
@@ -51,7 +52,7 @@
 #'
 frame_calendar <- function(
   data, x, y, date, calendar = "monthly", dir = "h", sunday = FALSE, 
-  nrow = NULL, ncol = NULL, polar = FALSE, scale = "global"
+  nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed"
 ) {
   x <- enquo(x)
   y <- enquo(y)
@@ -63,7 +64,7 @@ frame_calendar <- function(
 
   calendar <- match.arg(calendar, c("monthly", "weekly", "daily"))
   dir <- match.arg(dir, c("h", "v"))
-  scale <- match.arg(scale, c("global", "local"))
+  scale <- match.arg(scale, c("fixed", "free", "free_wday", "free_mday"))
 
   start_date <- min_na(as_date(date_eval))
 
@@ -97,10 +98,17 @@ frame_calendar <- function(
       ) 
   }
 
-  if (scale == "global") {
-    data <- ungroup(data)
-  } else { # local scale
+  data <- ungroup(data) # is.null(scale)
+  if (scale == "free") {
     data <- group_by(data, ROW, COL)
+  } else if (scale == "free_wday") {
+    data <- data %>% 
+      mutate(.day = wday(!!date)) %>% 
+      group_by(.day)
+  } else if (scale == "free_mday") {
+    data <- data %>% 
+      mutate(.day = mday(!!date)) %>% 
+      group_by(.day)
   }
 
   if (polar) {
@@ -129,6 +137,9 @@ frame_calendar <- function(
   data <- data %>% 
     ungroup() %>% 
     select(-(ROW:.gy))
+  if (scale %in% c("free_wday", "free_mday")) {
+    data <- select(data, -.day) # remove .day variable
+  }
 
   attr(data, "breaks") <- data_ref$breaks
   attr(data, "minor_breaks") <- data_ref$minor_breaks

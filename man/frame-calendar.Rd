@@ -7,7 +7,7 @@
 \usage{
 frame_calendar(data, x, y, date, calendar = "monthly", dir = "h",
   sunday = FALSE, nrow = NULL, ncol = NULL, polar = FALSE,
-  scale = "global")
+  scale = "fixed")
 
 prettify(plot, label = c("label", "text"), ...)
 }
@@ -30,7 +30,9 @@ in the monthly calendar, or TRUE for Sunday.}
 
 \item{polar}{Logical. Cartesian (FALSE, the default) or polar (TRUE) coordinates.}
 
-\item{scale}{"global" (the default) for scaling globally, or "local" for scaling}
+\item{scale}{"fixed" (the default) for fixed scale. or "free" for scaling
+conditional on each daily cell, "free_wday" for scaling on weekdays,
+"free_mday" for scaling on day of month.}
 
 \item{plot}{ggplot object}
 
