@@ -177,6 +177,49 @@ gen_reference <- function(grids, date, dir = "h", polar = FALSE, ...) {
   UseMethod("gen_reference")
 }
 
+gen_reference.daily <- function(grids, date, dir = "h", polar = FALSE, ...) {
+  # day breaks
+  minor_breaks <- gen_day_breaks(grids)
+  min_width <- min(abs(diff(minor_breaks$x)))
+  min_height <- min(abs(diff(minor_breaks$y)))
+
+  # Prepare for the string texts
+  yrs <- year(date)
+  nyears <- unique(yrs)
+  month_labels <- paste(yrs, month(date, label = TRUE), sep = "-")
+  unique_labels <- substring(unique(month_labels), first = 6)
+
+  if (dir == "h") {
+    # Month text positioned at the right of each month panel (dir == "h")
+    mtext <- data.frame(
+      x = max(minor_breaks$x) + min_width,
+      y = minor_breaks$y + min_height / 2
+    )
+    # Weekday text at the bottom
+    dtext <- data.frame(
+      x = minor_breaks$x + min_width / 2,
+      y = min(minor_breaks$y)
+    )
+  } else {
+    # Month text positioned at the top of each month panel (dir == "v")
+    mtext <- data.frame(
+      x = minor_breaks$x + min_width / 2,
+      y = max(minor_breaks$y) + min_height
+    )
+    dtext <- data.frame(
+      x = min(minor_breaks$x),
+      y = minor_breaks$y + min_height / 2
+    )
+  }
+  mtext$label <- unique_labels
+  dtext$label <- seq_len(max(mday(date)))
+
+  return(list(
+    breaks = NULL, minor_breaks = minor_breaks,
+    mlabel = mtext, dlabel = dtext
+  ))
+}
+
 gen_reference.weekly <- function(grids, date, dir = "h", polar = FALSE, ...) {
   # day breaks
   minor_breaks <- gen_day_breaks(grids)
