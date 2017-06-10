@@ -1,17 +1,16 @@
 ## Setting up different calendar layouts
 # It builds a complete calendar layout, whilst using "left_join" with 
 # "gen_group_id"
-setup_calendar <- function(x, ...) {
+setup_calendar <- function(x, dir = "h", ...) {
+  dir <- match.arg(dir, choices = c("h", "v"))
   UseMethod("setup_calendar")
 }
 
 setup_calendar.daily <- function(x, dir = "h", ...) {
   # x is a vector of unique dates
-  date_x <- unique(as_date(x))
-  mday_x <- mday(date_x)
-  dir <- match.arg(dir, choices = c("h", "v"))
-
-  month_x <- unique(date_x - mday_x + 1)
+  x <- unique(as_date(x))
+  mday_x <- mday(x)
+  month_x <- unique(x - mday_x + 1)
   nfacets <- length(month_x)
   seq_facets <- seq_len(nfacets)
   days_x <- days_in_month(month_x) # d
@@ -34,19 +33,15 @@ setup_calendar.daily <- function(x, dir = "h", ...) {
   return(cal_table)
 }
 
-setup_calendar.weekly <- function(x, dir = "h", sunday = FALSE, ...) {
+setup_calendar.weekly <- function(x, dir = "h", ...) {
   # x is a vector of unique dates
-  date_x <- unique(as_date(x))
-  init_counter <- mday(min_na(date_x))
-  wk_x <- isoweek(date_x)
-  dir <- match.arg(dir, choices = c("h", "v"))
+  x <- unique(as_date(x))
+  init_counter <- mday(min_na(x))
+  wk_x <- isoweek(x)
 
-  if (sunday) { # Weekday starts with Sunday
-    col_idx <- wday(date_x)
-  } else { # starts with Monday
-    col_idx <- wday2(date_x)
-  }
-  counter <- init_counter - 1 + seq_along(date_x)
+  # only starts with Monday for ISO week
+  col_idx <- wday2(x)
+  counter <- init_counter - 1 + seq_along(x)
   # if dir == "h"
   rle_x <- rle(wk_x)
   row_idx <- rep(seq_along(rle_x$values), rle_x$lengths)
@@ -66,10 +61,8 @@ setup_calendar.weekly <- function(x, dir = "h", sunday = FALSE, ...) {
 setup_calendar.monthly <- function(x, dir = "h", sunday = FALSE, 
   nrow = NULL, ncol = NULL, ...) {
   # x is a vector of unique dates
-  date_x <- unique(as_date(x))
-  dir <- match.arg(dir, choices = c("h", "v"))
-
-  month_x <- unique(date_x - mday(date_x) + 1)
+  x <- unique(as_date(x))
+  month_x <- unique(x - mday(x) + 1)
   nfacets <- length(month_x)
   nrow <- ceiling(nfacets / ncol) # overwrite user's row arg
   days_x <- days_in_month(month_x) # d

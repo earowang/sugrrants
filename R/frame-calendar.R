@@ -49,8 +49,10 @@
 #'
 #' @export
 #'
-frame_calendar <- function(data, x, y, date, calendar = "monthly", dir = "h",
-  sunday = FALSE, nrow = NULL, ncol = NULL, polar = FALSE, scale = "global") {
+frame_calendar <- function(
+  data, x, y, date, calendar = "monthly", dir = "h", sunday = FALSE, 
+  nrow = NULL, ncol = NULL, polar = FALSE, scale = "global"
+) {
   x <- enquo(x)
   y <- enquo(y)
   date <- enquo(date)
@@ -69,15 +71,8 @@ frame_calendar <- function(data, x, y, date, calendar = "monthly", dir = "h",
     arrange(!!date) %>% 
     mutate(.group_id = gen_group_id(!!date, start_date))
 
-  if (calendar == "monthly") {
-    class(date_eval) <- c("monthly", class(date_eval))
-  } else if (calendar == "weekly") {
-    class(date_eval) <- c("weekly", class(date_eval))
-  } else {
-    class(date_eval) <- c("daily", class(date_eval))
-  }
-
-  cal_layout <- setup_calendar(date_eval, dir = dir, sunday = sunday,
+  class(date_eval) <- c(calendar, class(date_eval))
+  cal_layout <- setup_calendar(x = date_eval, dir = dir, sunday = sunday,
     nrow = nrow, ncol = ncol)
 
   # Assign grids to the panels
@@ -125,15 +120,11 @@ frame_calendar <- function(data, x, y, date, calendar = "monthly", dir = "h",
       )
   }
   # generate breaks and labels for prettify()
-  # !!! ToDo
-  if (calendar == "monthly") {
-    data_ref <- gen_reference(
-      cal_grids, date = date_eval, margins, calendar = calendar, 
-      sunday = sunday, dir = dir, polar = polar
-    )
-  } else {
-    data_ref <- list()
-  }
+  class(cal_grids) <- c(calendar, class(cal_grids))
+  data_ref <- gen_reference(
+    cal_grids, date = date_eval, margins, calendar = calendar, 
+    sunday = sunday, dir = dir, polar = polar
+  )
 
   data <- data %>% 
     ungroup() %>% 
@@ -179,64 +170,97 @@ assign_grids <- function(ROW, COL) {
   return(out)
 }
 
-# The following snippet for linear coord
-gen_reference <- function(grids, date, margins, calendar = "monthly", dir = "h", 
-  sunday = FALSE, polar = FALSE) {
-  calendar <- match.arg(calendar, c("monthly", "weekly", "daily"))
+# Compute grid lines and text labels for frame_calendar()
+# ToDo: polar = TRUE
+gen_reference <- function(grids, date, dir = "h", polar = FALSE, ...) {
   dir <- match.arg(dir, c("h", "v"))
+  UseMethod("gen_reference")
+}
 
-  # Month breaks
-  if (calendar == "monthly") {
-    # Month breaks (if calendar == "monthly")
-    grids <- grids %>% 
-      group_by(MPANEL) %>% 
-      mutate(
-        .gx = .gx + MCOL * margins,
-        .gy = .gy - MROW * margins
-      ) 
-    xbreaks_df <- grids %>% 
-      group_by(MCOL) %>% 
-      summarise(
-        .xmajor_min = min(.gx),
-        .xmajor_max = max(.gx)
-      )
-    ybreaks_df <- grids %>% 
-      group_by(MROW) %>% 
-      summarise(
-        .ymajor_min = min(.gy),
-        .ymajor_max = max(.gy)
-      )
+gen_reference.weekly <- function(grids, date, dir = "h", polar = FALSE, ...) {
+  # day breaks
+  minor_breaks <- gen_day_breaks(grids)
+  min_width <- min(abs(diff(minor_breaks$x)))
+  min_height <- min(abs(diff(minor_breaks$y)))
+
+  # Prepare for the string texts
+  yrs <- year(date)
+  nyears <- unique(yrs)
+  week_labels <- paste(yrs, isoweek(date), sep = "-")
+  unique_labels <- formatC( # make week index to be fixed-width 2 digits
+    as.integer(substring(unique(week_labels), first = 6)), 
+    width = 2, flag = "0"
+  )
+
+  if (dir == "h") {
+    # Week index text positioned at the right of each week panel (dir == "h")
+    mtext <- data.frame(
+      x = max(minor_breaks$x) + min_width,
+      y = minor_breaks$y + min_height / 2
+    )
+    # Weekday text at the bottom
+    dtext <- data.frame(
+      x = minor_breaks$x + min_width / 2,
+      y = min(minor_breaks$y)
+    )
+  } else {
+    # Week index text positioned at the top of each week panel (dir == "v")
+    mtext <- data.frame(
+      x = minor_breaks$x + min_width / 2,
+      y = max(minor_breaks$y) + min_height
+    )
+    dtext <- data.frame(
+      x = min(minor_breaks$x),
+      y = minor_breaks$y + min_height / 2
+    )
   }
+  mtext$label <- unique_labels
+  dtext$label <- gen_wday_labels(sunday = FALSE)
+
+  return(list(
+    breaks = NULL, minor_breaks = minor_breaks,
+    mlabel = mtext, dlabel = dtext
+  ))
+}
+
+gen_reference.monthly <- function(
+  grids, date, margins, dir = "h", sunday = FALSE, polar = FALSE, ...
+) {
+  # Month breaks
+  grids <- grids %>% 
+    group_by(MPANEL) %>% 
+    mutate(
+      .gx = .gx + MCOL * margins,
+      .gy = .gy - MROW * margins
+    ) 
+  xbreaks_df <- grids %>% 
+    group_by(MCOL) %>% 
+    summarise(
+      .xmajor_min = min(.gx),
+      .xmajor_max = max(.gx)
+    )
+  ybreaks_df <- grids %>% 
+    group_by(MROW) %>% 
+    summarise(
+      .ymajor_min = min(.gy),
+      .ymajor_max = max(.gy)
+    )
 
   # day breaks
-  minor_xbreaks_df <- grids %>% 
-    group_by(COL) %>% 
-    summarise(
-      .xminor_min = min(.gx)
-    )
-  minor_xbreaks <- minor_xbreaks_df$.xminor_min
-  minor_ybreaks_df <- grids %>% 
-    group_by(ROW) %>% 
-    summarise(
-      .yminor_min = min(.gy)
-    )
-  minor_ybreaks <- minor_ybreaks_df$.yminor_min
-  minor_breaks <- list(x = minor_xbreaks, y = minor_ybreaks)
-  min_width <- min(abs(diff(minor_xbreaks)))
-  min_height <- min(abs(diff(minor_ybreaks)))
+  minor_breaks <- gen_day_breaks(grids)
+  min_width <- min(abs(diff(minor_breaks$x)))
+  min_height <- min(abs(diff(minor_breaks$y)))
 
   # month breaks update
-  if (calendar == "monthly") {
-    xbreaks <- c(xbreaks_df$.xmajor_min, xbreaks_df$.xmajor_max + min_width)
-    ybreaks <- c(ybreaks_df$.ymajor_min, ybreaks_df$.ymajor_max + min_height)
-    breaks <- list(x = xbreaks, y = ybreaks)
-  }
+  xbreaks <- c(xbreaks_df$.xmajor_min, xbreaks_df$.xmajor_max + min_width)
+  ybreaks <- c(ybreaks_df$.ymajor_min, ybreaks_df$.ymajor_max + min_height)
+  breaks <- list(x = xbreaks, y = ybreaks)
 
   # Prepare for the string texts
   yrs <- year(date)
   nyears <- unique(yrs)
   month_labels <- paste(yrs, month(date, label = TRUE), sep = "-")
-  unique_labels <- substr(unique(month_labels), start = 6, stop = 8)
+  unique_labels <- substring(unique(month_labels), first = 6)
 
   # Month label positioned at the top left of each month panel
   xtext <- sort(xbreaks_df$.xmajor_min)
@@ -248,20 +272,16 @@ gen_reference <- function(grids, date, margins, calendar = "monthly", dir = "h",
   # Weekday text
   if (dir == "h") {
     dtext <- data.frame(
-      x = minor_xbreaks + min_width / 2,
-      y = min(minor_ybreaks)
+      x = minor_breaks$x + min_width / 2,
+      y = min(minor_breaks$y)
     )
   } else {
     dtext <- data.frame(
-      x = min(minor_xbreaks),
-      y = minor_ybreaks + min_height / 2
+      x = min(minor_breaks$x),
+      y = minor_breaks$y + min_height / 2
     )
   }
-  wday_labels <- c("M", "T", "W", "T", "F", "S", "S")
-  if (sunday) {
-    wday_labels <- wday_labels[c(2:7, 1)]
-  }
-  dtext$label <- wday_labels
+  dtext$label <- gen_wday_labels(sunday = sunday)
 
   return(list(
     breaks = breaks, minor_breaks = minor_breaks,
@@ -339,3 +359,28 @@ get_dir <- function(data) {
   attr(data, "dir")
 }
 
+gen_wday_labels <- function(..., sunday = FALSE) { # simply ignore ...
+  wday_labels <- c("M", "T", "W", "T", "F", "S", "S")
+  if (sunday) {
+    wday_labels <- wday_labels[c(2:7, 1)]
+  }
+  return(wday_labels)
+}
+
+gen_day_breaks <- function(grids) {
+  # day breaks
+  minor_xbreaks_df <- grids %>% 
+    group_by(COL) %>% 
+    summarise(
+      .xminor_min = min(.gx)
+    )
+  minor_xbreaks <- minor_xbreaks_df$.xminor_min
+  minor_ybreaks_df <- grids %>% 
+    group_by(ROW) %>% 
+    summarise(
+      .yminor_min = min(.gy)
+    )
+  minor_ybreaks <- minor_ybreaks_df$.yminor_min
+  minor_breaks <- list(x = minor_xbreaks, y = minor_ybreaks)
+  return(minor_breaks)
+}
