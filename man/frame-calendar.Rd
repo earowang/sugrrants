@@ -9,7 +9,7 @@ frame_calendar(data, x, y, date, calendar = "monthly", dir = "h",
   sunday = FALSE, nrow = NULL, ncol = NULL, polar = FALSE,
   scale = "global")
 
-prettify(plot, ...)
+prettify(plot, label = c("label", "text"), ...)
 }
 \arguments{
 \item{data}{A data frame.}
@@ -33,6 +33,12 @@ in the monthly calendar, or TRUE for Sunday.}
 \item{scale}{"global" (the default) for scaling globally, or "local" for scaling}
 
 \item{plot}{ggplot object}
+
+\item{label}{If "label" is specified, it will add month/week text on the
+\code{ggplot} object, which is actually passed to \code{geom_label}. If "text" is
+specified, it will add weekday/day of month text on the \code{ggplot} object,
+which is actually passed to \code{geom_text}. By default, both "label" and
+"text" are used.}
 
 \item{...}{Extra arguments passed to geom_label and geom_text}
 }

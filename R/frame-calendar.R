@@ -334,9 +334,19 @@ gen_reference.monthly <- function(
 
 #' @rdname frame-calendar
 #' @param plot ggplot object
+#' @param label If "label" is specified, it will add month/week text on the 
+#'    `ggplot` object, which is actually passed to `geom_label`. If "text" is
+#'    specified, it will add weekday/day of month text on the `ggplot` object,
+#'    which is actually passed to `geom_text`. By default, both "label" and 
+#'    "text" are used.
 #' @param ... Extra arguments passed to geom_label and geom_text
 #' @export
-prettify <- function(plot, ...) {
+prettify <- function(plot, label = c("label", "text"), ...) {
+  if (is.null(label)) {
+    label <- NULL
+  } else {
+    label <- match.arg(label, c("label", "text"), several.ok = TRUE)
+  }
   if (missing(plot)) {
     plot <- last_plot()
   }
@@ -349,24 +359,28 @@ prettify <- function(plot, ...) {
   minor_breaks <- get_minor_breaks(plot$data)
   dir <- get_dir(plot$data)
 
-  plot <- plot + 
-    geom_label(
-      aes(x, y, label = label), data = mlabel,
-      hjust = 0, vjust = 0, inherit.aes = FALSE,
-      ...
-    )
-  if (dir == "h") {
+  if ("label" %in% label) {
     plot <- plot + 
-      geom_text(
-        aes(x, y, label = label), data = dlabel,
-        nudge_y = -0.01, vjust = 1, inherit.aes = FALSE, ...
+      geom_label(
+        aes(x, y, label = label), data = mlabel,
+        hjust = 0, vjust = 0, inherit.aes = FALSE,
+        ...
       )
-  } else {
-    plot <- plot + 
-      geom_text(
-        aes(x, y, label = label), data = dlabel,
-        nudge_x = -0.01, hjust = 1, inherit.aes = FALSE, ...
-      )
+  }
+  if ("text" %in% label) {
+    if (dir == "h") {
+      plot <- plot + 
+        geom_text(
+          aes(x, y, label = label), data = dlabel,
+          nudge_y = -0.01, vjust = 1, inherit.aes = FALSE, ...
+        )
+    } else {
+      plot <- plot + 
+        geom_text(
+          aes(x, y, label = label), data = dlabel,
+          nudge_x = -0.01, hjust = 1, inherit.aes = FALSE, ...
+        )
+    }
   }
   plot <- plot + 
     scale_x_continuous(breaks = breaks$x, minor_breaks = minor_breaks$x)
