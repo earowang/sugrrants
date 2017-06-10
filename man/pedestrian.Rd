@@ -4,19 +4,24 @@
 \name{pedestrian}
 \alias{pedestrian}
 \title{Pedestrian counts in Melbourne city}
-\format{A data frame with 70072 rows and 4 variables:
+\format{A tibble with 89837 rows and 9 variables:
 \describe{
-\item{Date_Time}{Date time in 2015}
+\item{Date_Time}{Date time when the pedestrian counts are recorded}
+\item{Year}{Year associated with Date_Time}
+\item{Month}{Month associated with Date_Time}
+\item{Mdate}{Day of month associated with Date_Time}
+\item{Day}{Weekday associated with Date_Time}
+\item{Time}{Hour associated with Date_Time}
 \item{Sensor_ID}{Sensor identifiers}
 \item{Sensor_Name}{Sensor names}
-\item{Hourly_Counts}{Pedestrian Counts at hourly intervals}
+\item{Hourly_Counts}{Hourly pedestrian counts}
 }}
 \usage{
 pedestrian
 }
 \description{
-A dataset containing the pedestrian counts at hourly intervals over the year
-of 2015 at 8 sensors in the city of Melbourne. The variables are as follows:
+A dataset containing the pedestrian counts at hourly intervals from 2016-01-01
+to 2017-04-20 at 8 sensors in the city of Melbourne. The variables are as follows:
 }
 \examples{
 pedestrian

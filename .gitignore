@@ -3,5 +3,4 @@
 .RData
 .Ruserdata
 inst/doc
-data-raw/Pedestrian_Counts_Oct16.csv
-data-raw/sweden.stn.loc.melt.rds
+data-raw/pedestrian.csv

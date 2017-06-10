@@ -37,9 +37,7 @@
 #'    # get the calendar layout for the data frame
 #'    ped_calendar <- pedestrian %>%
 #'      filter(Sensor_ID == 13) %>% 
-#'      mutate(Time = lubridate::hour(Date_Time)) %>% 
-#'      frame_calendar(x = Time, y = Hourly_Counts, date = Date_Time,
-#'        nrow = 3, ncol = 4)
+#'      frame_calendar(x = Time, y = Hourly_Counts, date = Date_Time, nrow = 4)
 #'
 #'    # plot
 #'    library(ggplot2)
