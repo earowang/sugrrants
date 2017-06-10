@@ -214,7 +214,7 @@ gen_reference.daily <- function(grids, date, dir = "h", polar = FALSE, ...) {
   } else {
     # Month text positioned at the top of each month panel (dir == "v")
     mtext <- data.frame(
-      x = minor_breaks$x + min_width / 2,
+      x = minor_breaks$x,
       y = max(minor_breaks$y) + min_height
     )
     dtext <- data.frame(
@@ -250,7 +250,7 @@ gen_reference.weekly <- function(grids, date, dir = "h", polar = FALSE, ...) {
     # Week index text positioned at the right of each week panel (dir == "h")
     mtext <- data.frame(
       x = max(minor_breaks$x) + min_width,
-      y = minor_breaks$y + min_height / 2
+      y = minor_breaks$y
     )
     # Weekday text at the bottom
     dtext <- data.frame(
@@ -260,7 +260,7 @@ gen_reference.weekly <- function(grids, date, dir = "h", polar = FALSE, ...) {
   } else {
     # Week index text positioned at the top of each week panel (dir == "v")
     mtext <- data.frame(
-      x = minor_breaks$x + min_width / 2,
+      x = minor_breaks$x,
       y = max(minor_breaks$y) + min_height
     )
     dtext <- data.frame(
