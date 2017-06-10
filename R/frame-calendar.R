@@ -1,32 +1,43 @@
-#' @title Build a calendar view for a time series data frame
+#' @title Rearrange a temporal data frame to a calendar-based data format using 
+#'    linear algebra
 #'
-#' @description A calendar view is useful to visualise time series at daily intervals
-#'    or higher frequency levels. `frame_calendar` sets up the calendar
-#'    layout for the input data frame, and the results is ready for `ggplot2`.
-#'    Each row represents a week and the first cell in the row indicates Mondays.
+#' @description Temporal data of daily intervals or higher frequency levels can 
+#'    be organised into a calendar-based format, which is useful for visually
+#'    presenting calendar-related activities or multiple seasonality (such as 
+#'    time of day, day of week, day of month). The function only returns a
+#'    rearranged data frame, and `ggplot2` takes care of the plotting afterwards. 
+#'    It allows more flexibility for users to visualise the data in various ways.
 #'
-#' @param data A data frame.
-#' @param x,y  Variables to be passed to `ggplot2(aes(x, y))`.
-#' @param date  A variable of date-times that helps to tell the days in the
-#'    calendar.
-#' @param calendar Character. Type of calendar.
-#' @param dir Direction: "h" for horizontal (the default) or "v" for vertical.
-#' @param sunday Logical. FALSE (the default) for starting the weekday as Monday
-#'    in the monthly calendar, or TRUE for Sunday.
-#' @param nrow,ncol Integer. Number of rows and columns for the calendar layout.
-#' @param polar Logical. Cartesian (FALSE, the default) or polar (TRUE) coordinates.
-#' @param scale "fixed" (the default) for fixed scale. or "free" for scaling
+#' @param data A data frame or a tibble including a `date-time` variable.
+#' @param x,y  Either `x` or `y` should be a variable mapping to time of day in
+#'    daily cells and a "value" variable, both of which are contained in the `data`. 
+#' @param date A `date-time` variable mapping to dates in the calendar.
+#' @param calendar Type of calendar. "monthly" calendar (the default) organises
+#'    the `data` to a common format comprised of day of week in the column and
+#'    week of month in the row. "weekly" calendar consists of day of week and
+#'    week of year. "daily" calendar refers to day of month and month of year.
+#' @param dir Direction of calendar: "h" for horizontal (the default) or "v" for 
+#'    vertical.
+#' @param sunday FALSE (the default) indicating to starting with Monday in a
+#'    week, or TRUE for Sunday, when `calendar = "monthly"`.
+#' @param nrow,ncol Number of rows and columns defined for "monthly" calendar 
+#'    layout.
+#' @param polar FALSE (the default) for Cartesian or TRUE for polar coordinates.
+#' @param scale "fixed" (the default) for fixed scale. "free" for scaling
 #'    conditional on each daily cell, "free_wday" for scaling on weekdays, 
 #'    "free_mday" for scaling on day of month.
 #'
-#' @return A data frame with newly added columns of `.x`, `.y`, and 
-#'    `.group_id`
+#' @return A data frame or a tibble with newly added columns of `.x`, `.y`, and 
+#'    `.group_id`. `.x` and `.y` together give new coordinates computed for
+#'    different types of calendars. `.group_id` groups the same dates in a
+#'    chronological order. The basic use is `ggplot(aes(x = .x, y = .y, group =
+#'    .group_id)) + geom_*`.
 #'
-#' @details Calendar view is a special ordered layout that `ggplot2::facet_grid` 
-#'    and `ggplot2::facet_wrap` currently do not support. This creates new
-#'    coordinates of `(.x, .y)` to place to the correct panel in the calendar 
-#'    and new grouped sequence of `.group_id` from `date` using some 
-#'    linear algebra.
+#' @details The calendar-based graphic can be considered as small multiples
+#'    of sub-series arranged into many daily cells. For every multiple (or
+#'    facet), it requires the `x` variable mapped to be time of day and `y` to
+#'    value. New `.x` and `.y` are computed according to `x` and `y` 
+#'    respectively, and get ready for `ggplot2` aesthetic mappings.
 #'
 #' @author Earo Wang
 #'
@@ -34,18 +45,31 @@
 #' 
 #' @examples
 #'    library(dplyr)
-#'    # get the calendar layout for the data frame
-#'    ped_calendar <- pedestrian %>%
+#'    # compute the calendar layout for the data frame
+#'    calendar_df <- pedestrian %>%
 #'      filter(Sensor_ID == 13) %>% 
 #'      frame_calendar(x = Time, y = Hourly_Counts, date = Date_Time, nrow = 4)
 #'
-#'    # plot
-#'    library(ggplot2)
-#'    ped_calendar %>% 
+#'    # ggplot
+#'    p1 <- calendar_df %>% 
 #'      ggplot(aes(x = .x, y = .y, group = .group_id)) +
 #'      geom_line()
-#'    prettify()
-#'
+#'    prettify(p1)
+#'    
+#'    # use in conjunction with group_by()
+#'    grped_calendar <- pedestrian %>% 
+#'      filter(Year == "2017", Month == "March") %>% 
+#'      group_by(Sensor_Name) %>% 
+#'      frame_calendar(
+#'        x = Time, y = Hourly_Counts, date = Date_Time, sunday = TRUE
+#'      )
+#'    
+#'    p2 <- grped_calendar %>% 
+#'      ggplot(aes(x = .x, y = .y, group = .group_id)) +
+#'      geom_line() +
+#'      facet_wrap(~ Sensor_Name, nrow = 2)
+#'    prettify(p2, label = "text")
+#
 #' @export
 #'
 frame_calendar <- function(

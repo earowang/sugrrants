@@ -3,7 +3,8 @@
 \name{frame_calendar}
 \alias{frame_calendar}
 \alias{prettify}
-\title{Build a calendar view for a time series data frame}
+\title{Rearrange a temporal data frame to a calendar-based data format using
+linear algebra}
 \usage{
 frame_calendar(data, x, y, date, calendar = "monthly", dir = "h",
   sunday = FALSE, nrow = NULL, ncol = NULL, polar = FALSE,
@@ -12,25 +13,30 @@ frame_calendar(data, x, y, date, calendar = "monthly", dir = "h",
 prettify(plot, label = c("label", "text"), ...)
 }
 \arguments{
-\item{data}{A data frame.}
+\item{data}{A data frame or a tibble including a \code{date-time} variable.}
 
-\item{x, y}{Variables to be passed to \code{ggplot2(aes(x, y))}.}
+\item{x, y}{Either \code{x} or \code{y} should be a variable mapping to time of day in
+daily cells and a "value" variable, both of which are contained in the \code{data}.}
 
-\item{date}{A variable of date-times that helps to tell the days in the
-calendar.}
+\item{date}{A \code{date-time} variable mapping to dates in the calendar.}
 
-\item{calendar}{Character. Type of calendar.}
+\item{calendar}{Type of calendar. "monthly" calendar (the default) organises
+the \code{data} to a common format comprised of day of week in the column and
+week of month in the row. "weekly" calendar consists of day of week and
+week of year. "daily" calendar refers to day of month and month of year.}
 
-\item{dir}{Direction: "h" for horizontal (the default) or "v" for vertical.}
+\item{dir}{Direction of calendar: "h" for horizontal (the default) or "v" for
+vertical.}
 
-\item{sunday}{Logical. FALSE (the default) for starting the weekday as Monday
-in the monthly calendar, or TRUE for Sunday.}
+\item{sunday}{FALSE (the default) indicating to starting with Monday in a
+week, or TRUE for Sunday, when \code{calendar = "monthly"}.}
 
-\item{nrow, ncol}{Integer. Number of rows and columns for the calendar layout.}
+\item{nrow, ncol}{Number of rows and columns defined for "monthly" calendar
+layout.}
 
-\item{polar}{Logical. Cartesian (FALSE, the default) or polar (TRUE) coordinates.}
+\item{polar}{FALSE (the default) for Cartesian or TRUE for polar coordinates.}
 
-\item{scale}{"fixed" (the default) for fixed scale. or "free" for scaling
+\item{scale}{"fixed" (the default) for fixed scale. "free" for scaling
 conditional on each daily cell, "free_wday" for scaling on weekdays,
 "free_mday" for scaling on day of month.}
 
@@ -45,36 +51,52 @@ which is actually passed to \code{geom_text}. By default, both "label" and
 \item{...}{Extra arguments passed to geom_label and geom_text}
 }
 \value{
-A data frame with newly added columns of \code{.x}, \code{.y}, and
-\code{.group_id}
+A data frame or a tibble with newly added columns of \code{.x}, \code{.y}, and
+\code{.group_id}. \code{.x} and \code{.y} together give new coordinates computed for
+different types of calendars. \code{.group_id} groups the same dates in a
+chronological order. The basic use is \code{ggplot(aes(x = .x, y = .y, group = .group_id)) + geom_*}.
 }
 \description{
-A calendar view is useful to visualise time series at daily intervals
-or higher frequency levels. \code{frame_calendar} sets up the calendar
-layout for the input data frame, and the results is ready for \code{ggplot2}.
-Each row represents a week and the first cell in the row indicates Mondays.
+Temporal data of daily intervals or higher frequency levels can
+be organised into a calendar-based format, which is useful for visually
+presenting calendar-related activities or multiple seasonality (such as
+time of day, day of week, day of month). The function only returns a
+rearranged data frame, and \code{ggplot2} takes care of the plotting afterwards.
+It allows more flexibility for users to visualise the data in various ways.
 }
 \details{
-Calendar view is a special ordered layout that \code{ggplot2::facet_grid}
-and \code{ggplot2::facet_wrap} currently do not support. This creates new
-coordinates of \code{(.x, .y)} to place to the correct panel in the calendar
-and new grouped sequence of \code{.group_id} from \code{date} using some
-linear algebra.
+The calendar-based graphic can be considered as small multiples
+of sub-series arranged into many daily cells. For every multiple (or
+facet), it requires the \code{x} variable mapped to be time of day and \code{y} to
+value. New \code{.x} and \code{.y} are computed according to \code{x} and \code{y}
+respectively, and get ready for \code{ggplot2} aesthetic mappings.
 }
 \examples{
    library(dplyr)
-   # get the calendar layout for the data frame
-   ped_calendar <- pedestrian \%>\%
+   # compute the calendar layout for the data frame
+   calendar_df <- pedestrian \%>\%
      filter(Sensor_ID == 13) \%>\% 
      frame_calendar(x = Time, y = Hourly_Counts, date = Date_Time, nrow = 4)
 
-   # plot
-   library(ggplot2)
-   ped_calendar \%>\% 
+   # ggplot
+   p1 <- calendar_df \%>\% 
      ggplot(aes(x = .x, y = .y, group = .group_id)) +
      geom_line()
-   prettify()
-
+   prettify(p1)
+   
+   # use in conjunction with group_by()
+   grped_calendar <- pedestrian \%>\% 
+     filter(Year == "2017", Month == "March") \%>\% 
+     group_by(Sensor_Name) \%>\% 
+     frame_calendar(
+       x = Time, y = Hourly_Counts, date = Date_Time, sunday = TRUE
+     )
+   
+   p2 <- grped_calendar \%>\% 
+     ggplot(aes(x = .x, y = .y, group = .group_id)) +
+     geom_line() +
+     facet_wrap(~ Sensor_Name, nrow = 2)
+   prettify(p2, label = "text")
 }
 \author{
 Earo Wang
