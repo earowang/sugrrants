@@ -1,0 +1,55 @@
+---
+output:
+  github_document:
+    html_preview: false
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.path = "figure/")
+```
+
+# sugrrants
+
+[![Travis-CI Build Status](https://travis-ci.org/earowang/sugrrants.svg?branch=master)](https://travis-ci.org/earowang/sugrrants)
+
+## Overview
+
+The goal of *sugrrants* is to provide supporting graphics with R for analysing time series data. It aims to fit into the *tidyverse* and grammar of graphics framework for handling with temporal data. The package is under development and highly experimental at this stage. Bug reporting and feature suggestions are welcome.
+
+## Installation
+
+You could install the development version from Github using
+
+```r
+# install.packages("devtools")
+devtools::install_github("earowang/sugrrants", build_vignettes = TRUE)
+```
+
+## Usage
+
+### Calendar-based graphics
+
+```{r calendar, echo = TRUE}
+library(dplyr)
+library(sugrrants)
+
+calendar_df <- pedestrian %>%
+  filter(Sensor_ID %in% c(9, 25)) %>%
+  group_by(Sensor_Name) %>%
+  frame_calendar(
+    x = Time, y = Hourly_Counts, date = Date_Time, calendar = "monthly")
+calendar_df
+```
+
+```{r calendar-plot, echo = TRUE}
+calendar_df %>%
+  ggplot(aes(x = .x, y = .y, group = .group_id)) +
+  geom_line() +
+  facet_grid(Sensor_Name ~ .)
+```
+
+## Acknowledgements
+
+The acronym of *sugrrants* is **SU**pporting **GR**aphics with **R** for **AN**alysing **T**ime **S**eries, pronounced as "sugar ants" that are a species of ant endemic to Australia. Naming credit goes to @robjhyndman.
