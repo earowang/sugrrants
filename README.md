@@ -66,7 +66,8 @@ calendar_df
 p <- calendar_df %>%
   ggplot(aes(x = .x, y = .y, group = .group_id, colour = Sensor_Name)) +
   geom_line() +
-  facet_grid(Sensor_Name ~ .)
+  facet_grid(Sensor_Name ~ .) +
+  theme(legend.position = "none")
 prettify(p, label = "text")
 ```
 
