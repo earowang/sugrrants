@@ -70,7 +70,7 @@ p <- calendar_df %>%
 prettify(p, label = "text")
 ```
 
-![](figure/calendar-plot-1.svg)
+![](figure/calendar-plot-1.png)
 
 Acknowledgements
 ----------------
