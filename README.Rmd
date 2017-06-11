@@ -33,25 +33,27 @@ devtools::install_github("earowang/sugrrants", build_vignettes = TRUE)
 
 ### Calendar-based graphics
 
-```{r calendar, echo = TRUE}
+```{r calendar, echo = TRUE, message = FALSE}
 library(dplyr)
 library(sugrrants)
 
 calendar_df <- pedestrian %>%
-  filter(Sensor_ID %in% c(9, 25)) %>%
-  group_by(Sensor_Name) %>%
+  filter(Sensor_ID == 9, Year == 2016) %>%
+  mutate(
+    Weekend = if_else(Day %in% c("Saturday", "Sunday"), "Weekend", "Weekday")
+  ) %>%
   frame_calendar(
-    x = Time, y = Hourly_Counts, date = Date_Time, calendar = "monthly")
+    x = Time, y = Hourly_Counts, date = Date_Time, calendar = "monthly"
+  )
 calendar_df
 ```
 
-```{r calendar-plot, echo = TRUE, fig.height = 8}
+```{r calendar-plot, echo = TRUE, fig.height = 7, fig.width = 7}
 p <- calendar_df %>%
-  ggplot(aes(x = .x, y = .y, group = .group_id, colour = Sensor_Name)) +
+  ggplot(aes(x = .x, y = .y, group = .group_id, colour = Weekend)) +
   geom_line() +
-  facet_grid(Sensor_Name ~ .) +
   theme(legend.position = "none")
-prettify(p, label = "text")
+prettify(p)
 ```
 
 ## Acknowledgements
