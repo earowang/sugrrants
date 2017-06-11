@@ -10,3 +10,6 @@
 #' @importFrom magrittr %>%
 #' @importFrom grid grobTree gList
 NULL
+
+#' @export
+magrittr::`%>%`
