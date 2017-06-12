@@ -83,6 +83,7 @@ frame_calendar <- function(
   UseMethod("frame_calendar")
 }
 
+#' @export
 frame_calendar.grouped_df <- function(
   data, ..., calendar = "monthly", dir = "h", sunday = FALSE, 
   nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed"
