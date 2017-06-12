@@ -2,7 +2,8 @@
 #' @importFrom lubridate isoweek month<-
 #' @importFrom timeDate GoodFriday Easter
 #' @importFrom dplyr group_by is.grouped_df groups ungroup group_size arrange
-#' @importFrom dplyr if_else mutate select filter left_join summarise distinct
+#' @importFrom dplyr if_else mutate select filter right_join summarise distinct
+#' @importFrom dplyr left_join rename
 #' @importFrom tibble type_sum
 #' @importFrom tidyr nest unnest
 #' @importFrom purrr map map2
@@ -10,6 +11,7 @@
 #' @importFrom ggplot2 geom_label geom_text scale_x_continuous scale_y_continuous
 #' @importFrom ggplot2 theme element_blank aes last_plot is.ggplot wrap_dims
 #' @importFrom rlang eval_tidy quo enquo abort !! !!! := quo_name flatten_int
+#' @importFrom rlang expr_text f_rhs
 #' @importFrom magrittr %>%
 #' @importFrom grid grobTree gList
 NULL

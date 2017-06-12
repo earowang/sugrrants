@@ -113,10 +113,7 @@ frame_calendar.default <- function(
   data <- arrange(data, !!date)
   .x <- paste0(".", quo_name(x))
   .y <- paste0(".", quo_name(y))
-  ### below is a workaround with dplyr::left_join using "by" argument
-  data <- data %>% 
-    mutate(.Date = !!date)
-  ### end
+  .date <- quo_name(date)
 
   date_eval <- eval_tidy(date, data = data)
   if (type_sum(date_eval) != "date") {
@@ -132,8 +129,11 @@ frame_calendar.default <- function(
   cal_grids <- cal_layout %>% 
     left_join(grids, by = c("COL", "ROW"))
 
-  data <- data %>% 
-    left_join(cal_grids, by = c(".Date" = "PANEL")) ### using .Date is tmp
+  # ideally should use left_join as keeping the colnames in the supplied order
+  # but expr_text(f_rhs) doesn't support LHS
+  data <- cal_grids %>% 
+    right_join(data, by = c("PANEL" = expr_text(f_rhs(date)))) %>% 
+    mutate(!!.date := PANEL)
 
   # Define a small multiple width and height
   width <- resolution(data$.gx, zero = FALSE) * 0.95
@@ -187,7 +187,7 @@ frame_calendar.default <- function(
 
   data <- data %>% 
     ungroup() %>% 
-    select(-(.Date:.gy))
+    select(-(ROW:.gy))
   if (scale %in% c("free_wday", "free_mday")) {
     data <- select(data, -.day) # remove .day variable
   }
