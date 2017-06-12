@@ -15,11 +15,13 @@ Depends:
 Imports:
     grid,
     rlang,
+    tidyr,
+    purrr,
+    tibble,
     timeDate,
     magrittr,
     lubridate,
-    dplyr (>= 0.7.0),
-    tibble
+    dplyr (>= 0.7.0)
 Suggests:
     knitr,
     rmarkdown

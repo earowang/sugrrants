@@ -13,7 +13,7 @@ frame_calendar(data, x, y, date, calendar = "monthly", dir = "h",
 prettify(plot, label = c("label", "text"), ...)
 }
 \arguments{
-\item{data}{A data frame or a tibble including a \code{Date} variable.}
+\item{data}{A data frame or a grouped data frame including a \code{Date} variable.}
 
 \item{x}{A variable mapping to time of day.}
 
@@ -71,7 +71,7 @@ It allows more flexibility for users to visualise the data in various ways.
 The calendar-based graphic can be considered as small multiples
 of sub-series arranged into many daily cells. For every multiple (or
 facet), it requires the \code{x} variable mapped to be time of day and \code{y} to
-value. New \code{x} and \code{y} are computed and named with a leading \code{.} according
+value. New \code{x} and \code{y} are computed and named with a padded \code{.} in front according
 to \code{x} and \code{y} respectively, and get ready for \code{ggplot2} aesthetic mappings.
 }
 \examples{
@@ -99,7 +99,8 @@ to \code{x} and \code{y} respectively, and get ready for \code{ggplot2} aestheti
      ggplot(aes(x = .Time, y = .Hourly_Counts, group = Date)) +
      geom_line() +
      facet_wrap(~ Sensor_Name, nrow = 2)
-   prettify(p2, label = "text")
+   # prettify(p2, label = "text") not working for group_by
+
 }
 \author{
 Earo Wang

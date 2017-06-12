@@ -8,7 +8,7 @@
 #'    rearranged data frame, and `ggplot2` takes care of the plotting afterwards. 
 #'    It allows more flexibility for users to visualise the data in various ways.
 #'
-#' @param data A data frame or a tibble including a `Date` variable.
+#' @param data A data frame or a grouped data frame including a `Date` variable.
 #' @param x A variable mapping to time of day. 
 #' @param y A variable mapping to value.
 #' @param date A `Date` variable mapping to dates in the calendar.
@@ -37,7 +37,7 @@
 #' @details The calendar-based graphic can be considered as small multiples
 #'    of sub-series arranged into many daily cells. For every multiple (or
 #'    facet), it requires the `x` variable mapped to be time of day and `y` to
-#'    value. New `x` and `y` are computed and named with a leading `.` according 
+#'    value. New `x` and `y` are computed and named with a padded `.` in front according 
 #'    to `x` and `y` respectively, and get ready for `ggplot2` aesthetic mappings.
 #'
 #' @author Earo Wang
@@ -69,11 +69,41 @@
 #'      ggplot(aes(x = .Time, y = .Hourly_Counts, group = Date)) +
 #'      geom_line() +
 #'      facet_wrap(~ Sensor_Name, nrow = 2)
-#'    prettify(p2, label = "text")
-#
-#' @export
+#'    # prettify(p2, label = "text") not working for group_by
 #'
+#' @export
 frame_calendar <- function(
+  data, x, y, date, calendar = "monthly", dir = "h", sunday = FALSE, 
+  nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed"
+) {
+  calendar <- match.arg(calendar, c("monthly", "weekly", "daily"))
+  dir <- match.arg(dir, c("h", "v"))
+  scale <- match.arg(scale, c("fixed", "free", "free_wday", "free_mday"))
+
+  UseMethod("frame_calendar")
+}
+
+frame_calendar.grouped_df <- function(
+  data, ..., calendar = "monthly", dir = "h", sunday = FALSE, 
+  nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed"
+) {
+  NextMethod()
+  data <- data %>% 
+    nest(.key = .calendar_tbl) %>% 
+    mutate(.calendar_tbl = map(
+      .calendar_tbl, 
+      ~ frame_calendar.default(
+        data = ., ..., 
+        calendar = calendar, dir = dir, sunday = sunday, 
+        nrow = nrow, ncol = ncol, polar = polar, scale = scale
+      )
+    )) %>% 
+    unnest()
+  return(data)
+}
+
+#' @export
+frame_calendar.default <- function(
   data, x, y, date, calendar = "monthly", dir = "h", sunday = FALSE, 
   nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed"
 ) {
@@ -88,16 +118,10 @@ frame_calendar <- function(
     mutate(.Date = !!date)
   ### end
 
-  grped_data <- is.grouped_df(data)
-  grped_vars <- groups(data)
   date_eval <- eval_tidy(date, data = data)
   if (type_sum(date_eval) != "date") {
     abort("'date' must be a 'Date' class.")
   }
-
-  calendar <- match.arg(calendar, c("monthly", "weekly", "daily"))
-  dir <- match.arg(dir, c("h", "v"))
-  scale <- match.arg(scale, c("fixed", "free", "free_wday", "free_mday"))
 
   class(date_eval) <- c(calendar, class(date_eval))
   cal_layout <- setup_calendar(x = date_eval, dir = dir, sunday = sunday,
@@ -174,10 +198,6 @@ frame_calendar <- function(
   attr(data, "dlabel") <- data_ref$dlabel
   attr(data, "dir") <- dir
 
-  if (grped_data) {
-    data <- data %>% 
-      group_by(!!!grped_vars)
-  }
   return(data)
 }
 
