@@ -11,10 +11,6 @@ expand.grid2 <- function(...) {
   expand.grid(..., KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
 }
 
-mapply2 <- function(FUN, ...) {
-  mapply(FUN, ..., SIMPLIFY = FALSE, USE.NAMES = FALSE)
-}
-
 is_constant <- function(x) {
   return(diff(range(x, na.rm = TRUE)) < .Machine$double.eps ^ 0.5)
 }

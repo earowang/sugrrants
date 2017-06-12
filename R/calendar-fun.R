@@ -14,8 +14,8 @@ setup_calendar.daily <- function(x, dir = "h", ...) {
   nfacets <- length(month_x)
   seq_facets <- seq_len(nfacets)
   days_x <- days_in_month(month_x) # d
-  counter <- mapply2( # g
-    function(x, y) x + 0:(y - 1), x = month_x, y = days_x
+  counter <- map2( # g
+    .x = month_x, .y = days_x, ~ .x + 0:(.y - 1)
   )
   # if dir == "h"
   row_idx <- rep(seq_facets, days_x)
@@ -76,11 +76,11 @@ setup_calendar.monthly <- function(x, dir = "h", sunday = FALSE,
   } else { # starts with Monday
     first_wday <- wday2(month_x) # k
   }
-  counter_date <- mapply2(
-    function(x, y) x + 0:(y - 1), x = month_x, y = days_x
+  counter_date <- map2(
+    .x = month_x, .y = days_x, ~ .x + 0:(.y - 1) 
   )
-  counter <- mapply2( # g
-    function(x, y) x + 0:(y - 1), x = first_wday, y = days_x
+  counter <- map2( # g
+    .x = first_wday, .y = days_x, ~ .x + 0:(.y - 1)
   )
   row_idx <- lapply( # i
     counter, 
