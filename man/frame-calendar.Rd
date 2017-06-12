@@ -33,7 +33,7 @@ vertical.}
 week, or TRUE for Sunday, when \code{calendar = "monthly"}.}
 
 \item{nrow, ncol}{Number of rows and columns defined for "monthly" calendar
-layout.}
+layout. If \code{NULL}, it computes a sensible layout.}
 
 \item{polar}{FALSE (the default) for Cartesian or TRUE for polar coordinates.}
 
@@ -54,10 +54,9 @@ which is actually passed to \code{geom_text}. By default, both "label" and
 \value{
 A data frame or a tibble with newly added columns of \code{.x}, \code{.y}. \code{.x}
 and \code{.y} together give new coordinates computed for different types of
-calendars. \code{.group_id} groups the same dates in a chronological order. The
-basic use is \code{ggplot(aes(x = .x, y = .y, group = date)) + geom_*}. The
-variable names \code{.x} and \code{.y} reflect the actual \code{x} and \code{y} with a padded
-\code{.} in front.
+calendars. \code{date} groups the same dates in a chronological order, which is
+useful for \code{geom_line} or \code{geom_path}. The basic use is \code{ggplot(aes(x = .x, y = .y, group = date)) + geom_*}. The variable names \code{.x} and \code{.y} reflect
+the actual \code{x} and \code{y} with a padded \code{.} in front.
 }
 \description{
 Temporal data of daily intervals or higher frequency levels can
@@ -71,8 +70,10 @@ It allows more flexibility for users to visualise the data in various ways.
 The calendar-based graphic can be considered as small multiples
 of sub-series arranged into many daily cells. For every multiple (or
 facet), it requires the \code{x} variable mapped to be time of day and \code{y} to
-value. New \code{x} and \code{y} are computed and named with a padded \code{.} in front according
-to \code{x} and \code{y} respectively, and get ready for \code{ggplot2} aesthetic mappings.
+value. New \code{x} and \code{y} are computed and named with a padded \code{.} in front
+according to \code{x} and \code{y} respectively, and get ready for \code{ggplot2} aesthetic
+mappings. In conjunction with \code{group_by()}, it allows every series to have
+their individual scales.
 }
 \examples{
    library(dplyr)

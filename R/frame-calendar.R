@@ -21,7 +21,7 @@
 #' @param sunday FALSE (the default) indicating to starting with Monday in a
 #'    week, or TRUE for Sunday, when `calendar = "monthly"`.
 #' @param nrow,ncol Number of rows and columns defined for "monthly" calendar 
-#'    layout.
+#'    layout. If `NULL`, it computes a sensible layout.
 #' @param polar FALSE (the default) for Cartesian or TRUE for polar coordinates.
 #' @param scale "fixed" (the default) for fixed scale. "free" for scaling
 #'    conditional on each daily cell, "free_wday" for scaling on weekdays, 
@@ -29,16 +29,18 @@
 #'
 #' @return A data frame or a tibble with newly added columns of `.x`, `.y`. `.x` 
 #'    and `.y` together give new coordinates computed for different types of 
-#'    calendars. `.group_id` groups the same dates in a chronological order. The 
-#'    basic use is `ggplot(aes(x = .x, y = .y, group = date)) + geom_*`. The 
-#'    variable names `.x` and `.y` reflect the actual `x` and `y` with a padded
-#'    `.` in front.
+#'    calendars. `date` groups the same dates in a chronological order, which is
+#'    useful for `geom_line` or `geom_path`. The basic use is `ggplot(aes(x = .x, 
+#'    y = .y, group = date)) + geom_*`. The variable names `.x` and `.y` reflect 
+#'    the actual `x` and `y` with a padded `.` in front.
 #'
 #' @details The calendar-based graphic can be considered as small multiples
 #'    of sub-series arranged into many daily cells. For every multiple (or
 #'    facet), it requires the `x` variable mapped to be time of day and `y` to
-#'    value. New `x` and `y` are computed and named with a padded `.` in front according 
-#'    to `x` and `y` respectively, and get ready for `ggplot2` aesthetic mappings.
+#'    value. New `x` and `y` are computed and named with a padded `.` in front 
+#'    according to `x` and `y` respectively, and get ready for `ggplot2` aesthetic 
+#'    mappings. In conjunction with `group_by()`, it allows every series to have
+#'    their individual scales.
 #'
 #' @author Earo Wang
 #'
