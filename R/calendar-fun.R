@@ -1,6 +1,6 @@
 ## Setting up different calendar layouts
 # It builds a complete calendar layout, whilst using "left_join" with 
-# "gen_group_id"
+# "date" variable
 setup_calendar <- function(x, dir = "h", ...) {
   dir <- match.arg(dir, choices = c("h", "v"))
   UseMethod("setup_calendar")
@@ -8,14 +8,14 @@ setup_calendar <- function(x, dir = "h", ...) {
 
 setup_calendar.daily <- function(x, dir = "h", ...) {
   # x is a vector of unique dates
-  x <- unique(as_date(x))
+  x <- unique(x)
   mday_x <- mday(x)
   month_x <- unique(x - mday_x + 1)
   nfacets <- length(month_x)
   seq_facets <- seq_len(nfacets)
   days_x <- days_in_month(month_x) # d
   counter <- mapply2( # g
-    function(x, y) x + 0:(y - 1), x = 1, y = days_x
+    function(x, y) x + 0:(y - 1), x = month_x, y = days_x
   )
   # if dir == "h"
   row_idx <- rep(seq_facets, days_x)
@@ -28,20 +28,20 @@ setup_calendar.daily <- function(x, dir = "h", ...) {
   cal_table <- data.frame(
     ROW = unlist2(row_idx),
     COL = unlist2(col_idx),
-    PANEL = seq_along(unlist2(counter))
+    PANEL = do.call("c", counter)
   )
   return(cal_table)
 }
 
 setup_calendar.weekly <- function(x, dir = "h", ...) {
   # x is a vector of unique dates
-  x <- unique(as_date(x))
+  x <- unique(x)
   init_counter <- mday(min_na(x))
   wk_x <- isoweek(x)
 
   # only starts with Monday for ISO week
   col_idx <- wday2(x)
-  counter <- init_counter - 1 + seq_along(x)
+  counter <- init_counter - 1 + x
   # if dir == "h"
   rle_x <- rle(wk_x)
   row_idx <- rep(seq_along(rle_x$values), rle_x$lengths)
@@ -61,7 +61,7 @@ setup_calendar.weekly <- function(x, dir = "h", ...) {
 setup_calendar.monthly <- function(x, dir = "h", sunday = FALSE, 
   nrow = NULL, ncol = NULL, ...) {
   # x is a vector of unique dates
-  x <- unique(as_date(x))
+  x <- unique(x)
   month_x <- unique(x - mday(x) + 1)
   nfacets <- length(month_x)
   dims <- wrap_dims(nfacets, nrow = nrow, ncol = ncol)
@@ -76,6 +76,9 @@ setup_calendar.monthly <- function(x, dir = "h", sunday = FALSE,
   } else { # starts with Monday
     first_wday <- wday2(month_x) # k
   }
+  counter_date <- mapply2(
+    function(x, y) x + 0:(y - 1), x = month_x, y = days_x
+  )
   counter <- mapply2( # g
     function(x, y) x + 0:(y - 1), x = first_wday, y = days_x
   )
@@ -117,7 +120,7 @@ setup_calendar.monthly <- function(x, dir = "h", sunday = FALSE,
     COL = unlist2(col_idx),
     MROW = rep.int(n_idx, days_x),
     MCOL = rep.int(m_idx, days_x),
-    PANEL = seq_along(unlist2(counter)),
+    PANEL = do.call("c", counter_date),
     MPANEL = rep.int(seq_len(nfacets), days_x)
   )
   return(cal_table)

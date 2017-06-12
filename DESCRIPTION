@@ -19,6 +19,7 @@ Imports:
     magrittr,
     lubridate,
     dplyr (>= 0.7.0),
+    tibble
 Suggests:
     knitr,
     rmarkdown

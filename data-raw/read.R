@@ -11,9 +11,13 @@ pedestrian <- ped_counts %>%
   filter(Year > 2015) %>% 
   mutate(
     Date_Time = dmy_hm(Date_Time),
-    Month = month(Date_Time, label = TRUE, abbr = FALSE),
-    Day = wday2(Date_Time, label = TRUE, abbr = FALSE),
+    Date = as_date(Date_Time),
+    Month = month(Date, label = TRUE, abbr = FALSE),
+    Day = wday2(Date, label = TRUE, abbr = FALSE),
   ) %>% 
-  select(-ID)
+  select(
+    Date_Time, Date, Year, Month, Mdate, Day, Time, 
+    Sensor_ID, Sensor_Name, Hourly_Counts
+  )
 
 devtools::use_data(pedestrian, overwrite = TRUE)

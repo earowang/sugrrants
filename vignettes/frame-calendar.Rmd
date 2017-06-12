@@ -1,0 +1,14 @@
+---
+title: "Calendar-based graphics"
+author: "Earo Wang"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{frame-calendar}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+grped_calendar <- pedestrian %>% 
+  filter(Year == "2017", Month == "March") %>% 
+  frame_calendar(x = Time, y = Hourly_Counts, date = Date_Time, sunday = TRUE)

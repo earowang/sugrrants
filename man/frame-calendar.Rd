@@ -13,12 +13,13 @@ frame_calendar(data, x, y, date, calendar = "monthly", dir = "h",
 prettify(plot, label = c("label", "text"), ...)
 }
 \arguments{
-\item{data}{A data frame or a tibble including a \code{date-time} variable.}
+\item{data}{A data frame or a tibble including a \code{Date} variable.}
 
-\item{x, y}{Either \code{x} or \code{y} should be a variable mapping to time of day in
-daily cells and a "value" variable, both of which are contained in the \code{data}.}
+\item{x}{A variable mapping to time of day.}
 
-\item{date}{A \code{date-time} variable mapping to dates in the calendar.}
+\item{y}{A variable mapping to value.}
+
+\item{date}{A \code{Date} variable mapping to dates in the calendar.}
 
 \item{calendar}{Type of calendar. "monthly" calendar (the default) organises
 the \code{data} to a common format comprised of day of week in the column and
@@ -51,10 +52,12 @@ which is actually passed to \code{geom_text}. By default, both "label" and
 \item{...}{Extra arguments passed to geom_label and geom_text}
 }
 \value{
-A data frame or a tibble with newly added columns of \code{.x}, \code{.y}, and
-\code{.group_id}. \code{.x} and \code{.y} together give new coordinates computed for
-different types of calendars. \code{.group_id} groups the same dates in a
-chronological order. The basic use is \code{ggplot(aes(x = .x, y = .y, group = .group_id)) + geom_*}.
+A data frame or a tibble with newly added columns of \code{.x}, \code{.y}. \code{.x}
+and \code{.y} together give new coordinates computed for different types of
+calendars. \code{.group_id} groups the same dates in a chronological order. The
+basic use is \code{ggplot(aes(x = .x, y = .y, group = date)) + geom_*}. The
+variable names \code{.x} and \code{.y} reflect the actual \code{x} and \code{y} with a padded
+\code{.} in front.
 }
 \description{
 Temporal data of daily intervals or higher frequency levels can
@@ -68,19 +71,19 @@ It allows more flexibility for users to visualise the data in various ways.
 The calendar-based graphic can be considered as small multiples
 of sub-series arranged into many daily cells. For every multiple (or
 facet), it requires the \code{x} variable mapped to be time of day and \code{y} to
-value. New \code{.x} and \code{.y} are computed according to \code{x} and \code{y}
-respectively, and get ready for \code{ggplot2} aesthetic mappings.
+value. New \code{x} and \code{y} are computed and named with a leading \code{.} according
+to \code{x} and \code{y} respectively, and get ready for \code{ggplot2} aesthetic mappings.
 }
 \examples{
    library(dplyr)
    # compute the calendar layout for the data frame
    calendar_df <- pedestrian \%>\%
      filter(Sensor_ID == 13) \%>\% 
-     frame_calendar(x = Time, y = Hourly_Counts, date = Date_Time, nrow = 4)
+     frame_calendar(x = Time, y = Hourly_Counts, date = Date, nrow = 4)
 
    # ggplot
    p1 <- calendar_df \%>\% 
-     ggplot(aes(x = .x, y = .y, group = .group_id)) +
+     ggplot(aes(x = .Time, y = .Hourly_Counts, group = Date)) +
      geom_line()
    prettify(p1)
    
@@ -89,11 +92,11 @@ respectively, and get ready for \code{ggplot2} aesthetic mappings.
      filter(Year == "2017", Month == "March") \%>\% 
      group_by(Sensor_Name) \%>\% 
      frame_calendar(
-       x = Time, y = Hourly_Counts, date = Date_Time, sunday = TRUE
+       x = Time, y = Hourly_Counts, date = Date, sunday = TRUE
      )
    
    p2 <- grped_calendar \%>\% 
-     ggplot(aes(x = .x, y = .y, group = .group_id)) +
+     ggplot(aes(x = .Time, y = .Hourly_Counts, group = Date)) +
      geom_line() +
      facet_wrap(~ Sensor_Name, nrow = 2)
    prettify(p2, label = "text")

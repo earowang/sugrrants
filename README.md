@@ -35,30 +35,30 @@ calendar_df <- pedestrian %>%
     Weekend = if_else(Day %in% c("Saturday", "Sunday"), "Weekend", "Weekday")
   ) %>%
   frame_calendar(
-    x = Time, y = Hourly_Counts, date = Date_Time, calendar = "monthly"
+    x = Time, y = Hourly_Counts, date = Date, calendar = "monthly"
   )
 calendar_df
-#> # A tibble: 9,523 x 13
-#>              Date_Time  Year   Month Mdate    Day  Time Sensor_ID
-#>                 <dttm> <int>   <ord> <int>  <ord> <int>     <int>
-#>  1 2016-01-01 00:00:00  2016 January     1 Friday     0         9
-#>  2 2016-01-01 01:00:00  2016 January     1 Friday     1         9
-#>  3 2016-01-01 02:00:00  2016 January     1 Friday     2         9
-#>  4 2016-01-01 03:00:00  2016 January     1 Friday     3         9
-#>  5 2016-01-01 04:00:00  2016 January     1 Friday     4         9
-#>  6 2016-01-01 05:00:00  2016 January     1 Friday     5         9
-#>  7 2016-01-01 06:00:00  2016 January     1 Friday     6         9
-#>  8 2016-01-01 07:00:00  2016 January     1 Friday     7         9
-#>  9 2016-01-01 08:00:00  2016 January     1 Friday     8         9
-#> 10 2016-01-01 09:00:00  2016 January     1 Friday     9         9
-#> # ... with 9,513 more rows, and 6 more variables: Sensor_Name <chr>,
-#> #   Hourly_Counts <int>, Weekend <chr>, .group_id <dbl>, .x <dbl>,
-#> #   .y <dbl>
+#> # A tibble: 9,523 x 14
+#>              Date_Time       Date  Year   Month Mdate    Day  Time
+#>                 <dttm>     <date> <int>   <ord> <int>  <ord> <int>
+#>  1 2016-01-01 00:00:00 2016-01-01  2016 January     1 Friday     0
+#>  2 2016-01-01 01:00:00 2016-01-01  2016 January     1 Friday     1
+#>  3 2016-01-01 02:00:00 2016-01-01  2016 January     1 Friday     2
+#>  4 2016-01-01 03:00:00 2016-01-01  2016 January     1 Friday     3
+#>  5 2016-01-01 04:00:00 2016-01-01  2016 January     1 Friday     4
+#>  6 2016-01-01 05:00:00 2016-01-01  2016 January     1 Friday     5
+#>  7 2016-01-01 06:00:00 2016-01-01  2016 January     1 Friday     6
+#>  8 2016-01-01 07:00:00 2016-01-01  2016 January     1 Friday     7
+#>  9 2016-01-01 08:00:00 2016-01-01  2016 January     1 Friday     8
+#> 10 2016-01-01 09:00:00 2016-01-01  2016 January     1 Friday     9
+#> # ... with 9,513 more rows, and 7 more variables: Sensor_ID <int>,
+#> #   Sensor_Name <chr>, Hourly_Counts <int>, Weekend <chr>, .Date <date>,
+#> #   .Time <dbl>, .Hourly_Counts <dbl>
 ```
 
 ``` r
 p <- calendar_df %>%
-  ggplot(aes(x = .x, y = .y, group = .group_id, colour = Weekend)) +
+  ggplot(aes(x = .Time, y = .Hourly_Counts, group = Date, colour = Weekend)) +
   geom_line() +
   theme(legend.position = "none")
 prettify(p)

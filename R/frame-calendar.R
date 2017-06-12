@@ -8,10 +8,10 @@
 #'    rearranged data frame, and `ggplot2` takes care of the plotting afterwards. 
 #'    It allows more flexibility for users to visualise the data in various ways.
 #'
-#' @param data A data frame or a tibble including a `date-time` variable.
-#' @param x,y  Either `x` or `y` should be a variable mapping to time of day in
-#'    daily cells and a "value" variable, both of which are contained in the `data`. 
-#' @param date A `date-time` variable mapping to dates in the calendar.
+#' @param data A data frame or a tibble including a `Date` variable.
+#' @param x A variable mapping to time of day. 
+#' @param y A variable mapping to value.
+#' @param date A `Date` variable mapping to dates in the calendar.
 #' @param calendar Type of calendar. "monthly" calendar (the default) organises
 #'    the `data` to a common format comprised of day of week in the column and
 #'    week of month in the row. "weekly" calendar consists of day of week and
@@ -27,17 +27,18 @@
 #'    conditional on each daily cell, "free_wday" for scaling on weekdays, 
 #'    "free_mday" for scaling on day of month.
 #'
-#' @return A data frame or a tibble with newly added columns of `.x`, `.y`, and 
-#'    `.group_id`. `.x` and `.y` together give new coordinates computed for
-#'    different types of calendars. `.group_id` groups the same dates in a
-#'    chronological order. The basic use is `ggplot(aes(x = .x, y = .y, group =
-#'    .group_id)) + geom_*`.
+#' @return A data frame or a tibble with newly added columns of `.x`, `.y`. `.x` 
+#'    and `.y` together give new coordinates computed for different types of 
+#'    calendars. `.group_id` groups the same dates in a chronological order. The 
+#'    basic use is `ggplot(aes(x = .x, y = .y, group = date)) + geom_*`. The 
+#'    variable names `.x` and `.y` reflect the actual `x` and `y` with a padded
+#'    `.` in front.
 #'
 #' @details The calendar-based graphic can be considered as small multiples
 #'    of sub-series arranged into many daily cells. For every multiple (or
 #'    facet), it requires the `x` variable mapped to be time of day and `y` to
-#'    value. New `.x` and `.y` are computed according to `x` and `y` 
-#'    respectively, and get ready for `ggplot2` aesthetic mappings.
+#'    value. New `x` and `y` are computed and named with a leading `.` according 
+#'    to `x` and `y` respectively, and get ready for `ggplot2` aesthetic mappings.
 #'
 #' @author Earo Wang
 #'
@@ -48,11 +49,11 @@
 #'    # compute the calendar layout for the data frame
 #'    calendar_df <- pedestrian %>%
 #'      filter(Sensor_ID == 13) %>% 
-#'      frame_calendar(x = Time, y = Hourly_Counts, date = Date_Time, nrow = 4)
+#'      frame_calendar(x = Time, y = Hourly_Counts, date = Date, nrow = 4)
 #'
 #'    # ggplot
 #'    p1 <- calendar_df %>% 
-#'      ggplot(aes(x = .x, y = .y, group = .group_id)) +
+#'      ggplot(aes(x = .Time, y = .Hourly_Counts, group = Date)) +
 #'      geom_line()
 #'    prettify(p1)
 #'    
@@ -61,11 +62,11 @@
 #'      filter(Year == "2017", Month == "March") %>% 
 #'      group_by(Sensor_Name) %>% 
 #'      frame_calendar(
-#'        x = Time, y = Hourly_Counts, date = Date_Time, sunday = TRUE
+#'        x = Time, y = Hourly_Counts, date = Date, sunday = TRUE
 #'      )
 #'    
 #'    p2 <- grped_calendar %>% 
-#'      ggplot(aes(x = .x, y = .y, group = .group_id)) +
+#'      ggplot(aes(x = .Time, y = .Hourly_Counts, group = Date)) +
 #'      geom_line() +
 #'      facet_wrap(~ Sensor_Name, nrow = 2)
 #'    prettify(p2, label = "text")
@@ -79,20 +80,24 @@ frame_calendar <- function(
   x <- enquo(x)
   y <- enquo(y)
   date <- enquo(date)
+  data <- arrange(data, !!date)
+  .x <- paste0(".", quo_name(x))
+  .y <- paste0(".", quo_name(y))
+  ### below is a workaround with dplyr::left_join using "by" argument
+  data <- data %>% 
+    mutate(.Date = !!date)
+  ### end
 
   grped_data <- is.grouped_df(data)
   grped_vars <- groups(data)
   date_eval <- eval_tidy(date, data = data)
+  if (type_sum(date_eval) != "date") {
+    abort("'date' must be a 'Date' class.")
+  }
 
   calendar <- match.arg(calendar, c("monthly", "weekly", "daily"))
   dir <- match.arg(dir, c("h", "v"))
   scale <- match.arg(scale, c("fixed", "free", "free_wday", "free_mday"))
-
-  start_date <- min_na(as_date(date_eval))
-
-  data <- data %>% 
-    arrange(!!date) %>% 
-    mutate(.group_id = gen_group_id(!!date, start_date))
 
   class(date_eval) <- c(calendar, class(date_eval))
   cal_layout <- setup_calendar(x = date_eval, dir = dir, sunday = sunday,
@@ -104,7 +109,7 @@ frame_calendar <- function(
     left_join(grids, by = c("COL", "ROW"))
 
   data <- data %>% 
-    left_join(cal_grids, by = c(".group_id" = "PANEL"))
+    left_join(cal_grids, by = c(".Date" = "PANEL")) ### using .Date is tmp
 
   # Define a small multiple width and height
   width <- resolution(data$.gx, zero = FALSE) * 0.95
@@ -138,15 +143,15 @@ frame_calendar <- function(
       mutate(
         theta = 2 * pi * normalise(!!x, xmax = max_na(!!x)),
         radius = normalise(!!y, xmax = max_na(!!y)),
-        .x = .gx + width * radius * sin(theta),
-        .y = .gy + height * radius * cos(theta)
+        !!.x := .gx + width * radius * sin(theta),
+        !!.y := .gy + height * radius * cos(theta)
       ) %>% 
       select(-c(theta, radius))
   } else {
     data <- data %>% 
       mutate(
-        .x = .gx + normalise(!!x, xmax = max_na(!!x)) * width,
-        .y = .gy + normalise(!!y, xmax = max_na(!!y)) * height
+        !!.x := .gx + normalise(!!x, xmax = max_na(!!x)) * width,
+        !!.y := .gy + normalise(!!y, xmax = max_na(!!y)) * height
       )
   }
   # generate breaks and labels for prettify()
@@ -177,22 +182,6 @@ frame_calendar <- function(
 }
 
 ## calendar functions -------------------
-# Generate group_id for each series, but the same starting point is required 
-# across different series. It's determined by empirical data.
-gen_group_id <- function(x, start_date) {
-  # x is a date object
-  date_x <- as_date(x)
-  num_x <- as.numeric(date_x)
-  start_mday <- mday(start_date)
-  start_idx <- ifelse(
-    start_mday == 1, 
-    as.numeric(start_date), 
-    as.numeric(start_date - start_mday + 1)
-  )
-  group_id <- num_x - start_idx + 1
-  return(group_id)
-}
-
 # Assign grids from 0 to 1
 assign_grids <- function(ROW, COL) {
   col_grids <- seq(1, 0, length.out = ROW)
