@@ -7,10 +7,6 @@ max_na <- function(x) {
   max(x, na.rm = TRUE)
 }
 
-unlist2 <- function(x) {
-  unlist(x, recursive = FALSE, use.names = FALSE)
-}
-
 expand.grid2 <- function(...) {
   expand.grid(..., KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
 }

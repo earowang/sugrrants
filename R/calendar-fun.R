@@ -26,8 +26,8 @@ setup_calendar.daily <- function(x, dir = "h", ...) {
     col_idx <- col_tmp
   }
   cal_table <- data.frame(
-    ROW = unlist2(row_idx),
-    COL = unlist2(col_idx),
+    ROW = flatten_int(row_idx),
+    COL = flatten_int(col_idx),
     PANEL = do.call("c", counter)
   )
   return(cal_table)
@@ -116,8 +116,8 @@ setup_calendar.monthly <- function(x, dir = "h", sunday = FALSE,
     )
   }
   cal_table <- data.frame(
-    ROW = unlist2(row_idx),
-    COL = unlist2(col_idx),
+    ROW = flatten_int(row_idx),
+    COL = flatten_int(col_idx),
     MROW = rep.int(n_idx, days_x),
     MCOL = rep.int(m_idx, days_x),
     PANEL = do.call("c", counter_date),
