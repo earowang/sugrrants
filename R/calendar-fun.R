@@ -101,18 +101,18 @@ setup_calendar.monthly <- function(x, dir = "h", sunday = FALSE,
   last_rep <- m_idx[nfacets]
   n_idx <- rep.int(1:nrow, times = c(rep.int(ncol, nrow - 1), last_rep))
   if (dir == "h") {
-    row_idx[] <- mapply2(
-      function(x, y) x + max_wks * (y - 1), x = row_idx, y = n_idx
+    row_idx[] <- map2(
+      .x = row_idx, .y = n_idx, ~ .x + max_wks * (.y - 1)
     )
-    col_idx[] <- mapply2(
-      function(x, y) x + ndays * (y - 1), x = col_idx, y = m_idx
+    col_idx[] <- map2(
+      .x = col_idx, .y = m_idx, ~ .x + ndays * (.y - 1)
     )
   } else { # dir = "v"
-    row_idx[] <- mapply2(
-      function(x, y) x + ndays * (y - 1), x = row_idx, y = n_idx
+    row_idx[] <- map2(
+      .x = row_idx, .y = n_idx, ~ .x + ndays * (.y - 1)
     )
-    col_idx[] <- mapply2(
-      function(x, y) x + max_wks * (y - 1), x = col_idx, y = m_idx
+    col_idx[] <- map2(
+      .x = col_idx, .y = m_idx, ~ .x + max_wks * (.y - 1)
     )
   }
   cal_table <- data.frame(
