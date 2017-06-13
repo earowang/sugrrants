@@ -195,13 +195,16 @@ frame_calendar.default <- function(
     data <- select(data, -.day) # remove .day variable
   }
 
-  attr(data, "breaks") <- data_ref$breaks
-  attr(data, "minor_breaks") <- data_ref$minor_breaks
-  attr(data, "mlabel") <- data_ref$mlabel
-  attr(data, "dlabel") <- data_ref$dlabel
-  attr(data, "dir") <- dir
-
-  return(data)
+  return(
+    structure(data,
+      breaks = data_ref$breaks,
+      minor_breaks = data_ref$minor_breaks,
+      label = data_ref$label,
+      text = data_ref$text,
+      dir = dir,
+      class = c("ggcalendar", class(data))
+    )
+  )
 }
 
 ## calendar functions -------------------
@@ -261,7 +264,7 @@ gen_reference.daily <- function(grids, date, dir = "h", polar = FALSE, ...) {
 
   return(list(
     breaks = NULL, minor_breaks = minor_breaks,
-    mlabel = mtext, dlabel = dtext
+    label = mtext, text = dtext
   ))
 }
 
@@ -307,7 +310,7 @@ gen_reference.weekly <- function(grids, date, dir = "h", polar = FALSE, ...) {
 
   return(list(
     breaks = NULL, minor_breaks = minor_breaks,
-    mlabel = mtext, dlabel = dtext
+    label = mtext, text = dtext
   ))
 }
 
@@ -373,7 +376,7 @@ gen_reference.monthly <- function(
 
   return(list(
     breaks = breaks, minor_breaks = minor_breaks,
-    mlabel = mtext, dlabel = dtext
+    label = mtext, text = dtext
   ))
 }
 
@@ -388,9 +391,9 @@ gen_reference.monthly <- function(
 #' @export
 prettify <- function(plot, label = c("label", "text"), ...) {
   if (is.null(label)) {
-    label <- NULL
+    label_arg <- NULL
   } else {
-    label <- match.arg(label, c("label", "text"), several.ok = TRUE)
+    label_arg <- match.arg(label, c("label", "text"), several.ok = TRUE)
   }
   if (missing(plot)) {
     plot <- last_plot()
@@ -398,31 +401,31 @@ prettify <- function(plot, label = c("label", "text"), ...) {
   if (!is.ggplot(plot)) {
     abort("'plot' must be a ggplot object.")
   }
-  mlabel <- get_mlabel(plot$data)
-  dlabel <- get_dlabel(plot$data)
+  label <- get_label(plot$data)
+  text <- get_text(plot$data)
   breaks <- get_breaks(plot$data)
   minor_breaks <- get_minor_breaks(plot$data)
   dir <- get_dir(plot$data)
 
-  if ("label" %in% label) {
+  if ("label" %in% label_arg) {
     plot <- plot + 
       geom_label(
-        aes(x, y, label = label), data = mlabel,
+        aes(x, y, label = label), data = label,
         hjust = 0, vjust = 0, inherit.aes = FALSE,
         ...
       )
   }
-  if ("text" %in% label) {
+  if ("text" %in% label_arg) {
     if (dir == "h") {
       plot <- plot + 
         geom_text(
-          aes(x, y, label = label), data = dlabel,
+          aes(x, y, label = label), data = text,
           nudge_y = -0.01, vjust = 1, inherit.aes = FALSE, ...
         )
     } else {
       plot <- plot + 
         geom_text(
-          aes(x, y, label = label), data = dlabel,
+          aes(x, y, label = label), data = text,
           nudge_x = -0.01, hjust = 1, inherit.aes = FALSE, ...
         )
     }
@@ -449,12 +452,12 @@ get_minor_breaks <- function(data) {
   attr(data, "minor_breaks")
 }
 
-get_mlabel <- function(data) {
-  attr(data, "mlabel")
+get_label <- function(data) {
+  attr(data, "label")
 }
 
-get_dlabel <- function(data) {
-  attr(data, "dlabel")
+get_text <- function(data) {
+  attr(data, "text")
 }
 
 get_dir <- function(data) {
