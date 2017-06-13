@@ -10,7 +10,7 @@
 #'
 #' @param data A data frame or a grouped data frame including a `Date` variable.
 #' @param x A variable mapping to time of day. 
-#' @param y A variable mapping to value.
+#' @param y One variable or more mapping to value.
 #' @param date A `Date` variable mapping to dates in the calendar.
 #' @param calendar Type of calendar. "monthly" calendar (the default) organises
 #'    the `data` to a common format comprised of day of week in the column and
@@ -32,12 +32,12 @@
 #'    calendars. `date` groups the same dates in a chronological order, which is
 #'    useful for `geom_line` or `geom_path`. The basic use is `ggplot(aes(x = .x, 
 #'    y = .y, group = date)) + geom_*`. The variable names `.x` and `.y` reflect 
-#'    the actual `x` and `y` with a padded `.` in front.
+#'    the actual `x` and `y` with a prefix `.`.
 #'
 #' @details The calendar-based graphic can be considered as small multiples
 #'    of sub-series arranged into many daily cells. For every multiple (or
 #'    facet), it requires the `x` variable mapped to be time of day and `y` to
-#'    value. New `x` and `y` are computed and named with a padded `.` in front 
+#'    value. New `x` and `y` are computed and named with a prefix `.`
 #'    according to `x` and `y` respectively, and get ready for `ggplot2` aesthetic 
 #'    mappings. In conjunction with `group_by()`, it allows every series to have
 #'    their individual scales.
@@ -111,11 +111,12 @@ frame_calendar.default <- function(
   nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed"
 ) {
   x <- enquo(x)
-  y <- enquo(y)
+  check_y <- possibly_string(y)
+  if (!check_y) y <- deparse(substitute(y)) # convert to string
   date <- enquo(date)
   data <- arrange(data, !!date)
   .x <- paste0(".", quo_name(x))
-  .y <- paste0(".", quo_name(y))
+  # .y <- paste0(".", quo_name(y))
   .date <- quo_name(date)
 
   date_eval <- eval_tidy(date, data = data)
@@ -135,7 +136,7 @@ frame_calendar.default <- function(
   # ideally should use left_join as keeping the colnames in the supplied order
   # but expr_text(f_rhs) doesn't support LHS
   data <- cal_grids %>% 
-    right_join(data, by = c("PANEL" = expr_text(f_rhs(date)))) %>% 
+    right_join(data, by = c("PANEL" = quo_name(date))) %>%
     mutate(!!.date := PANEL)
 
   # Define a small multiple width and height
@@ -165,7 +166,12 @@ frame_calendar.default <- function(
       group_by(.day)
   }
 
-  if (polar) {
+  data <- data %>% 
+    mutate(
+      .ymax = max(!!!syms(y)),
+      .ymin = min(!!!syms(y))
+    )
+  if (polar) { # polar doesn't support multiple y's
     data <- data %>% 
       mutate(
         theta = 2 * pi * normalise(!!x, xmax = max_na(!!x)),
@@ -175,10 +181,16 @@ frame_calendar.default <- function(
       ) %>% 
       select(-c(theta, radius))
   } else {
+    fn <- function(x, gy, ymax, ymin) { # temporal function for mutate at
+      gy + normalise(x, xmax = max_na(ymax), xmin = min_na(ymin)) * height
+    }
     data <- data %>% 
       mutate(
-        !!.x := .gx + normalise(!!x, xmax = max_na(!!x)) * width,
-        !!.y := .gy + normalise(!!y, xmax = max_na(!!y)) * height
+        !!.x := .gx + normalise(!!x, xmax = max_na(!!x)) * width
+      ) %>% 
+      mutate_at(
+        .vars = vars(!!!y),
+        .funs = funs(zzz = fn(., .gy, .ymax, .ymin))
       )
   }
   # generate breaks and labels for prettify()
@@ -190,10 +202,15 @@ frame_calendar.default <- function(
 
   data <- data %>% 
     ungroup() %>% 
-    select(-(ROW:.gy))
+    select(-(ROW:.gy)) %>% 
+    select(-c(.ymax, .ymin))
   if (scale %in% c("free_wday", "free_mday")) {
     data <- select(data, -.day) # remove .day variable
   }
+
+  # rename y's variables
+  y_idx <- ends_with("zzz", vars = colnames(data))
+  colnames(data)[y_idx] <- paste0(".", y)
 
   return(
     structure(data,
