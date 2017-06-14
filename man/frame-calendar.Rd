@@ -17,7 +17,8 @@ prettify(plot, label = c("label", "text"), ...)
 
 \item{x}{A variable mapping to time of day.}
 
-\item{y}{One variable or more mapping to value.}
+\item{y}{One variable or more mapping to value. If more than one variable,
+the variables needs to be quoted.}
 
 \item{date}{A \code{Date} variable mapping to dates in the calendar.}
 

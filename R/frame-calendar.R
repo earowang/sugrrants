@@ -10,7 +10,8 @@
 #'
 #' @param data A data frame or a grouped data frame including a `Date` variable.
 #' @param x A variable mapping to time of day. 
-#' @param y One variable or more mapping to value.
+#' @param y One variable or more mapping to value. If more than one variable,
+#'    the variables needs to be quoted.
 #' @param date A `Date` variable mapping to dates in the calendar.
 #' @param calendar Type of calendar. "monthly" calendar (the default) organises
 #'    the `data` to a common format comprised of day of week in the column and
@@ -134,7 +135,7 @@ frame_calendar.default <- function(
     left_join(grids, by = c("COL", "ROW"))
 
   # ideally should use left_join as keeping the colnames in the supplied order
-  # but expr_text(f_rhs) doesn't support LHS
+  # but quo_name() doesn't support LHS
   data <- cal_grids %>% 
     right_join(data, by = c("PANEL" = quo_name(date))) %>%
     mutate(!!.date := PANEL)
@@ -172,12 +173,14 @@ frame_calendar.default <- function(
       .ymin = min(!!!syms(y))
     )
   if (polar) { # polar doesn't support multiple y's
+    .y <- paste0(".", y)
     data <- data %>% 
       mutate(
         theta = 2 * pi * normalise(!!x, xmax = max_na(!!x)),
-        radius = normalise(!!y, xmax = max_na(!!y)),
+        radius = normalise(!!sym(y), xmax = max_na(!!sym(y))),
         !!.x := .gx + width * radius * sin(theta),
         !!.y := .gy + height * radius * cos(theta)
+        # !!.y := .gy + height * radius * cos(theta)
       ) %>% 
       select(-c(theta, radius))
   } else {
