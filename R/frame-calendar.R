@@ -91,12 +91,9 @@ frame_calendar.grouped_df <- function(
   data, x, y, date, calendar = "monthly", dir = "h", sunday = FALSE, 
   nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed"
 ) {
-  check_x <- possibly_string(x)
-  if (!check_x) x <- deparse(substitute(x))
-  check_y <- possibly_string(y)
-  if (!check_y) y <- deparse(substitute(y))
-  check_date <- possibly_string(date)
-  if (!check_date) date <- deparse(substitute(date))
+  if (!possibly_string(x)) x <- deparse(substitute(x))
+  if (!possibly_string(y)) y <- deparse(substitute(y))
+  if (!possibly_string(date)) date <- deparse(substitute(date))
 
   if (!possibly_identity(x)) x <- sym(x)
   if (!possibly_identity(y)) y <- syms(y)
@@ -121,12 +118,9 @@ frame_calendar.default <- function(
   data, x, y, date, calendar = "monthly", dir = "h", sunday = FALSE, 
   nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed"
 ) {
-  check_x <- possibly_string(x)
-  if (!check_x) x <- deparse(substitute(x))
-  check_y <- possibly_string(y)
-  if (!check_y) y <- deparse(substitute(y))
-  check_date <- possibly_string(date)
-  if (!check_date) date <- deparse(substitute(date))
+  if (!possibly_string(x)) x <- deparse(substitute(x))
+  if (!possibly_string(y)) y <- deparse(substitute(y))
+  if (!possibly_string(date)) date <- deparse(substitute(date))
 
   if (!possibly_identity(x)) x <- sym(x)
   if (!possibly_identity(y)) y <- syms(y)
@@ -195,25 +189,20 @@ frame_calendar_ <- function(
       group_by(.day)
   }
 
-  data <- data %>% 
-    mutate(
-      .ymax = max(!!!y),
-      .ymin = min(!!!y)
-    )
-  if (polar) { # polar doesn't support multiple y's
-    .y <- paste0(".", y)
+  fn <- function(x) { # temporal function for mutate at
+    normalise(x, xmax = max_na(x), xmin = min_na(x)) * height
+  }
+  if (polar) { # polar only support one y
+    .y <- paste0(".", y[[1]])
     data <- data %>% 
       mutate(
         theta = 2 * pi * normalise(!!x, xmax = max_na(!!x)),
-        radius = normalise(!!sym(y), xmax = max_na(!!sym(y))),
+        radius = normalise(!!!y, xmax = max_na(!!!y)),
         !!.x := .gx + width * radius * sin(theta),
         !!.y := .gy + height * radius * cos(theta)
       ) %>% 
       select(-c(theta, radius))
   } else {
-    fn <- function(x, gy, ymax, ymin) { # temporal function for mutate at
-      gy + normalise(x, xmax = max_na(ymax), xmin = min_na(ymin)) * height
-    }
     if (possibly_identity(x)) {
       data <- data %>% 
         mutate(.x = .gx)
@@ -230,7 +219,7 @@ frame_calendar_ <- function(
       data <- data %>% 
         mutate_at(
           .vars = vars(!!!y),
-          .funs = funs(zzz = fn(., .gy, .ymax, .ymin))
+          .funs = funs(zzz = .gy + fn(.))
         )
     }
   }
@@ -243,8 +232,7 @@ frame_calendar_ <- function(
 
   data <- data %>% 
     ungroup() %>% 
-    select(-(ROW:.gy)) %>% 
-    select(-c(.ymax, .ymin))
+    select(-(ROW:.gy))
   if (scale %in% c("free_wday", "free_mday")) {
     data <- select(data, -.day) # remove .day variable
   }
