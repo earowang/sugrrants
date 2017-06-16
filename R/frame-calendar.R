@@ -106,7 +106,7 @@ frame_calendar.grouped_df <- function(
     nest(.key = .calendar_tbl) %>% 
     mutate(.calendar_tbl = map(
       .calendar_tbl, 
-      function(data) frame_calendar.default(
+      function(data) frame_calendar_(
         data = data, x = x, y = y, date = date,
         calendar = calendar, dir = dir, sunday = sunday, 
         nrow = nrow, ncol = ncol, polar = polar, scale = scale
