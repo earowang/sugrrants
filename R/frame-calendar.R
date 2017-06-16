@@ -88,16 +88,26 @@ frame_calendar <- function(
 
 #' @export
 frame_calendar.grouped_df <- function(
-  data, ..., calendar = "monthly", dir = "h", sunday = FALSE, 
+  data, x, y, date, calendar = "monthly", dir = "h", sunday = FALSE, 
   nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed"
 ) {
-  NextMethod()
+  check_x <- possibly_string(x)
+  if (!check_x) x <- deparse(substitute(x))
+  check_y <- possibly_string(y)
+  if (!check_y) y <- deparse(substitute(y))
+  check_date <- possibly_string(date)
+  if (!check_date) date <- deparse(substitute(date))
+
+  x <- sym(x)
+  y <- syms(y)
+  date <- sym(date)
+
   data <- data %>% 
     nest(.key = .calendar_tbl) %>% 
     mutate(.calendar_tbl = map(
       .calendar_tbl, 
-      ~ frame_calendar.default(
-        data = ., ..., 
+      function(data) frame_calendar.default(
+        data = data, x = x, y = y, date = date,
         calendar = calendar, dir = dir, sunday = sunday, 
         nrow = nrow, ncol = ncol, polar = polar, scale = scale
       )
@@ -111,16 +121,34 @@ frame_calendar.default <- function(
   data, x, y, date, calendar = "monthly", dir = "h", sunday = FALSE, 
   nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed"
 ) {
-  x <- enquo(x)
+  check_x <- possibly_string(x)
+  if (!check_x) x <- deparse(substitute(x))
   check_y <- possibly_string(y)
-  if (!check_y) y <- deparse(substitute(y)) # convert to string
-  date <- enquo(date)
+  if (!check_y) y <- deparse(substitute(y))
+  check_date <- possibly_string(date)
+  if (!check_date) date <- deparse(substitute(date))
+
+  x <- sym(x)
+  y <- syms(y)
+  date <- sym(date)
+
+  frame_calendar_(
+    data, x = x, y = y, date = date,
+    calendar = calendar, dir = dir, sunday = sunday, 
+    nrow = nrow, ncol = ncol, polar = polar, scale = scale
+  )
+}
+
+frame_calendar_ <- function(
+  data, x, y, date, calendar = "monthly", dir = "h", sunday = FALSE, 
+  nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed"
+) {
   data <- arrange(data, !!date)
   .x <- paste0(".", quo_name(x))
   # .y <- paste0(".", quo_name(y))
   .date <- quo_name(date)
 
-  date_eval <- eval_tidy(date, data = data)
+  date_eval <- eval_tidy(date, data = data, parent.frame())
   if (type_sum(date_eval) != "date") {
     abort("'date' must be a 'Date' class.")
   }
@@ -169,8 +197,8 @@ frame_calendar.default <- function(
 
   data <- data %>% 
     mutate(
-      .ymax = max(!!!syms(y)),
-      .ymin = min(!!!syms(y))
+      .ymax = max(!!!y),
+      .ymin = min(!!!y)
     )
   if (polar) { # polar doesn't support multiple y's
     .y <- paste0(".", y)
@@ -180,7 +208,6 @@ frame_calendar.default <- function(
         radius = normalise(!!sym(y), xmax = max_na(!!sym(y))),
         !!.x := .gx + width * radius * sin(theta),
         !!.y := .gy + height * radius * cos(theta)
-        # !!.y := .gy + height * radius * cos(theta)
       ) %>% 
       select(-c(theta, radius))
   } else {
