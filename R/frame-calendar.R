@@ -169,7 +169,7 @@ frame_calendar_ <- function(
   # Define a small multiple width and height
   width <- resolution(data$.gx, zero = FALSE) * 0.95
   height <- resolution(data$.gy, zero = FALSE) * 0.95
-  margins <- mean(c(width, height)) # Month by month margin
+  margins <- min(c(width, height)) # Month by month margin
 
   if (calendar == "monthly") {
     data <- data %>% 
