@@ -13,12 +13,12 @@ setup_calendar.daily <- function(x, dir = "h", ...) {
   month_x <- unique(x - mday_x + 1)
   nfacets <- length(month_x)
   seq_facets <- seq_len(nfacets)
-  days_x <- days_in_month(month_x) # d
+  days_x <- unname(days_in_month(month_x)) # d # unname() get rid of rlang warning
   counter <- map2( # g
     .x = month_x, .y = days_x, ~ .x + 0:(.y - 1)
   )
   # if dir == "h"
-  row_idx <- rep(seq_facets, days_x)
+  row_idx <- list(rep.int(seq_facets, days_x))
   col_idx <- lapply(days_x, seq_len)
   if (dir == "v") { # reverse col_idx and row_idx when direction is vertical
     col_tmp <- row_idx
@@ -44,7 +44,7 @@ setup_calendar.weekly <- function(x, dir = "h", ...) {
   counter <- init_counter - 1 + x
   # if dir == "h"
   rle_x <- rle(wk_x)
-  row_idx <- rep(seq_along(rle_x$values), rle_x$lengths)
+  row_idx <- rep.int(seq_along(rle_x$values), rle_x$lengths)
   if (dir == "v") { # reverse col_idx and row_idx when direction is vertical
     col_tmp <- row_idx
     row_idx <- col_idx

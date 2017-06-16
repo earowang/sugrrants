@@ -11,7 +11,7 @@
 #' @importFrom ggplot2 geom_label geom_text scale_x_continuous scale_y_continuous
 #' @importFrom ggplot2 theme element_blank aes last_plot is.ggplot wrap_dims
 #' @importFrom rlang eval_tidy quo enquo abort !! !!! := quo_name flatten_int
-#' @importFrom rlang is_string syms
+#' @importFrom rlang is_string syms sym
 #' @importFrom magrittr %>%
 #' @importFrom grid grobTree gList
 NULL
