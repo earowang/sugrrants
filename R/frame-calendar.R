@@ -9,9 +9,11 @@
 #'    It allows more flexibility for users to visualise the data in various ways.
 #'
 #' @param data A data frame or a grouped data frame including a `Date` variable.
-#' @param x A variable mapping to time of day. 
+#' @param x A variable mapping to time of day. If integer 1 is specified, it
+#'    simply returns calendar grids on x without transformation.
 #' @param y One variable or more mapping to value. If more than one variable,
-#'    the variables needs to be quoted.
+#'    the variables needs to be quoted. If integer 1 is specified, it returns
+#'    calendar grids on y without transformation.
 #' @param date A `Date` variable mapping to dates in the calendar.
 #' @param calendar Type of calendar. "monthly" calendar (the default) organises
 #'    the `data` to a common format comprised of day of week in the column and
@@ -41,7 +43,8 @@
 #'    value. New `x` and `y` are computed and named with a prefix `.`
 #'    according to `x` and `y` respectively, and get ready for `ggplot2` aesthetic 
 #'    mappings. In conjunction with `group_by()`, it allows every series to have
-#'    their individual scales.
+#'    their individual scales. For more details, see `vignette("frame-calendar",
+#'    package = "sugrrants")`
 #'
 #' @author Earo Wang
 #'
@@ -141,6 +144,7 @@ frame_calendar_ <- function(
   .x <- paste0(".", quo_name(x))
   # .y <- paste0(".", quo_name(y))
   .date <- quo_name(date)
+  cls <- class(data)
 
   date_eval <- eval_tidy(date, data = data, parent.frame())
   if (type_sum(date_eval) != "date") {
@@ -252,7 +256,7 @@ frame_calendar_ <- function(
       text = data_ref$text,
       dir = dir,
       polar = polar,
-      class = c("ggcalendar", class(data))
+      class = c("ggcalendar", cls)
     )
   )
 }

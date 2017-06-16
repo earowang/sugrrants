@@ -9,6 +9,87 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-grped_calendar <- pedestrian %>% 
-  filter(Year == "2017", Month == "March") %>% 
-  frame_calendar(x = Time, y = Hourly_Counts, date = Date_Time, sunday = TRUE)
+```{r initial, echo = FALSE, cache = FALSE, results = 'hide'}
+library(knitr)
+opts_chunk$set(warning = FALSE, message = FALSE,
+  fig.width = 7, fig.height = 6, fig.align = 'center'
+)
+```
+
+```{r load}
+library(dplyr)
+library(viridis)
+library(sugrrants)
+pedestrian17 <- pedestrian %>%
+  filter(Year == "2017")
+head(pedestrian17)
+```
+
+```{r center}
+center <- pedestrian17 %>% 
+  filter(Sensor_Name == "Melbourne Convention Exhibition Centre")
+center_calendar <- center %>%
+  frame_calendar(x = Time, y = Hourly_Counts, date = Date, calendar = "monthly")
+head(center_calendar)
+```
+
+```{r center-plot}
+p1 <- ggplot(center_calendar, aes(x = .Time, y = .Hourly_Counts, group = Date)) +
+  geom_line()
+p1
+```
+
+```{r center-more}
+prettify(p1)
+```
+
+```{r center-free}
+center_calendar_wday <- center %>%
+  frame_calendar(x = Time, y = Hourly_Counts, date = Date, calendar = "monthly",
+    scale = "free_wday")
+p2 <- ggplot(center_calendar_wday, aes(
+  x = .Time, y = .Hourly_Counts, group = Date)) +
+  geom_line()
+prettify(p2)
+```
+
+```{r ped-facet, fig.height = 9}
+grped_calendar <- pedestrian17 %>% 
+  group_by(Sensor_Name) %>%
+  frame_calendar(x = Time, y = Hourly_Counts, date = Date, ncol = 4)
+grped_calendar %>%
+  ggplot(aes(x = .Time, y = .Hourly_Counts, group = Date)) +
+  geom_line() +
+  facet_grid(Sensor_Name ~ .)
+```
+
+```{r ped-daily}
+center_daily <- center %>%
+  group_by(Date) %>%
+  summarise(
+    Max_Counts = max(Hourly_Counts),
+    Min_Counts = min(Hourly_Counts)
+  ) %>%
+  ungroup()
+center_daily_calendar <- center_daily %>%
+  frame_calendar(x = 1, y = c("Min_Counts", "Max_Counts"), date = Date,
+    calendar = "daily")
+head(center_daily_calendar)
+p3 <- center_daily_calendar %>%
+  ggplot() +
+  geom_rect(aes(
+    xmin = .x, xmax = .x + 0.03,
+    ymin = .Min_Counts, ymax = .Max_Counts
+  ), colour = "white")
+prettify(p3)
+``` 
+
+```{r ped-max}
+center_max_calendar <- center_daily %>%
+  frame_calendar(x = 1, y = 1, date = Date, calendar = "weekly")
+head(center_max_calendar)
+center_max_calendar %>%
+  ggplot(aes(x = .x, y = .y)) +
+  geom_tile(aes(fill = Max_Counts)) +
+  scale_fill_viridis()
+```

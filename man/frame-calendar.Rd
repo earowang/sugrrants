@@ -15,10 +15,12 @@ prettify(plot, label = c("label", "text"), ...)
 \arguments{
 \item{data}{A data frame or a grouped data frame including a \code{Date} variable.}
 
-\item{x}{A variable mapping to time of day.}
+\item{x}{A variable mapping to time of day. If integer 1 is specified, it
+simply returns calendar grids on x without transformation.}
 
 \item{y}{One variable or more mapping to value. If more than one variable,
-the variables needs to be quoted.}
+the variables needs to be quoted. If integer 1 is specified, it returns
+calendar grids on y without transformation.}
 
 \item{date}{A \code{Date} variable mapping to dates in the calendar.}
 
@@ -74,7 +76,7 @@ facet), it requires the \code{x} variable mapped to be time of day and \code{y} 
 value. New \code{x} and \code{y} are computed and named with a prefix \code{.}
 according to \code{x} and \code{y} respectively, and get ready for \code{ggplot2} aesthetic
 mappings. In conjunction with \code{group_by()}, it allows every series to have
-their individual scales.
+their individual scales. For more details, see \code{vignette("frame-calendar", package = "sugrrants")}
 }
 \examples{
    library(dplyr)
