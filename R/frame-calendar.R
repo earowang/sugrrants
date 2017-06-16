@@ -260,6 +260,7 @@ frame_calendar_ <- function(
       label = data_ref$label,
       text = data_ref$text,
       dir = dir,
+      polar = polar,
       class = c("ggcalendar", class(data))
     )
   )
@@ -448,16 +449,16 @@ gen_reference.monthly <- function(
 #' @param ... Extra arguments passed to geom_label and geom_text
 #' @export
 prettify <- function(plot, label = c("label", "text"), ...) {
-  if (is.null(label)) {
-    label_arg <- NULL
-  } else {
-    label_arg <- match.arg(label, c("label", "text"), several.ok = TRUE)
-  }
   if (missing(plot)) {
     plot <- last_plot()
   }
   if (!is.ggplot(plot)) {
     abort("'plot' must be a ggplot object.")
+  }
+  if (is.null(label)) {
+    label_arg <- NULL
+  } else {
+    label_arg <- match.arg(label, c("label", "text"), several.ok = TRUE)
   }
   label <- get_label(plot$data)
   text <- get_text(plot$data)
@@ -520,6 +521,10 @@ get_text <- function(data) {
 
 get_dir <- function(data) {
   attr(data, "dir")
+}
+
+get_polar <- function(data) {
+  attr(data, "polar")
 }
 
 gen_wday_labels <- function(..., sunday = FALSE) { # simply ignore ...
