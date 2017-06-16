@@ -98,8 +98,8 @@ frame_calendar.grouped_df <- function(
   check_date <- possibly_string(date)
   if (!check_date) date <- deparse(substitute(date))
 
-  x <- sym(x)
-  y <- syms(y)
+  if (!possibly_identity(x)) x <- sym(x)
+  if (!possibly_identity(y)) y <- syms(y)
   date <- sym(date)
 
   data <- data %>% 
@@ -128,8 +128,8 @@ frame_calendar.default <- function(
   check_date <- possibly_string(date)
   if (!check_date) date <- deparse(substitute(date))
 
-  x <- sym(x)
-  y <- syms(y)
+  if (!possibly_identity(x)) x <- sym(x)
+  if (!possibly_identity(y)) y <- syms(y)
   date <- sym(date)
 
   frame_calendar_(
@@ -214,14 +214,25 @@ frame_calendar_ <- function(
     fn <- function(x, gy, ymax, ymin) { # temporal function for mutate at
       gy + normalise(x, xmax = max_na(ymax), xmin = min_na(ymin)) * height
     }
-    data <- data %>% 
-      mutate(
-        !!.x := .gx + normalise(!!x, xmax = max_na(!!x)) * width
-      ) %>% 
-      mutate_at(
-        .vars = vars(!!!y),
-        .funs = funs(zzz = fn(., .gy, .ymax, .ymin))
-      )
+    if (possibly_identity(x)) {
+      data <- data %>% 
+        mutate(.x = .gx)
+    } else {
+      data <- data %>% 
+        mutate(
+          !!.x := .gx + normalise(!!x, xmax = max_na(!!x)) * width
+        )
+    }
+    if (possibly_identity(y)) {
+      data <- data %>% 
+        mutate(.y = .gy)
+    } else {
+      data <- data %>% 
+        mutate_at(
+          .vars = vars(!!!y),
+          .funs = funs(zzz = fn(., .gy, .ymax, .ymin))
+        )
+    }
   }
   # generate breaks and labels for prettify()
   class(cal_grids) <- c(calendar, class(cal_grids))
