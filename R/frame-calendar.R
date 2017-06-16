@@ -193,6 +193,9 @@ frame_calendar_ <- function(
     normalise(x, xmax = max_na(x), xmin = min_na(x)) * height
   }
   if (polar) { # polar only support one y
+    if (length(y) > 1) {
+      message("Only the first 'y' variable is used.")
+    }
     .y <- paste0(".", y[[1]])
     data <- data %>% 
       mutate(
@@ -447,6 +450,9 @@ prettify <- function(plot, label = c("label", "text"), ...) {
     label_arg <- NULL
   } else {
     label_arg <- match.arg(label, c("label", "text"), several.ok = TRUE)
+  }
+  if (!("ggcalendar" %in% class(plot$data))) {
+    abort("'prettify' does not know how to handle with this type of data.")
   }
   label <- get_label(plot$data)
   text <- get_text(plot$data)
