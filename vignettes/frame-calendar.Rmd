@@ -1,7 +1,10 @@
 ---
 title: "Calendar-based graphics"
-author: "Earo Wang"
+author: "Earo Wang, Di Cook, Rob J Hyndman"
 date: "`r Sys.Date()`"
+bibliography: references.bib
+biblio-style: authoryear-comp
+link-citations: yes
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{frame-calendar}
@@ -9,49 +12,68 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+## Introduction
+
 ```{r initial, echo = FALSE, cache = FALSE, results = 'hide'}
 library(knitr)
-opts_chunk$set(warning = FALSE, message = FALSE,
-  fig.width = 7, fig.height = 6, fig.align = 'center'
+opts_chunk$set(
+  warning = FALSE, message = FALSE, echo = TRUE,
+  fig.width = 7, fig.height = 6, fig.align = 'centre'
 )
 ```
+
+Calendar-based graphics turn out a useful tool for visually unfolding people's daily schedules in details, such as hourly foot traffic in CBD, daily residential electricity demand and etc. It arranges the values according to the corresponding dates into a calendar layout, which is comprised of weekdays on the columns and weeks of a month on the rows for a common monthly calendar. The idea originates from @van_wijk_cluster_1999 and is implemented into a couple of R packages ([ggTimeSeries](https://github.com/AtherEnergy/ggTimeSeries) and [ggcal](https://github.com/jayjacobs/ggcal)), yet they all are a variant of heatmap in temporal context. We extend the calendar-based graphics to a broader range of applications using linear algebra tools. For example, (1) it not only handles with data of daily intervals but also of higher frequency like hourly data; (2) it is no longer constrained to heatmap but can be used with other types of *Geoms*; (3) the built-in calendars include *monthly*, *weekly*, and *daily* types for the purpose of comparisons between different temporal components. The function `frame_calendar` returns the computed calendar grids as a data frame or a tibble according to its data input, and *ggplot2* takes care of the plotting as you usually do with a data frame.
+
+We are going to use Melbourne pedestrian data (shipped with the package) as an example throughout the vignette, which is sourced from [Melbourne Open Data Portal](http://www.pedestrian.melbourne.vic.gov.au). The subset of the data contains 7 sensors counting foot traffic at hourly intervals across the city of Melbourne from January to April in 2017.
 
 ```{r load}
 library(dplyr)
 library(viridis)
 library(sugrrants)
-pedestrian17 <- pedestrian %>%
-  filter(Year == "2017")
+pedestrian17 <- filter(pedestrian, Year == "2017")
 head(pedestrian17)
 ```
 
-```{r center}
-center <- pedestrian17 %>% 
+We'll start with one sensor only--Melbourne Convention Exhibition Centre--to explain the basic use of the `frame_calendar`. As it attempts to fit into the *tidyverse* framework, the interface should be straightforward to those who use *tidyverse* on a daily basis. The first argument is the `data` so that the data frame can directly be piped into the function using `%>%`. A variable indicating time of day should be mapped to `x`, a value variable of interest mapped to `y`. `date` requires a `Date` variable to organise the data into a correct chronological order . See `?frame_calendar` for more arguments. In this case, *Time* as hour of day is used for `x` and *Hourly_Counts* as value for `y`. It returns a data frame including newly added columns *.Time* and *.Hourly_Counts* with a prefix "." of the variable names. These new columns contain the rearranged coordinates for the calendar plots later.
+
+```{r centre}
+centre <- pedestrian17 %>% 
   filter(Sensor_Name == "Melbourne Convention Exhibition Centre")
-center_calendar <- center %>%
+centre_calendar <- centre %>%
   frame_calendar(x = Time, y = Hourly_Counts, date = Date, calendar = "monthly")
-head(center_calendar)
+head(centre_calendar)
 ```
 
-```{r center-plot}
-p1 <- ggplot(center_calendar, aes(x = .Time, y = .Hourly_Counts, group = Date)) +
+Consequently, *.Time* and *.Hourly_Counts* are mapped to the x and y axes respectively grouped by *Date* when using `geom_line()`. The transformed *.Time* and *.Hourly_Counts* variables no longer carry their initial meanings, and therefore their values are meaningless.
+
+```{r centre-plot}
+p1 <- centre_calendar %>% 
+  ggplot(aes(x = .Time, y = .Hourly_Counts, group = Date)) +
   geom_line()
 p1
 ```
 
-```{r center-more}
+To make the plot more accessible and informative, we provide another function `prettify` to work with `frame_calendar`. It takes a `ggplot` object and gives sensible breaks and labels. It can be noted that the calendar-based graphic depicts time of day, day of week, and other calendar effects like public holiday in a clear manner. (NOTE: `prettify` works better with lines and points geoms at this stage.)
+
+```{r centre-more}
 prettify(p1)
 ```
 
-```{r center-free}
-center_calendar_wday <- center %>%
+The scaling is controlled by the `scale` argument: `NULL` (the default) suggesting to be scaled globally; `free` to be scaled for each daily block individually; `free_wday` to be scaled conditional on each weekday; `free_mday` to be scaled conditional on each day of month. The code snippet below shows the scaling by weekdays. We can easily compare the magnitudes across Mondays and so on.
+
+```{r centre-free}
+centre_calendar_wday <- centre %>%
   frame_calendar(x = Time, y = Hourly_Counts, date = Date, calendar = "monthly",
     scale = "free_wday")
-p2 <- ggplot(center_calendar_wday, aes(
+p2 <- ggplot(centre_calendar_wday, aes(
   x = .Time, y = .Hourly_Counts, group = Date)) +
   geom_line()
 prettify(p2)
 ```
+
+## Use in conjunction with `group_by`
+
+The `frame_calendar` function can be naturally combined with `group_by`, and hence the grouped variable has its own scale.
 
 ```{r ped-facet, fig.height = 9}
 grped_calendar <- pedestrian17 %>% 
@@ -63,19 +85,23 @@ grped_calendar %>%
   facet_grid(Sensor_Name ~ .)
 ```
 
+## More geoms
+
+It's not necessarily working with lines but other geoms.
+
 ```{r ped-daily}
-center_daily <- center %>%
+centre_daily <- centre %>%
   group_by(Date) %>%
   summarise(
     Max_Counts = max(Hourly_Counts),
     Min_Counts = min(Hourly_Counts)
   ) %>%
   ungroup()
-center_daily_calendar <- center_daily %>%
+centre_daily_calendar <- centre_daily %>%
   frame_calendar(x = 1, y = c("Min_Counts", "Max_Counts"), date = Date,
     calendar = "daily")
-head(center_daily_calendar)
-p3 <- center_daily_calendar %>%
+head(centre_daily_calendar)
+p3 <- centre_daily_calendar %>%
   ggplot() +
   geom_rect(aes(
     xmin = .x, xmax = .x + 0.03,
@@ -85,11 +111,13 @@ prettify(p3)
 ``` 
 
 ```{r ped-max}
-center_max_calendar <- center_daily %>%
+centre_max_calendar <- centre_daily %>%
   frame_calendar(x = 1, y = 1, date = Date, calendar = "weekly")
-head(center_max_calendar)
-center_max_calendar %>%
+head(centre_max_calendar)
+centre_max_calendar %>%
   ggplot(aes(x = .x, y = .y)) +
   geom_tile(aes(fill = Max_Counts)) +
   scale_fill_viridis()
 ```
+
+## Reference
