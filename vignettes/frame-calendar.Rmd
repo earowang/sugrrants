@@ -34,7 +34,7 @@ pedestrian17 <- filter(pedestrian, Year == "2017")
 head(pedestrian17)
 ```
 
-We'll start with one sensor only--Melbourne Convention Exhibition Centre--to explain the basic use of the `frame_calendar`. As it attempts to fit into the *tidyverse* framework, the interface should be straightforward to those who use *tidyverse* on a daily basis. The first argument is the `data` so that the data frame can directly be piped into the function using `%>%`. A variable indicating time of day should be mapped to `x`, a value variable of interest mapped to `y`. `date` requires a `Date` variable to organise the data into a correct chronological order . See `?frame_calendar` for more arguments. In this case, *Time* as hour of day is used for `x` and *Hourly_Counts* as value for `y`. It returns a data frame including newly added columns *.Time* and *.Hourly_Counts* with a prefix "." of the variable names. These new columns contain the rearranged coordinates for the calendar plots later.
+We'll start with one sensor only--Melbourne Convention Exhibition Centre--to explain the basic use of the `frame_calendar`. As it attempts to fit into the *tidyverse* framework, the interface should be straightforward to those who use *tidyverse* on a daily basis. The first argument is the `data` so that the data frame can directly be piped into the function using `%>%`. A variable indicating time of day should be mapped to `x`, a value variable of interest mapped to `y`. `date` requires a `Date` variable to organise the data into a correct chronological order . See `?frame_calendar` for more options. In this case, *Time* as hour of day is used for `x` and *Hourly_Counts* as value for `y`. It returns a data frame including newly added columns *.Time* and *.Hourly_Counts* with a prefix "." of the variable names. These new columns contain the rearranged coordinates for the calendar plots later.
 
 ```{r centre}
 centre <- pedestrian17 %>% 
@@ -44,7 +44,7 @@ centre_calendar <- centre %>%
 head(centre_calendar)
 ```
 
-Consequently, *.Time* and *.Hourly_Counts* are mapped to the x and y axes respectively grouped by *Date* when using `geom_line()`. The transformed *.Time* and *.Hourly_Counts* variables no longer carry their initial meanings, and therefore their values are meaningless.
+Consequently, *.Time* and *.Hourly_Counts* are mapped to the x and y axes respectively grouped by *Date* when using `geom_line()`. The transformed *.Time* and *.Hourly_Counts* variables no longer carry their initial meanings, and thereby their values are meaningless.
 
 ```{r centre-plot}
 p1 <- centre_calendar %>% 
@@ -53,7 +53,7 @@ p1 <- centre_calendar %>%
 p1
 ```
 
-To make the plot more accessible and informative, we provide another function `prettify` to work with `frame_calendar`. It takes a `ggplot` object and gives sensible breaks and labels. It can be noted that the calendar-based graphic depicts time of day, day of week, and other calendar effects like public holiday in a clear manner. (NOTE: `prettify` works better with lines and points geoms at this stage.)
+To make the plot more accessible and informative, we provide another function `prettify` to go hand in hand with `frame_calendar`. It takes a `ggplot` object and gives sensible breaks and labels. It can be noted that the calendar-based graphic depicts time of day, day of week, and other calendar effects like public holiday in a clear manner. (NOTE: `prettify` works better with line and point geoms at this stage.)
 
 ```{r centre-more}
 prettify(p1)
@@ -87,7 +87,7 @@ grped_calendar %>%
 
 ## More geoms
 
-It's not necessarily working with lines but other geoms.
+It's not necessarily working with lines but other geoms too. We aggregate hourly counts to daily highs and lows, and in turn the time of day variable is dropped. But we could also use `frame_calendar` to get the calendar layout by simply passing integer 1 to `x` meaning "identity" across days. `y` allows multiple variables to be passed. Using the *daily* calendar instead, we use rectangular geom to represent daily maximums and minimums. As `x` doesn't take a variable, `.x` is presented.
 
 ```{r ped-daily}
 centre_daily <- centre %>%
@@ -110,13 +110,15 @@ p3 <- centre_daily_calendar %>%
 prettify(p3)
 ``` 
 
+If both `x` and `y` are given as 1, calendar grids are returned. A heatmap therefore can be drawn.
+
 ```{r ped-max}
 centre_max_calendar <- centre_daily %>%
-  frame_calendar(x = 1, y = 1, date = Date, calendar = "weekly")
+  frame_calendar(x = 1, y = 1, date = Date, calendar = "monthly")
 head(centre_max_calendar)
 centre_max_calendar %>%
   ggplot(aes(x = .x, y = .y)) +
-  geom_tile(aes(fill = Max_Counts)) +
+  geom_tile(aes(fill = Max_Counts), colour = "grey50") +
   scale_fill_viridis()
 ```
 
