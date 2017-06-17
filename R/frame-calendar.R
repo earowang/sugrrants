@@ -193,9 +193,11 @@ frame_calendar_ <- function(
       group_by(.day)
   }
 
-  fn <- function(x) { # temporal function for mutate at
-    normalise(x, xmax = max_na(x), xmin = min_na(x)) * height
-  }
+  data <- data %>% 
+    mutate(
+      .ymax = max(!!!y),
+      .ymin = min(!!!y)
+    )
   if (polar) { # polar only support one y
     if (length(y) > 1) {
       message("Only the first 'y' variable is used.")
@@ -210,9 +212,11 @@ frame_calendar_ <- function(
       ) %>% 
       select(-c(theta, radius))
   } else {
+    fn <- function(x, ymax, ymin) { # temporal function for mutate at
+      normalise(x, xmax = max_na(ymax), xmin = min_na(ymin)) * height
+    }
     if (possibly_identity(x)) {
-      data <- data %>% 
-        mutate(.x = .gx)
+      data <- mutate(data, .x = .gx)
     } else {
       data <- data %>% 
         mutate(
@@ -220,13 +224,12 @@ frame_calendar_ <- function(
         )
     }
     if (possibly_identity(y)) {
-      data <- data %>% 
-        mutate(.y = .gy)
+      data <- mutate(data, .y = .gy)
     } else {
       data <- data %>% 
         mutate_at(
           .vars = vars(!!!y),
-          .funs = funs(zzz = .gy + fn(.))
+          .funs = funs(zzz = .gy + fn(., .ymax, .ymin))
         )
     }
   }
