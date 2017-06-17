@@ -110,7 +110,7 @@ p3 <- centre_daily_calendar %>%
 prettify(p3)
 ``` 
 
-If both `x` and `y` are given as 1, calendar grids are returned. A heatmap therefore can be drawn.
+If both `x` and `y` are given as 1, only calendar grids are returned. A heatmap therefore can be drawn.
 
 ```{r ped-max}
 centre_max_calendar <- centre_daily %>%
@@ -121,5 +121,9 @@ centre_max_calendar %>%
   geom_tile(aes(fill = Max_Counts), colour = "grey50") +
   scale_fill_viridis()
 ```
+
+## Summary
+
+As its name suggests, `frame_calendar` just does the computation for you and leaves the plotting to *ggplot2*. This lends itself to more possibilities and flexibilities of calendar-based visualisation. In addition, some of these plots shown above can be produced using facets on temporal units by *ggplot2*; however, `frame_calendar` coupled with *ggplot2* is much faster than `facet_*` as it's more lightweight. Lastly, it can handle with long historical temporal data easily on a limited screen space as a result of calendar-based arrangement.
 
 ## Reference

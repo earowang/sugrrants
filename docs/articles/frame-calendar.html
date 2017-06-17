@@ -177,7 +177,7 @@ centre_daily_calendar &lt;-<span class="st"> </span>centre_daily <span class="op
   ), <span class="dt">colour =</span> <span class="st">"white"</span>)
 <span class="kw"><a href="../reference/frame-calendar.html">prettify</a></span>(p3)</code></pre></div>
 <p><img src="frame-calendar_files/figure-html/ped-daily-1.png" width="672"></p>
-<p>If both <code>x</code> and <code>y</code> are given as 1, calendar grids are returned. A heatmap therefore can be drawn.</p>
+<p>If both <code>x</code> and <code>y</code> are given as 1, only calendar grids are returned. A heatmap therefore can be drawn.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">centre_max_calendar &lt;-<span class="st"> </span>centre_daily <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw"><a href="../reference/frame-calendar.html">frame_calendar</a></span>(<span class="dt">x =</span> <span class="dv">1</span>, <span class="dt">y =</span> <span class="dv">1</span>, <span class="dt">date =</span> Date, <span class="dt">calendar =</span> <span class="st">"monthly"</span>)
 <span class="kw">head</span>(centre_max_calendar)</code></pre></div>
@@ -195,6 +195,11 @@ centre_daily_calendar &lt;-<span class="st"> </span>centre_daily <span class="op
 <span class="st">  </span><span class="kw">geom_tile</span>(<span class="kw">aes</span>(<span class="dt">fill =</span> Max_Counts), <span class="dt">colour =</span> <span class="st">"grey50"</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_fill_viridis</span>()</code></pre></div>
 <p><img src="frame-calendar_files/figure-html/ped-max-1.png" width="672"></p>
+</div>
+<div id="summary" class="section level2">
+<h2 class="hasAnchor">
+<a href="#summary" class="anchor"></a>Summary</h2>
+<p>As its name suggests, <code>frame_calendar</code> just does the computation for you and leaves the plotting to <em>ggplot2</em>. This lends itself to more possibilities and flexibilities of calendar-based visualisation. In addition, some of these plots shown above can be produced using facets on temporal units by <em>ggplot2</em>; however, <code>frame_calendar</code> coupled with <em>ggplot2</em> is much faster than <code>facet_*</code> as it’s more lightweight. Lastly, it can handle with long historical temporal data easily on a limited screen space as a result of calendar-based arrangement.</p>
 </div>
 <div id="reference" class="section level2 unnumbered">
 <h2 class="hasAnchor">
@@ -215,6 +220,7 @@ centre_daily_calendar &lt;-<span class="st"> </span>centre_daily <span class="op
 <li><a href="#introduction">Introduction</a></li>
       <li><a href="#use-in-conjunction-with-group_by">Use in conjunction with <code>group_by</code></a></li>
       <li><a href="#more-geoms">More geoms</a></li>
+      <li><a href="#summary">Summary</a></li>
       <li><a href="#reference">Reference</a></li>
       </ul>
 </div>
