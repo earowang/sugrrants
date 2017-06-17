@@ -242,7 +242,8 @@ frame_calendar_ <- function(
 
   data <- data %>% 
     ungroup() %>% 
-    select(-(ROW:.gy))
+    select(-(ROW:.gy)) %>% 
+    select(-c(.ymax, .ymin))
   if (scale %in% c("free_wday", "free_mday")) {
     data <- select(data, -.day) # remove .day variable
   }
