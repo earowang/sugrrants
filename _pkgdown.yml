@@ -1,0 +1,23 @@
+template:
+  params:
+    bootswatch: united
+
+authors:
+  Earo Wang:
+    href: http://earo.me
+  Di Cook:
+    href: http://dicook.org
+  Rob Hyndman:
+    href: http://robjhyndman.com
+
+navbar:
+  type: default
+  left:
+  - text: Reference
+    href: reference/index.html
+  - text: Vignettes
+    menu:
+    - text: Calendar based graphics
+      href: articles/frame-calendar.html
+  - text: News
+    href: news/index.html
