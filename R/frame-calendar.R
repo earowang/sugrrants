@@ -195,8 +195,8 @@ frame_calendar_ <- function(
 
   data <- data %>% 
     mutate(
-      .ymax = max(!!!y),
-      .ymin = min(!!!y)
+      .ymax = max(!!!y, na.rm = TRUE),
+      .ymin = min(!!!y, na.rm = TRUE)
     )
   if (polar) { # polar only support one y
     if (length(y) > 1) {
