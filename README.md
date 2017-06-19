@@ -3,7 +3,7 @@
 sugrrants
 =========
 
-[![Travis-CI Build Status](https://travis-ci.org/earowang/sugrrants.svg?branch=master)](https://travis-ci.org/earowang/sugrrants)
+[![Travis-CI Build Status](https://travis-ci.org/earowang/sugrrants.svg?branch=master)](https://travis-ci.org/earowang/sugrrants) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/sugrrants)](https://cran.r-project.org/package=sugrrants)
 
 Overview
 --------
@@ -64,7 +64,7 @@ p <- calendar_df %>%
 prettify(p)
 ```
 
-![](figure/calendar-plot-1.png)
+![](man/figure/calendar-plot-1.png)
 
 Miscellaneous
 -------------

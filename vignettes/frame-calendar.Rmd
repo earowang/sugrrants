@@ -59,6 +59,8 @@ To make the plot more accessible and informative, we provide another function `p
 prettify(p1)
 ```
 
+## Scaling
+
 The scaling is controlled by the `scale` argument: `NULL` (the default) suggesting to be scaled globally; `free` to be scaled for each daily block individually; `free_wday` to be scaled conditional on each weekday; `free_mday` to be scaled conditional on each day of month. The code snippet below shows the scaling by weekdays. We can easily compare the magnitudes across Mondays and so on.
 
 ```{r centre-free}
@@ -73,10 +75,23 @@ prettify(p2)
 
 ## Use in conjunction with `group_by`
 
+```{r overlay, fig.height = 5}
+two_sensors <- pedestrian17 %>%
+  filter(Sensor_Name %in% c("Melbourne Convention Exhibition Centre", "Lonsdale St (South)"))
+two_sensors_calendar <- two_sensors %>%
+  frame_calendar(x = Time, y = Hourly_Counts, date = Date, ncol = 4)
+p3 <- two_sensors_calendar %>%
+  ggplot(aes(x = .Time, y = .Hourly_Counts, group = Date, colour = Sensor_Name)) +
+  geom_line() +
+  scale_colour_viridis(discrete = TRUE) +
+  theme(legend.position = "bottom")
+prettify(p3)
+```
+
 The `frame_calendar` function can be naturally combined with `group_by`, and hence the grouped variable has its own scale.
 
-```{r ped-facet, fig.height = 9}
-grped_calendar <- pedestrian17 %>% 
+```{r ped-facet}
+grped_calendar <- two_sensors %>% 
   group_by(Sensor_Name) %>%
   frame_calendar(x = Time, y = Hourly_Counts, date = Date, ncol = 4)
 grped_calendar %>%

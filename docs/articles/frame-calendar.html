@@ -69,7 +69,7 @@
       <h1>Calendar-based graphics</h1>
                         <h4 class="author">Earo Wang, Di Cook, Rob J Hyndman</h4>
             
-            <h4 class="date">2017-06-17</h4>
+            <h4 class="date">2017-06-19</h4>
           </div>
 
     
@@ -121,6 +121,10 @@ p1</code></pre></div>
 <p>To make the plot more accessible and informative, we provide another function <code>prettify</code> to go hand in hand with <code>frame_calendar</code>. It takes a <code>ggplot</code> object and gives sensible breaks and labels. It can be noted that the calendar-based graphic depicts time of day, day of week, and other calendar effects like public holiday in a clear manner. (NOTE: <code>prettify</code> works better with line and point geoms at this stage.)</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/frame-calendar.html">prettify</a></span>(p1)</code></pre></div>
 <p><img src="frame-calendar_files/figure-html/centre-more-1.png" width="672"></p>
+</div>
+<div id="scaling" class="section level2">
+<h2 class="hasAnchor">
+<a href="#scaling" class="anchor"></a>Scaling</h2>
 <p>The scaling is controlled by the <code>scale</code> argument: <code>NULL</code> (the default) suggesting to be scaled globally; <code>free</code> to be scaled for each daily block individually; <code>free_wday</code> to be scaled conditional on each weekday; <code>free_mday</code> to be scaled conditional on each day of month. The code snippet below shows the scaling by weekdays. We can easily compare the magnitudes across Mondays and so on.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">centre_calendar_wday &lt;-<span class="st"> </span>centre <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw"><a href="../reference/frame-calendar.html">frame_calendar</a></span>(<span class="dt">x =</span> Time, <span class="dt">y =</span> Hourly_Counts, <span class="dt">date =</span> Date, <span class="dt">calendar =</span> <span class="st">"monthly"</span>,
@@ -135,8 +139,19 @@ p2 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(centre_calendar_
 <h2 class="hasAnchor">
 <a href="#use-in-conjunction-with-group_by" class="anchor"></a>Use in conjunction with <code>group_by</code>
 </h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">two_sensors &lt;-<span class="st"> </span>pedestrian17 <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">filter</span>(Sensor_Name <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">"Melbourne Convention Exhibition Centre"</span>, <span class="st">"Lonsdale St (South)"</span>))
+two_sensors_calendar &lt;-<span class="st"> </span>two_sensors <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="../reference/frame-calendar.html">frame_calendar</a></span>(<span class="dt">x =</span> Time, <span class="dt">y =</span> Hourly_Counts, <span class="dt">date =</span> Date, <span class="dt">ncol =</span> <span class="dv">4</span>)
+p3 &lt;-<span class="st"> </span>two_sensors_calendar <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> .Time, <span class="dt">y =</span> .Hourly_Counts, <span class="dt">group =</span> Date, <span class="dt">colour =</span> Sensor_Name)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_colour_viridis</span>(<span class="dt">discrete =</span> <span class="ot">TRUE</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">"bottom"</span>)
+<span class="kw"><a href="../reference/frame-calendar.html">prettify</a></span>(p3)</code></pre></div>
+<p><img src="frame-calendar_files/figure-html/overlay-1.png" width="672"></p>
 <p>The <code>frame_calendar</code> function can be naturally combined with <code>group_by</code>, and hence the grouped variable has its own scale.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">grped_calendar &lt;-<span class="st"> </span>pedestrian17 <span class="op">%&gt;%</span><span class="st"> </span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">grped_calendar &lt;-<span class="st"> </span>two_sensors <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">group_by</span>(Sensor_Name) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw"><a href="../reference/frame-calendar.html">frame_calendar</a></span>(<span class="dt">x =</span> Time, <span class="dt">y =</span> Hourly_Counts, <span class="dt">date =</span> Date, <span class="dt">ncol =</span> <span class="dv">4</span>)
 grped_calendar <span class="op">%&gt;%</span>
@@ -218,6 +233,7 @@ centre_daily_calendar &lt;-<span class="st"> </span>centre_daily <span class="op
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#introduction">Introduction</a></li>
+      <li><a href="#scaling">Scaling</a></li>
       <li><a href="#use-in-conjunction-with-group_by">Use in conjunction with <code>group_by</code></a></li>
       <li><a href="#more-geoms">More geoms</a></li>
       <li><a href="#summary">Summary</a></li>

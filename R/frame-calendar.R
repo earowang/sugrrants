@@ -42,8 +42,8 @@
 #'    facet), it requires the `x` variable mapped to be time of day and `y` to
 #'    value. New `x` and `y` are computed and named with a prefix `.`
 #'    according to `x` and `y` respectively, and get ready for `ggplot2` aesthetic 
-#'    mappings. In conjunction with `group_by()`, it allows every series to have
-#'    their individual scales. For more details, see `vignette("frame-calendar",
+#'    mappings. In conjunction with `group_by()`, it allows the grouped variable 
+#'    to have their individual scales. For more details, see `vignette("frame-calendar",
 #'    package = "sugrrants")`
 #'
 #' @author Earo Wang

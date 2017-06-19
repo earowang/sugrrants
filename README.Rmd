@@ -8,13 +8,14 @@ output:
 
 ```{r, echo = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE, comment = "#>", fig.path = "figure/"
+  collapse = TRUE, comment = "#>", fig.path = "man/figure/"
 )
 ```
 
 # sugrrants
 
 [![Travis-CI Build Status](https://travis-ci.org/earowang/sugrrants.svg?branch=master)](https://travis-ci.org/earowang/sugrrants)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/sugrrants)](https://cran.r-project.org/package=sugrrants)
 
 ## Overview
 
