@@ -13,8 +13,5 @@ install:
 winbuild:
 	Rscript -e "devtools::build_win(version = 'R-devel', quiet = TRUE)"
 
-release:
-	Rscript -e "devtools::release()"
-
 pkgdown:
 	Rscript -e "pkgdown::clean_site(); pkgdown::build_site()"

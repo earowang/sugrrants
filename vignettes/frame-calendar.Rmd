@@ -27,6 +27,7 @@ Calendar-based graphics turn out a useful tool for visually unfolding people's d
 We are going to use Melbourne pedestrian data (shipped with the package) as an example throughout the vignette, which is sourced from [Melbourne Open Data Portal](http://www.pedestrian.melbourne.vic.gov.au). The subset of the data contains 7 sensors counting foot traffic at hourly intervals across the city of Melbourne from January to April in 2017.
 
 ```{r load}
+library(tidyr)
 library(dplyr)
 library(viridis)
 library(sugrrants)
@@ -104,30 +105,51 @@ grped_calendar %>%
 
 It's not necessarily working with lines but other geoms too. We aggregate hourly counts to daily highs and lows, and in turn the time of day variable is dropped. But we could also use `frame_calendar` to get the calendar layout by simply passing integer 1 to `x` meaning "identity" across days. `y` allows multiple variables to be passed. Using the *daily* calendar instead, we use rectangular geom to represent daily maximums and minimums. As `x` doesn't take a variable, `.x` is presented.
 
-```{r ped-daily}
-centre_daily <- centre %>%
-  group_by(Date) %>%
-  summarise(
-    Max_Counts = max(Hourly_Counts),
-    Min_Counts = min(Hourly_Counts)
-  ) %>%
-  ungroup()
-centre_daily_calendar <- centre_daily %>%
-  frame_calendar(x = 1, y = c("Min_Counts", "Max_Counts"), date = Date,
+```{r ped-lag, fig.height = 2.5, fig.width = 8}
+centre_lagged <- centre %>%
+  mutate(Lagged_Counts = dplyr::lag(Hourly_Counts))
+centre_lagged_calendar <- centre_lagged %>% 
+  frame_calendar(x = Hourly_Counts, y = Lagged_Counts, date = Date,
     calendar = "daily")
-head(centre_daily_calendar)
-p3 <- centre_daily_calendar %>%
-  ggplot() +
-  geom_rect(aes(
-    xmin = .x, xmax = .x + 0.03,
-    ymin = .Min_Counts, ymax = .Max_Counts
-  ), colour = "white")
+p3 <- centre_lagged_calendar %>%
+  ggplot(aes(x = .Hourly_Counts, y = .Lagged_Counts, group = Date)) +
+  geom_point(size = 0.5)
 prettify(p3)
+```
+
+```{r ped-daily}
+two_sensors_wide <- two_sensors %>% 
+  select(-Sensor_ID) %>% 
+  spread(key = Sensor_Name, value = Hourly_Counts) %>% 
+  rename(
+    Centre = `Melbourne Convention Exhibition Centre`,
+    Lonsdale = `Lonsdale St (South)`
+  ) %>%
+  mutate(
+    Diff = Centre - Lonsdale,
+    More = if_else(Diff > 0, "Centre", "Lonsdate")
+  )
+sensors_wide_calendar <- two_sensors_wide %>% 
+  frame_calendar(x = Time, y = c("Centre", "Lonsdale"), date = Date, 
+    calendar = "weekly" )
+head(sensors_wide_calendar)
+p4 <- sensors_wide_calendar %>%
+  ggplot() +
+  geom_rect(aes(xmin = .Time, xmax = .Time + 0.005,
+    ymin = .Lonsdale, ymax = .Centre, fill = More
+  )) +
+  scale_fill_viridis(discrete = TRUE) +
+  theme(legend.position = "bottom")
+prettify(p4)
 ``` 
 
 If both `x` and `y` are given as 1, only calendar grids are returned. A heatmap therefore can be drawn.
 
 ```{r ped-max}
+centre_daily <- centre %>%
+  group_by(Date) %>%
+  summarise(Max_Counts = max(Hourly_Counts)) %>%
+  ungroup()
 centre_max_calendar <- centre_daily %>%
   frame_calendar(x = 1, y = 1, date = Date, calendar = "monthly")
 head(centre_max_calendar)

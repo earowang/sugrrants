@@ -140,13 +140,13 @@ frame_calendar_ <- function(
   data, x, y, date, calendar = "monthly", dir = "h", sunday = FALSE, 
   nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed"
 ) {
-  data <- arrange(data, !!date)
+  # data <- arrange(data, !!date) # I don't think I need to change row order
   .x <- paste0(".", quo_name(x))
   # .y <- paste0(".", quo_name(y))
   .date <- quo_name(date)
   cls <- class(data)
 
-  date_eval <- eval_tidy(date, data = data, parent.frame())
+  date_eval <- sort(eval_tidy(date, data = data, parent.frame()))
   if (type_sum(date_eval) != "date") {
     abort("'date' must be a 'Date' class.")
   }
