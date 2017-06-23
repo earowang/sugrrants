@@ -69,7 +69,7 @@
       <h1>Calendar-based graphics</h1>
                         <h4 class="author">Earo Wang, Di Cook, Rob J Hyndman</h4>
             
-            <h4 class="date">2017-06-19</h4>
+            <h4 class="date">2017-06-23</h4>
           </div>
 
     
@@ -80,10 +80,11 @@
 <a href="#introduction" class="anchor"></a>Introduction</h2>
 <p>Calendar-based graphics turn out a useful tool for visually unfolding people’s daily schedules in details, such as hourly foot traffic in CBD, daily residential electricity demand and etc. It arranges the values according to the corresponding dates into a calendar layout, which is comprised of weekdays on the columns and weeks of a month on the rows for a common monthly calendar. The idea originates from <span class="citation">Van Wijk and Van Selow (<a href="#ref-van_wijk_cluster_1999">1999</a>)</span> and is implemented into a couple of R packages (<a href="https://github.com/AtherEnergy/ggTimeSeries">ggTimeSeries</a> and <a href="https://github.com/jayjacobs/ggcal">ggcal</a>), yet they all are a variant of heatmap in temporal context. We extend the calendar-based graphics to a broader range of applications using linear algebra tools. For example, (1) it not only handles with data of daily intervals but also of higher frequency like hourly data; (2) it is no longer constrained to heatmap but can be used with other types of <em>Geoms</em>; (3) the built-in calendars include <em>monthly</em>, <em>weekly</em>, and <em>daily</em> types for the purpose of comparisons between different temporal components. The function <code>frame_calendar</code> returns the computed calendar grids as a data frame or a tibble according to its data input, and <em>ggplot2</em> takes care of the plotting as you usually do with a data frame.</p>
 <p>We are going to use Melbourne pedestrian data (shipped with the package) as an example throughout the vignette, which is sourced from <a href="http://www.pedestrian.melbourne.vic.gov.au">Melbourne Open Data Portal</a>. The subset of the data contains 7 sensors counting foot traffic at hourly intervals across the city of Melbourne from January to April in 2017.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyr)
+<span class="kw">library</span>(dplyr)
 <span class="kw">library</span>(viridis)
 <span class="kw">library</span>(sugrrants)
-pedestrian17 &lt;-<span class="st"> </span><span class="kw">filter</span>(pedestrian, Year <span class="op">==</span><span class="st"> "2017"</span>)
+pedestrian17 &lt;-<span class="st"> </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(pedestrian, Year <span class="op">==</span><span class="st"> "2017"</span>)
 <span class="kw">head</span>(pedestrian17)</code></pre></div>
 <pre><code>## # A tibble: 6 x 10
 ##    Date_Time       Date  Year   Month Mdate    Day  Time Sensor_ID
@@ -95,9 +96,9 @@ pedestrian17 &lt;-<span class="st"> </span><span class="kw">filter</span>(pedest
 ## 5 2017-01-01 2017-01-01  2017 January     1 Sunday     0        25
 ## 6 2017-01-01 2017-01-01  2017 January     1 Sunday     0        30
 ## # ... with 2 more variables: Sensor_Name &lt;chr&gt;, Hourly_Counts &lt;int&gt;</code></pre>
-<p>We’ll start with one sensor only–Melbourne Convention Exhibition Centre–to explain the basic use of the <code>frame_calendar</code>. As it attempts to fit into the <em>tidyverse</em> framework, the interface should be straightforward to those who use <em>tidyverse</em> on a daily basis. The first argument is the <code>data</code> so that the data frame can directly be piped into the function using <code>%&gt;%</code>. A variable indicating time of day should be mapped to <code>x</code>, a value variable of interest mapped to <code>y</code>. <code>date</code> requires a <code>Date</code> variable to organise the data into a correct chronological order . See <code><a href="../reference/frame-calendar.html">?frame_calendar</a></code> for more options. In this case, <em>Time</em> as hour of day is used for <code>x</code> and <em>Hourly_Counts</em> as value for <code>y</code>. It returns a data frame including newly added columns <em>.Time</em> and <em>.Hourly_Counts</em> with a prefix “.” of the variable names. These new columns contain the rearranged coordinates for the calendar plots later.</p>
+<p>We’ll start with one sensor only–Melbourne Convention Exhibition Centre–to explain the basic use of the <code><a href="../reference/frame-calendar.html">frame_calendar()</a></code>. As it attempts to fit into the <em>tidyverse</em> framework, the interface should be straightforward to those who use <em>tidyverse</em> on a daily basis. The first argument is the <code>data</code> so that the data frame can directly be piped into the function using <code>%&gt;%</code>. A variable indicating time of day could be mapped to <code>x</code>, a value variable of interest mapped to <code>y</code>. <code>date</code> requires a <code>Date</code> variable to organise the data into a correct chronological order . See <code>?frame_calendar()</code> for more options. In this case, <em>Time</em> as hour of day is used for <code>x</code> and <em>Hourly_Counts</em> as value for <code>y</code>. It returns a data frame including newly added columns <em>.Time</em> and <em>.Hourly_Counts</em> with a prefix “.” of the variable names. These new columns contain the rearranged coordinates for the calendar plots later.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">centre &lt;-<span class="st"> </span>pedestrian17 <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(Sensor_Name <span class="op">==</span><span class="st"> "Melbourne Convention Exhibition Centre"</span>)
+<span class="st">  </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(Sensor_Name <span class="op">==</span><span class="st"> "Melbourne Convention Exhibition Centre"</span>)
 centre_calendar &lt;-<span class="st"> </span>centre <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw"><a href="../reference/frame-calendar.html">frame_calendar</a></span>(<span class="dt">x =</span> Time, <span class="dt">y =</span> Hourly_Counts, <span class="dt">date =</span> Date, <span class="dt">calendar =</span> <span class="st">"monthly"</span>)
 <span class="kw">head</span>(centre_calendar)</code></pre></div>
@@ -118,41 +119,51 @@ centre_calendar &lt;-<span class="st"> </span>centre <span class="op">%&gt;%</sp
 <span class="st">  </span><span class="kw">geom_line</span>()
 p1</code></pre></div>
 <p><img src="frame-calendar_files/figure-html/centre-plot-1.png" width="672"></p>
-<p>To make the plot more accessible and informative, we provide another function <code>prettify</code> to go hand in hand with <code>frame_calendar</code>. It takes a <code>ggplot</code> object and gives sensible breaks and labels. It can be noted that the calendar-based graphic depicts time of day, day of week, and other calendar effects like public holiday in a clear manner. (NOTE: <code>prettify</code> works better with line and point geoms at this stage.)</p>
+<p>To make the plot more accessible and informative, we provide another function <code><a href="../reference/frame-calendar.html">prettify()</a></code> to go hand in hand with <code><a href="../reference/frame-calendar.html">frame_calendar()</a></code>. It takes a <code>ggplot</code> object and gives sensible breaks and labels. It can be noted that the calendar-based graphic depicts time of day, day of week, and other calendar effects like public holiday in a clear manner. (NOTE: <code><a href="../reference/frame-calendar.html">prettify()</a></code> works better with line and point geoms at this stage.)</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/frame-calendar.html">prettify</a></span>(p1)</code></pre></div>
 <p><img src="frame-calendar_files/figure-html/centre-more-1.png" width="672"></p>
 </div>
 <div id="scaling" class="section level2">
 <h2 class="hasAnchor">
 <a href="#scaling" class="anchor"></a>Scaling</h2>
-<p>The scaling is controlled by the <code>scale</code> argument: <code>NULL</code> (the default) suggesting to be scaled globally; <code>free</code> to be scaled for each daily block individually; <code>free_wday</code> to be scaled conditional on each weekday; <code>free_mday</code> to be scaled conditional on each day of month. The code snippet below shows the scaling by weekdays. We can easily compare the magnitudes across Mondays and so on.</p>
+<p>Scaling is controlled by the <code>scale</code> argument: <code>NULL</code> is the default suggesting to be scaled globally. The figure above shows the global scale that enables overall comparison. Another option <code>free</code> means to be scaled for each daily block individually. It puts more emphasis on a single day shape instead of magnitude comparison.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">centre_calendar_free &lt;-<span class="st"> </span>centre <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="../reference/frame-calendar.html">frame_calendar</a></span>(<span class="dt">x =</span> Time, <span class="dt">y =</span> Hourly_Counts, <span class="dt">date =</span> Date, <span class="dt">calendar =</span> <span class="st">"monthly"</span>,
+    <span class="dt">scale =</span> <span class="st">"free"</span>, <span class="dt">ncol =</span> <span class="dv">4</span>)
+p2 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(centre_calendar_free, 
+        <span class="kw">aes</span>(<span class="dt">x =</span> .Time, <span class="dt">y =</span> .Hourly_Counts, <span class="dt">group =</span> Date)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>()
+<span class="kw"><a href="../reference/frame-calendar.html">prettify</a></span>(p2, <span class="dt">label =</span> <span class="ot">NULL</span>)</code></pre></div>
+<p><img src="frame-calendar_files/figure-html/centre-free-1.png" width="672"></p>
+<p>The other two choices are <code>free_wday</code> and <code>free_mday</code>, scaled conditionally on each weekday and each day of month respectively. The code snippet below gives the scaling by weekdays so that it enables to compare the magnitudes across Mondays, Tuesdays, and so on.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">centre_calendar_wday &lt;-<span class="st"> </span>centre <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw"><a href="../reference/frame-calendar.html">frame_calendar</a></span>(<span class="dt">x =</span> Time, <span class="dt">y =</span> Hourly_Counts, <span class="dt">date =</span> Date, <span class="dt">calendar =</span> <span class="st">"monthly"</span>,
-    <span class="dt">scale =</span> <span class="st">"free_wday"</span>)
-p2 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(centre_calendar_wday, <span class="kw">aes</span>(
-  <span class="dt">x =</span> .Time, <span class="dt">y =</span> .Hourly_Counts, <span class="dt">group =</span> Date)) <span class="op">+</span>
+    <span class="dt">scale =</span> <span class="st">"free_wday"</span>, <span class="dt">ncol =</span> <span class="dv">4</span>)
+p3 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(centre_calendar_wday, 
+        <span class="kw">aes</span>(<span class="dt">x =</span> .Time, <span class="dt">y =</span> .Hourly_Counts, <span class="dt">group =</span> Date)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_line</span>()
-<span class="kw"><a href="../reference/frame-calendar.html">prettify</a></span>(p2)</code></pre></div>
-<p><img src="frame-calendar_files/figure-html/centre-free-1.png" width="672"></p>
+<span class="kw"><a href="../reference/frame-calendar.html">prettify</a></span>(p3, <span class="dt">label =</span> <span class="ot">NULL</span>)</code></pre></div>
+<p><img src="frame-calendar_files/figure-html/centre-wday-1.png" width="672"></p>
 </div>
 <div id="use-in-conjunction-with-group_by" class="section level2">
 <h2 class="hasAnchor">
 <a href="#use-in-conjunction-with-group_by" class="anchor"></a>Use in conjunction with <code>group_by</code>
 </h2>
+<p>We can also superimpose one sensor on top of the other. Without using <code><a href="http://dplyr.tidyverse.org/reference/group_by.html">group_by()</a></code>, they will share the common scale on the overlaying graph.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">two_sensors &lt;-<span class="st"> </span>pedestrian17 <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">filter</span>(Sensor_Name <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">"Melbourne Convention Exhibition Centre"</span>, <span class="st">"Lonsdale St (South)"</span>))
+<span class="st">  </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(Sensor_Name <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">"Melbourne Convention Exhibition Centre"</span>, <span class="st">"Lonsdale St (South)"</span>))
 two_sensors_calendar &lt;-<span class="st"> </span>two_sensors <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw"><a href="../reference/frame-calendar.html">frame_calendar</a></span>(<span class="dt">x =</span> Time, <span class="dt">y =</span> Hourly_Counts, <span class="dt">date =</span> Date, <span class="dt">ncol =</span> <span class="dv">4</span>)
-p3 &lt;-<span class="st"> </span>two_sensors_calendar <span class="op">%&gt;%</span>
+p4 &lt;-<span class="st"> </span>two_sensors_calendar <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> .Time, <span class="dt">y =</span> .Hourly_Counts, <span class="dt">group =</span> Date, <span class="dt">colour =</span> Sensor_Name)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">scale_colour_viridis</span>(<span class="dt">discrete =</span> <span class="ot">TRUE</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/viridis/topics/scale_viridis">scale_colour_viridis</a></span>(<span class="dt">discrete =</span> <span class="ot">TRUE</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">"bottom"</span>)
-<span class="kw"><a href="../reference/frame-calendar.html">prettify</a></span>(p3)</code></pre></div>
+<span class="kw"><a href="../reference/frame-calendar.html">prettify</a></span>(p4, <span class="dt">label =</span> <span class="ot">NULL</span>)</code></pre></div>
 <p><img src="frame-calendar_files/figure-html/overlay-1.png" width="672"></p>
-<p>The <code>frame_calendar</code> function can be naturally combined with <code>group_by</code>, and hence the grouped variable has its own scale.</p>
+<p>The <code><a href="../reference/frame-calendar.html">frame_calendar()</a></code> function can be naturally combined with <code><a href="http://dplyr.tidyverse.org/reference/group_by.html">group_by()</a></code>, and hence the grouped variable has its own scale.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">grped_calendar &lt;-<span class="st"> </span>two_sensors <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">group_by</span>(Sensor_Name) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(Sensor_Name) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw"><a href="../reference/frame-calendar.html">frame_calendar</a></span>(<span class="dt">x =</span> Time, <span class="dt">y =</span> Hourly_Counts, <span class="dt">date =</span> Date, <span class="dt">ncol =</span> <span class="dv">4</span>)
 grped_calendar <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> .Time, <span class="dt">y =</span> .Hourly_Counts, <span class="dt">group =</span> Date)) <span class="op">+</span>
@@ -163,58 +174,82 @@ grped_calendar <span class="op">%&gt;%</span>
 <div id="more-geoms" class="section level2">
 <h2 class="hasAnchor">
 <a href="#more-geoms" class="anchor"></a>More geoms</h2>
-<p>It’s not necessarily working with lines but other geoms too. We aggregate hourly counts to daily highs and lows, and in turn the time of day variable is dropped. But we could also use <code>frame_calendar</code> to get the calendar layout by simply passing integer 1 to <code>x</code> meaning “identity” across days. <code>y</code> allows multiple variables to be passed. Using the <em>daily</em> calendar instead, we use rectangular geom to represent daily maximums and minimums. As <code>x</code> doesn’t take a variable, <code>.x</code> is presented.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">centre_daily &lt;-<span class="st"> </span>centre <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">group_by</span>(Date) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">summarise</span>(
-    <span class="dt">Max_Counts =</span> <span class="kw">max</span>(Hourly_Counts),
-    <span class="dt">Min_Counts =</span> <span class="kw">min</span>(Hourly_Counts)
-  ) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">ungroup</span>()
-centre_daily_calendar &lt;-<span class="st"> </span>centre_daily <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw"><a href="../reference/frame-calendar.html">frame_calendar</a></span>(<span class="dt">x =</span> <span class="dv">1</span>, <span class="dt">y =</span> <span class="kw">c</span>(<span class="st">"Min_Counts"</span>, <span class="st">"Max_Counts"</span>), <span class="dt">date =</span> Date,
+<p>It’s not necessarily working with lines but other geoms too. One example is a lag scatterplot on a “daily” calendar. Lagged hourly counts are plotted against hourly counts in each daily cell using a point geom.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">centre_lagged &lt;-<span class="st"> </span>centre <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">Lagged_Counts =</span> dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/lead-lag.html">lag</a></span>(Hourly_Counts))
+centre_lagged_calendar &lt;-<span class="st"> </span>centre_lagged <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw"><a href="../reference/frame-calendar.html">frame_calendar</a></span>(<span class="dt">x =</span> Hourly_Counts, <span class="dt">y =</span> Lagged_Counts, <span class="dt">date =</span> Date,
     <span class="dt">calendar =</span> <span class="st">"daily"</span>)
-<span class="kw">head</span>(centre_daily_calendar)</code></pre></div>
-<pre><code>## # A tibble: 6 x 6
-##   Max_Counts Min_Counts       Date         .x .Min_Counts .Max_Counts
-##        &lt;dbl&gt;      &lt;dbl&gt;     &lt;date&gt;      &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;
-## 1       2930         61 2017-01-01 0.00000000    1.006487    1.316667
-## 2       1432          8 2017-01-02 0.03333333    1.000757    1.154712
-## 3       1432          9 2017-01-03 0.06666667    1.000865    1.154712
-## 4       1175          8 2017-01-04 0.10000000    1.000757    1.126926
-## 5       1134          4 2017-01-05 0.13333333    1.000324    1.122493
-## 6       1008          8 2017-01-06 0.16666667    1.000757    1.108871</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p3 &lt;-<span class="st"> </span>centre_daily_calendar <span class="op">%&gt;%</span>
+p3 &lt;-<span class="st"> </span>centre_lagged_calendar <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> .Hourly_Counts, <span class="dt">y =</span> .Lagged_Counts, <span class="dt">group =</span> Date)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size =</span> <span class="fl">0.5</span>)
+<span class="kw"><a href="../reference/frame-calendar.html">prettify</a></span>(p3, <span class="dt">size =</span> <span class="dv">3</span>)</code></pre></div>
+<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
+<p><img src="frame-calendar_files/figure-html/ped-lag-1.png" width="768"></p>
+<p>Furthermore, the argument <code>y</code> is possible to take multiple variable names that need to be quoted. It’s difficult to spot the differences between two sensors from the overlaying plot shown earlier. The rectangular glyphs arranged on a “weekly” calendar are plotted to illustrate the multiple <code>y</code>s use and the differences between sensors. The long data format is firstly converted to the wide format using <code><a href="http://www.rdocumentation.org/packages/tidyr/topics/spread">tidyr::spread()</a></code> <span class="citation">(Wickham <a href="#ref-wickham2014tidy">2014</a>)</span>. These two sensors are variables rather than values now, and hence can be passed to <code>y</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">two_sensors_wide &lt;-<span class="st"> </span>two_sensors <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="op">-</span>Sensor_ID) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/tidyr/topics/spread">spread</a></span>(<span class="dt">key =</span> Sensor_Name, <span class="dt">value =</span> Hourly_Counts) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">rename</a></span>(
+    <span class="dt">Centre =</span> <span class="st">`</span><span class="dt">Melbourne Convention Exhibition Centre</span><span class="st">`</span>,
+    <span class="dt">Lonsdale =</span> <span class="st">`</span><span class="dt">Lonsdale St (South)</span><span class="st">`</span>
+  ) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(
+    <span class="dt">Diff =</span> Centre <span class="op">-</span><span class="st"> </span>Lonsdale,
+    <span class="dt">More =</span> <span class="kw"><a href="http://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span>(Diff <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>, <span class="st">"Centre"</span>, <span class="st">"Lonsdale"</span>)
+  )
+sensors_wide_calendar &lt;-<span class="st"> </span>two_sensors_wide <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw"><a href="../reference/frame-calendar.html">frame_calendar</a></span>(<span class="dt">x =</span> Time, <span class="dt">y =</span> <span class="kw">c</span>(<span class="st">"Centre"</span>, <span class="st">"Lonsdale"</span>), <span class="dt">date =</span> Date, 
+    <span class="dt">calendar =</span> <span class="st">"weekly"</span> )
+<span class="kw">head</span>(sensors_wide_calendar)</code></pre></div>
+<pre><code>## # A tibble: 6 x 14
+##             Date_Time  Year   Month Mdate    Day  Time Lonsdale Centre
+##                &lt;dttm&gt; &lt;int&gt;   &lt;ord&gt; &lt;int&gt;  &lt;ord&gt; &lt;int&gt;    &lt;int&gt;  &lt;int&gt;
+## 1 2017-01-01 00:00:00  2017 January     1 Sunday     0      827   2930
+## 2 2017-01-01 01:00:00  2017 January     1 Sunday     1      918   1629
+## 3 2017-01-01 02:00:00  2017 January     1 Sunday     2      600    550
+## 4 2017-01-01 03:00:00  2017 January     1 Sunday     3      495    301
+## 5 2017-01-01 04:00:00  2017 January     1 Sunday     4      270     99
+## 6 2017-01-01 05:00:00  2017 January     1 Sunday     5      110     68
+## # ... with 6 more variables: Diff &lt;int&gt;, More &lt;chr&gt;, Date &lt;date&gt;,
+## #   .Time &lt;dbl&gt;, .Centre &lt;dbl&gt;, .Lonsdale &lt;dbl&gt;</code></pre>
+<p>Having multiple <code>y</code>s makes it a little easier when mapping to some geoms that contain the <code>ymin</code> and <code>ymax</code> arguments, such as <code>geom_rect</code> and <code>geom_ribbon</code>. Interestingly, Lonsdale Street is busier than Convention Centre in the evening, vice versa in the day time.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p5 &lt;-<span class="st"> </span>sensors_wide_calendar <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_rect</span>(<span class="kw">aes</span>(
-    <span class="dt">xmin =</span> .x, <span class="dt">xmax =</span> .x <span class="op">+</span><span class="st"> </span><span class="fl">0.03</span>,
-    <span class="dt">ymin =</span> .Min_Counts, <span class="dt">ymax =</span> .Max_Counts
-  ), <span class="dt">colour =</span> <span class="st">"white"</span>)
-<span class="kw"><a href="../reference/frame-calendar.html">prettify</a></span>(p3)</code></pre></div>
-<p><img src="frame-calendar_files/figure-html/ped-daily-1.png" width="672"></p>
-<p>If both <code>x</code> and <code>y</code> are given as 1, only calendar grids are returned. A heatmap therefore can be drawn.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">centre_max_calendar &lt;-<span class="st"> </span>centre_daily <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">geom_rect</span>(<span class="kw">aes</span>(<span class="dt">xmin =</span> .Time, <span class="dt">xmax =</span> .Time <span class="op">+</span><span class="st"> </span><span class="fl">0.005</span>,
+    <span class="dt">ymin =</span> .Lonsdale, <span class="dt">ymax =</span> .Centre, <span class="dt">fill =</span> More
+  )) <span class="op">+</span>
+<span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/viridis/topics/scale_viridis">scale_fill_viridis</a></span>(<span class="dt">discrete =</span> <span class="ot">TRUE</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">"bottom"</span>)
+<span class="kw"><a href="../reference/frame-calendar.html">prettify</a></span>(p5)</code></pre></div>
+<p><img src="frame-calendar_files/figure-html/ped-daily-plot-1.png" width="672"></p>
+<p>Can we plot a heatmap using <code><a href="../reference/frame-calendar.html">frame_calendar()</a></code> too? Yep, either <code>x</code> or <code>y</code> can be given as 1 implying identity across days. If both <code>x</code> and <code>y</code> are given as 1, only calendar grids are returned. A heatmap therefore can be drawn.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">centre_daily &lt;-<span class="st"> </span>centre <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(Date) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span>(<span class="dt">Max_Counts =</span> <span class="kw">max</span>(Hourly_Counts)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span>()
+centre_max_calendar &lt;-<span class="st"> </span>centre_daily <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw"><a href="../reference/frame-calendar.html">frame_calendar</a></span>(<span class="dt">x =</span> <span class="dv">1</span>, <span class="dt">y =</span> <span class="dv">1</span>, <span class="dt">date =</span> Date, <span class="dt">calendar =</span> <span class="st">"monthly"</span>)
 <span class="kw">head</span>(centre_max_calendar)</code></pre></div>
-<pre><code>## # A tibble: 6 x 5
-##   Max_Counts Min_Counts       Date         .x        .y
-##        &lt;dbl&gt;      &lt;dbl&gt;     &lt;date&gt;      &lt;dbl&gt;     &lt;dbl&gt;
-## 1       2930         61 2017-01-01 0.53461538 0.9269231
-## 2       1432          8 2017-01-02 0.07307692 0.8158120
-## 3       1432          9 2017-01-03 0.15000000 0.8158120
-## 4       1175          8 2017-01-04 0.22692308 0.8158120
-## 5       1134          4 2017-01-05 0.30384615 0.8158120
-## 6       1008          8 2017-01-06 0.38076923 0.8158120</code></pre>
+<pre><code>## # A tibble: 6 x 4
+##   Max_Counts       Date         .x        .y
+##        &lt;dbl&gt;     &lt;date&gt;      &lt;dbl&gt;     &lt;dbl&gt;
+## 1       2930 2017-01-01 0.53461538 0.9269231
+## 2       1432 2017-01-02 0.07307692 0.8158120
+## 3       1432 2017-01-03 0.15000000 0.8158120
+## 4       1175 2017-01-04 0.22692308 0.8158120
+## 5       1134 2017-01-05 0.30384615 0.8158120
+## 6       1008 2017-01-06 0.38076923 0.8158120</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">centre_max_calendar <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> .x, <span class="dt">y =</span> .y)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_tile</span>(<span class="kw">aes</span>(<span class="dt">fill =</span> Max_Counts), <span class="dt">colour =</span> <span class="st">"grey50"</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">scale_fill_viridis</span>()</code></pre></div>
+<span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/viridis/topics/scale_viridis">scale_fill_viridis</a></span>()</code></pre></div>
 <p><img src="frame-calendar_files/figure-html/ped-max-1.png" width="672"></p>
 </div>
 <div id="summary" class="section level2">
 <h2 class="hasAnchor">
 <a href="#summary" class="anchor"></a>Summary</h2>
-<p>As its name suggests, <code>frame_calendar</code> just does the computation for you and leaves the plotting to <em>ggplot2</em>. This lends itself to more possibilities and flexibilities of calendar-based visualisation. In addition, some of these plots shown above can be produced using facets on temporal units by <em>ggplot2</em>; however, <code>frame_calendar</code> coupled with <em>ggplot2</em> is much faster than <code>facet_*</code> as it’s more lightweight. Lastly, it can handle with long historical temporal data easily on a limited screen space as a result of calendar-based arrangement.</p>
+<p>As its name suggests, <code><a href="../reference/frame-calendar.html">frame_calendar()</a></code> just gives a rearranged data frame to you and leaves the plotting to <em>ggplot2</em>. This lends itself to more flexibility of calendar-based visualisation. In addition, some of these plots shown above may be produced using facets on temporal units by <em>ggplot2</em>; however, <code><a href="../reference/frame-calendar.html">frame_calendar()</a></code> coupled with <em>ggplot2</em> is much faster than <code>facet_*</code> as it’s lighter-weight. Lastly, it can handle with long historical temporal data easily on a limited screen space as a result of calendar-based glyphs.</p>
 </div>
 <div id="reference" class="section level2 unnumbered">
 <h2 class="hasAnchor">
@@ -223,6 +258,9 @@ centre_daily_calendar &lt;-<span class="st"> </span>centre_daily <span class="op
 <div id="ref-van_wijk_cluster_1999">
 <p>Van Wijk, Jarke J., and Edward R. Van Selow. 1999. “Cluster and Calendar Based Visualization of Time Series Data.” In <em>Information Visualization, 1999.(Info Vis’ 99) Proceedings. 1999 IEEE Symposium on</em>, 4–9. IEEE.</p>
 </div>
+<div id="ref-wickham2014tidy">
+<p>Wickham, Hadley. 2014. “Tidy Data.” <em>Journal of Statistical Software</em> 59 (10). Foundation for Open Access Statistics: 1–23.</p>
+</div>
 </div>
 </div>
 </div>
@@ -230,7 +268,8 @@ centre_daily_calendar &lt;-<span class="st"> </span>centre_daily <span class="op
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
         <div id="tocnav">
-      <h2>Contents</h2>
+      <h2 class="hasAnchor">
+<a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#introduction">Introduction</a></li>
       <li><a href="#scaling">Scaling</a></li>

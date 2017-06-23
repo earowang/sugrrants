@@ -23,7 +23,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -179,12 +180,12 @@ to the paired geom/stat.</p></td>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>   <span class='fu'>library</span>(<span class='no'>dplyr</span>)
    <span class='no'>fstaff</span> <span class='kw'>&lt;-</span> <span class='no'>pedestrian</span> <span class='kw'>%&gt;%</span>
-     <span class='fu'>filter</span>(<span class='no'>Sensor_ID</span> <span class='kw'>==</span> <span class='fl'>13</span>)
+     <span class='fu'><a href='http://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='no'>Sensor_ID</span> <span class='kw'>==</span> <span class='fl'>13</span>)
 
    <span class='co'># use ggplot2 </span>
    <span class='no'>fstaff</span> <span class='kw'>%&gt;%</span>
      <span class='fu'>ggplot</span>(<span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>..lag..</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>Hourly_Counts</span>)) +
-     <span class='fu'>stat_acf</span>(<span class='kw'>geom</span> <span class='kw'>=</span> <span class='st'>"bar"</span>)</div><img src='stat_acf-2.png' alt='' width='540' height='400' /><div class='input'>
+     <span class='fu'>stat_acf</span>(<span class='kw'>geom</span> <span class='kw'>=</span> <span class='st'>"bar"</span>)</div><div class='img'><img src='stat_acf-1.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

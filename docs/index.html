@@ -85,7 +85,7 @@
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>You could install the development version from Github using</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("devtools")</span>
-devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">"earowang/sugrrants"</span>, <span class="dt">build_vignettes =</span> <span class="ot">TRUE</span>)</code></pre></div>
+devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"earowang/sugrrants"</span>, <span class="dt">build_vignettes =</span> <span class="ot">TRUE</span>)</code></pre></div>
 </div>
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
@@ -97,9 +97,9 @@ devtools<span class="op">::</span><span class="kw">install_github</span>(<span c
 <span class="kw">library</span>(sugrrants)
 
 calendar_df &lt;-<span class="st"> </span>pedestrian <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">filter</span>(Sensor_ID <span class="op">==</span><span class="st"> </span><span class="dv">9</span>, Year <span class="op">==</span><span class="st"> </span><span class="dv">2016</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">mutate</span>(
-    <span class="dt">Weekend =</span> <span class="kw">if_else</span>(Day <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">"Saturday"</span>, <span class="st">"Sunday"</span>), <span class="st">"Weekend"</span>, <span class="st">"Weekday"</span>)
+<span class="st">  </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(Sensor_ID <span class="op">==</span><span class="st"> </span><span class="dv">9</span>, Year <span class="op">==</span><span class="st"> </span><span class="dv">2016</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(
+    <span class="dt">Weekend =</span> <span class="kw"><a href="http://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span>(Day <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">"Saturday"</span>, <span class="st">"Sunday"</span>), <span class="st">"Weekend"</span>, <span class="st">"Weekday"</span>)
   ) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw"><a href="reference/frame-calendar.html">frame_calendar</a></span>(
     <span class="dt">x =</span> Time, <span class="dt">y =</span> Hourly_Counts, <span class="dt">date =</span> Date, <span class="dt">calendar =</span> <span class="st">"monthly"</span>
@@ -139,7 +139,8 @@ calendar_df
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Links</h2>
+    <h2 class="hasAnchor">
+<a href="#sidebar" class="anchor"></a>Links</h2>
 <ul class="list-unstyled">
 <li>Browse source code at <br><a href="https://github.com/earowang/sugrrants">https://​github.com/​earowang/​sugrrants</a>
 </li>

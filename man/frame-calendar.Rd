@@ -75,8 +75,8 @@ of sub-series arranged into many daily cells. For every multiple (or
 facet), it requires the \code{x} variable mapped to be time of day and \code{y} to
 value. New \code{x} and \code{y} are computed and named with a prefix \code{.}
 according to \code{x} and \code{y} respectively, and get ready for \code{ggplot2} aesthetic
-mappings. In conjunction with \code{group_by()}, it allows every series to have
-their individual scales. For more details, see \code{vignette("frame-calendar", package = "sugrrants")}
+mappings. In conjunction with \code{group_by()}, it allows the grouped variable
+to have their individual scales. For more details, see \code{vignette("frame-calendar", package = "sugrrants")}
 }
 \examples{
    library(dplyr)

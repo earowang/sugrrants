@@ -35,7 +35,7 @@ pedestrian17 <- filter(pedestrian, Year == "2017")
 head(pedestrian17)
 ```
 
-We'll start with one sensor only--Melbourne Convention Exhibition Centre--to explain the basic use of the `frame_calendar`. As it attempts to fit into the *tidyverse* framework, the interface should be straightforward to those who use *tidyverse* on a daily basis. The first argument is the `data` so that the data frame can directly be piped into the function using `%>%`. A variable indicating time of day should be mapped to `x`, a value variable of interest mapped to `y`. `date` requires a `Date` variable to organise the data into a correct chronological order . See `?frame_calendar` for more options. In this case, *Time* as hour of day is used for `x` and *Hourly_Counts* as value for `y`. It returns a data frame including newly added columns *.Time* and *.Hourly_Counts* with a prefix "." of the variable names. These new columns contain the rearranged coordinates for the calendar plots later.
+We'll start with one sensor only--Melbourne Convention Exhibition Centre--to explain the basic use of the `frame_calendar()`. As it attempts to fit into the *tidyverse* framework, the interface should be straightforward to those who use *tidyverse* on a daily basis. The first argument is the `data` so that the data frame can directly be piped into the function using `%>%`. A variable indicating time of day could be mapped to `x`, a value variable of interest mapped to `y`. `date` requires a `Date` variable to organise the data into a correct chronological order . See `?frame_calendar()` for more options. In this case, *Time* as hour of day is used for `x` and *Hourly_Counts* as value for `y`. It returns a data frame including newly added columns *.Time* and *.Hourly_Counts* with a prefix "." of the variable names. These new columns contain the rearranged coordinates for the calendar plots later.
 
 ```{r centre}
 centre <- pedestrian17 %>% 
@@ -54,7 +54,7 @@ p1 <- centre_calendar %>%
 p1
 ```
 
-To make the plot more accessible and informative, we provide another function `prettify` to go hand in hand with `frame_calendar`. It takes a `ggplot` object and gives sensible breaks and labels. It can be noted that the calendar-based graphic depicts time of day, day of week, and other calendar effects like public holiday in a clear manner. (NOTE: `prettify` works better with line and point geoms at this stage.)
+To make the plot more accessible and informative, we provide another function `prettify()` to go hand in hand with `frame_calendar()`. It takes a `ggplot` object and gives sensible breaks and labels. It can be noted that the calendar-based graphic depicts time of day, day of week, and other calendar effects like public holiday in a clear manner. (NOTE: `prettify()` works better with line and point geoms at this stage.)
 
 ```{r centre-more}
 prettify(p1)
@@ -62,34 +62,48 @@ prettify(p1)
 
 ## Scaling
 
-The scaling is controlled by the `scale` argument: `NULL` (the default) suggesting to be scaled globally; `free` to be scaled for each daily block individually; `free_wday` to be scaled conditional on each weekday; `free_mday` to be scaled conditional on each day of month. The code snippet below shows the scaling by weekdays. We can easily compare the magnitudes across Mondays and so on.
+Scaling is controlled by the `scale` argument: `NULL` is the default suggesting to be scaled globally. The figure above shows the global scale that enables overall comparison. Another option `free` means to be scaled for each daily block individually. It puts more emphasis on a single day shape instead of magnitude comparison.
 
-```{r centre-free}
+```{r centre-free, fig.height = 2.5}
+centre_calendar_free <- centre %>%
+  frame_calendar(x = Time, y = Hourly_Counts, date = Date, calendar = "monthly",
+    scale = "free", ncol = 4)
+p2 <- ggplot(centre_calendar_free, 
+        aes(x = .Time, y = .Hourly_Counts, group = Date)) +
+  geom_line()
+prettify(p2, label = NULL)
+```
+
+The other two choices are `free_wday` and `free_mday`, scaled conditionally on each weekday and each day of month respectively. The code snippet below gives the scaling by weekdays so that it enables to compare the magnitudes across Mondays, Tuesdays, and so on.
+
+```{r centre-wday, fig.height = 2.5}
 centre_calendar_wday <- centre %>%
   frame_calendar(x = Time, y = Hourly_Counts, date = Date, calendar = "monthly",
-    scale = "free_wday")
-p2 <- ggplot(centre_calendar_wday, aes(
-  x = .Time, y = .Hourly_Counts, group = Date)) +
+    scale = "free_wday", ncol = 4)
+p3 <- ggplot(centre_calendar_wday, 
+        aes(x = .Time, y = .Hourly_Counts, group = Date)) +
   geom_line()
-prettify(p2)
+prettify(p3, label = NULL)
 ```
 
 ## Use in conjunction with `group_by`
 
-```{r overlay, fig.height = 5}
+We can also superimpose one sensor on top of the other. Without using `group_by()`, they will share the common scale on the overlaying graph.
+
+```{r overlay, fig.height = 4}
 two_sensors <- pedestrian17 %>%
   filter(Sensor_Name %in% c("Melbourne Convention Exhibition Centre", "Lonsdale St (South)"))
 two_sensors_calendar <- two_sensors %>%
   frame_calendar(x = Time, y = Hourly_Counts, date = Date, ncol = 4)
-p3 <- two_sensors_calendar %>%
+p4 <- two_sensors_calendar %>%
   ggplot(aes(x = .Time, y = .Hourly_Counts, group = Date, colour = Sensor_Name)) +
   geom_line() +
   scale_colour_viridis(discrete = TRUE) +
   theme(legend.position = "bottom")
-prettify(p3)
+prettify(p4, label = NULL)
 ```
 
-The `frame_calendar` function can be naturally combined with `group_by`, and hence the grouped variable has its own scale.
+The `frame_calendar()` function can be naturally combined with `group_by()`, and hence the grouped variable has its own scale.
 
 ```{r ped-facet}
 grped_calendar <- two_sensors %>% 
@@ -103,9 +117,9 @@ grped_calendar %>%
 
 ## More geoms
 
-It's not necessarily working with lines but other geoms too. We aggregate hourly counts to daily highs and lows, and in turn the time of day variable is dropped. But we could also use `frame_calendar` to get the calendar layout by simply passing integer 1 to `x` meaning "identity" across days. `y` allows multiple variables to be passed. Using the *daily* calendar instead, we use rectangular geom to represent daily maximums and minimums. As `x` doesn't take a variable, `.x` is presented.
+It's not necessarily working with lines but other geoms too. One example is a lag scatterplot on a "daily" calendar. Lagged hourly counts are plotted against hourly counts in each daily cell using a point geom.
 
-```{r ped-lag, fig.height = 2.5, fig.width = 8}
+```{r ped-lag, fig.height = 2, fig.width = 8, warning = TRUE}
 centre_lagged <- centre %>%
   mutate(Lagged_Counts = dplyr::lag(Hourly_Counts))
 centre_lagged_calendar <- centre_lagged %>% 
@@ -114,8 +128,10 @@ centre_lagged_calendar <- centre_lagged %>%
 p3 <- centre_lagged_calendar %>%
   ggplot(aes(x = .Hourly_Counts, y = .Lagged_Counts, group = Date)) +
   geom_point(size = 0.5)
-prettify(p3)
+prettify(p3, size = 3)
 ```
+
+Furthermore, the argument `y` is possible to take multiple variable names that need to be quoted. It's difficult to spot the differences between two sensors from the overlaying plot shown earlier. The rectangular glyphs arranged on a "weekly" calendar are plotted to illustrate the multiple `y`s use and the differences between sensors. The long data format is firstly converted to the wide format using `tidyr::spread()` [@wickham2014tidy]. These two sensors are variables rather than values now, and hence can be passed to `y`. 
 
 ```{r ped-daily}
 two_sensors_wide <- two_sensors %>% 
@@ -127,23 +143,28 @@ two_sensors_wide <- two_sensors %>%
   ) %>%
   mutate(
     Diff = Centre - Lonsdale,
-    More = if_else(Diff > 0, "Centre", "Lonsdate")
+    More = if_else(Diff > 0, "Centre", "Lonsdale")
   )
 sensors_wide_calendar <- two_sensors_wide %>% 
   frame_calendar(x = Time, y = c("Centre", "Lonsdale"), date = Date, 
     calendar = "weekly" )
 head(sensors_wide_calendar)
-p4 <- sensors_wide_calendar %>%
+```
+
+Having multiple `y`s makes it a little easier when mapping to some geoms that contain the `ymin` and `ymax` arguments, such as `geom_rect` and `geom_ribbon`. Interestingly, Lonsdale Street is busier than Convention Centre in the evening, vice versa in the day time.
+
+```{r ped-daily-plot}
+p5 <- sensors_wide_calendar %>%
   ggplot() +
   geom_rect(aes(xmin = .Time, xmax = .Time + 0.005,
     ymin = .Lonsdale, ymax = .Centre, fill = More
   )) +
   scale_fill_viridis(discrete = TRUE) +
   theme(legend.position = "bottom")
-prettify(p4)
+prettify(p5)
 ``` 
 
-If both `x` and `y` are given as 1, only calendar grids are returned. A heatmap therefore can be drawn.
+Can we plot a heatmap using `frame_calendar()` too? Yep, either `x` or `y` can be given as 1 implying identity across days. If both `x` and `y` are given as 1, only calendar grids are returned. A heatmap therefore can be drawn.
 
 ```{r ped-max}
 centre_daily <- centre %>%
@@ -161,6 +182,6 @@ centre_max_calendar %>%
 
 ## Summary
 
-As its name suggests, `frame_calendar` just does the computation for you and leaves the plotting to *ggplot2*. This lends itself to more possibilities and flexibilities of calendar-based visualisation. In addition, some of these plots shown above can be produced using facets on temporal units by *ggplot2*; however, `frame_calendar` coupled with *ggplot2* is much faster than `facet_*` as it's more lightweight. Lastly, it can handle with long historical temporal data easily on a limited screen space as a result of calendar-based arrangement.
+As its name suggests, `frame_calendar()` just gives a rearranged data frame to you and leaves the plotting to *ggplot2*. This lends itself to more flexibility of calendar-based visualisation. In addition, some of these plots shown above may be produced using facets on temporal units by *ggplot2*; however, `frame_calendar()` coupled with *ggplot2* is much faster than `facet_*` as it's lighter-weight. Lastly, it can handle with long historical temporal data easily on a limited screen space as a result of calendar-based glyphs.
 
 ## Reference

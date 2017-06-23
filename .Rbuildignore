@@ -6,3 +6,4 @@
 ^figure$
 ^docs$
 ^Makefile$
+^_pkgdown\.yml$
