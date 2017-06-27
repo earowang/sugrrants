@@ -2,7 +2,7 @@
 #'
 #' @description Since the data input is `data.frame`, it's better to sort
 #'  the date-times from early to recent and make implicit missing values explicit
-#'  before using `geom_acfbar`.
+#'  before using `geom_acf`.
 #'  
 #' @inheritParams ggplot2::geom_bar
 #' @param lag.max An integer indicating the maximum lag at which to calculate the
@@ -14,7 +14,6 @@
 #'    default is the "correlation" and other options are "covariance" and "partial".
 #'
 #' @author Earo Wang
-#' 
 #' @rdname sugrrants-geom
 #'
 #' @examples
@@ -28,7 +27,6 @@
 #'      geom_acf()
 #'
 #' @export
-#'
 geom_acf <- function(mapping = NULL, data = NULL, 
   position = "identity", na.rm = FALSE, show.legend = NA, inherit.aes = TRUE, 
   lag.max = NULL, type = "correlation", level = 0.95, ...) {

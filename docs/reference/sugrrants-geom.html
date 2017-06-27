@@ -95,7 +95,7 @@
     
     <p>Since the data input is <code>data.frame</code>, it's better to sort
 the date-times from early to recent and make implicit missing values explicit
-before using <code>geom_acfbar</code>.</p>
+before using <code>geom_acf</code>.</p>
     
 
     <pre class="usage"><span class='fu'>geom_acf</span>(<span class='kw'>mapping</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>position</span> <span class='kw'>=</span> <span class='st'>"identity"</span>,
@@ -180,7 +180,7 @@ to the paired geom/stat.</p></td>
    <span class='co'># use ggplot2 </span>
    <span class='no'>fstaff</span> <span class='kw'>%&gt;%</span>
      <span class='fu'>ggplot</span>(<span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>..lag..</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>Hourly_Counts</span>)) +
-     <span class='fu'>geom_acf</span>()</div><div class='img'><img src='sugrrants-geom-1.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+     <span class='fu'>geom_acf</span>()</div><div class='img'><img src='sugrrants-geom-4.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

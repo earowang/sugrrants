@@ -4,8 +4,12 @@
 #'
 #' @return A grid grob
 #'
+#' @keywords internal
+#' @name draw-key
+NULL
+
+#' @rdname draw-key
 #' @export
-#' 
 draw_key_acf <- function(data, params, size) {
   grobTree(
     draw_key_rect(data, params),

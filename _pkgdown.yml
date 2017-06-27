@@ -10,6 +10,26 @@ authors:
   Rob Hyndman:
     href: http://robjhyndman.com
 
+reference:
+- title: Calendar based graphics
+  desc: >
+    Rearrange `data.frame` or `tibble` into a calendar layout using linear
+    algebra tools for plotting via `ggplot2`.
+  contents:
+    - frame_calendar
+
+- title: Geoms and stats extension to temporal-context data
+  contents:
+    - starts_with("geom_")
+    - starts_with("stat_")
+
+- title: Handle with temporal components
+  desc: >
+    These functions provides tools to handle with temporal components.
+  contents:
+    - au_holiday
+    - wday2
+
 navbar:
   type: default
   left:

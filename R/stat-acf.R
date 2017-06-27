@@ -26,7 +26,6 @@
 #'      stat_acf(geom = "bar")
 #'
 #' @export
-#'
 stat_acf <- function(mapping = NULL, data = NULL, geom = "bar",
   position = "identity", na.rm = FALSE, show.legend = NA, 
   inherit.aes = TRUE, lag.max = NULL, type = "correlation", level = 0.95, ...) {

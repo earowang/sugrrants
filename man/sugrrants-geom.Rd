@@ -61,7 +61,7 @@ to the paired geom/stat.}
 \description{
 Since the data input is \code{data.frame}, it's better to sort
 the date-times from early to recent and make implicit missing values explicit
-before using \code{geom_acfbar}.
+before using \code{geom_acf}.
 }
 \examples{
    library(dplyr)
