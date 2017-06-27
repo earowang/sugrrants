@@ -15,10 +15,10 @@ prettify(plot, label = c("label", "text"), ...)
 \arguments{
 \item{data}{A data frame or a grouped data frame including a \code{Date} variable.}
 
-\item{x}{A variable mapping to time of day. If integer 1 is specified, it
-simply returns calendar grids on x without transformation.}
+\item{x}{A variable mapping to x axis, for example time of day. If integer 1
+is specified, it simply returns calendar grids on x without transformation.}
 
-\item{y}{One variable or more mapping to value. If more than one variable,
+\item{y}{One variable or more mapping to y axis. If more than one variable,
 the variables needs to be quoted. If integer 1 is specified, it returns
 calendar grids on y without transformation.}
 
@@ -99,11 +99,11 @@ to have their individual scales. For more details, see \code{vignette("frame-cal
        x = Time, y = Hourly_Counts, date = Date, sunday = TRUE
      )
    
-   p2 <- grped_calendar \%>\% 
+   grped_calendar \%>\% 
      ggplot(aes(x = .Time, y = .Hourly_Counts, group = Date)) +
      geom_line() +
      facet_wrap(~ Sensor_Name, nrow = 2)
-   # prettify(p2, label = "text") not working for group_by
+   # prettify() not working for group_by
 
 }
 \author{

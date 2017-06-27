@@ -9,9 +9,9 @@
 #'    It allows more flexibility for users to visualise the data in various ways.
 #'
 #' @param data A data frame or a grouped data frame including a `Date` variable.
-#' @param x A variable mapping to time of day. If integer 1 is specified, it
-#'    simply returns calendar grids on x without transformation.
-#' @param y One variable or more mapping to value. If more than one variable,
+#' @param x A variable mapping to x axis, for example time of day. If integer 1 
+#'    is specified, it simply returns calendar grids on x without transformation.
+#' @param y One variable or more mapping to y axis. If more than one variable,
 #'    the variables needs to be quoted. If integer 1 is specified, it returns
 #'    calendar grids on y without transformation.
 #' @param date A `Date` variable mapping to dates in the calendar.
@@ -71,11 +71,11 @@
 #'        x = Time, y = Hourly_Counts, date = Date, sunday = TRUE
 #'      )
 #'    
-#'    p2 <- grped_calendar %>% 
+#'    grped_calendar %>% 
 #'      ggplot(aes(x = .Time, y = .Hourly_Counts, group = Date)) +
 #'      geom_line() +
 #'      facet_wrap(~ Sensor_Name, nrow = 2)
-#'    # prettify(p2, label = "text") not working for group_by
+#'    # prettify() not working for group_by
 #'
 #' @export
 frame_calendar <- function(
@@ -164,7 +164,7 @@ frame_calendar_ <- function(
   # but quo_name() doesn't support LHS
   data <- cal_grids %>% 
     right_join(data, by = c("PANEL" = quo_name(date))) %>%
-    mutate(!!.date := PANEL)
+    dplyr::mutate(!!.date := PANEL)
 
   # Define a small multiple width and height
   width <- resolution(data$.gx, zero = FALSE) * 0.95
@@ -173,8 +173,8 @@ frame_calendar_ <- function(
 
   if (calendar == "monthly") {
     data <- data %>% 
-      group_by(MPANEL) %>% 
-      mutate(
+      dplyr::group_by(MPANEL) %>% 
+      dplyr::mutate(
         .gx = .gx + MCOL * margins,
         .gy = .gy - MROW * margins
       ) 
@@ -182,19 +182,19 @@ frame_calendar_ <- function(
 
   data <- ungroup(data) # is.null(scale)
   if (scale == "free") {
-    data <- group_by(data, ROW, COL)
+    data <- dplyr::group_by(data, ROW, COL)
   } else if (scale == "free_wday") {
     data <- data %>% 
-      mutate(.day = wday(!!date)) %>% 
-      group_by(.day)
+      dplyr::mutate(.day = wday(!!date)) %>% 
+      dplyr::group_by(.day)
   } else if (scale == "free_mday") {
     data <- data %>% 
-      mutate(.day = mday(!!date)) %>% 
-      group_by(.day)
+      dplyr::mutate(.day = mday(!!date)) %>% 
+      dplyr::group_by(.day)
   }
 
   data <- data %>% 
-    mutate(
+    dplyr::mutate(
       .ymax = max(!!!y, na.rm = TRUE),
       .ymin = min(!!!y, na.rm = TRUE)
     )
@@ -204,30 +204,30 @@ frame_calendar_ <- function(
     }
     .y <- paste0(".", y[[1]])
     data <- data %>% 
-      mutate(
+      dplyr::mutate(
         theta = 2 * pi * normalise(!!x, xmax = max_na(!!x)),
         radius = normalise(!!!y, xmax = max_na(!!!y)),
         !!.x := .gx + width * radius * sin(theta),
         !!.y := .gy + height * radius * cos(theta)
       ) %>% 
-      select(-c(theta, radius))
+      dplyr::select(-c(theta, radius))
   } else {
     fn <- function(x, ymax, ymin) { # temporal function for mutate at
       normalise(x, xmax = max_na(ymax), xmin = min_na(ymin)) * height
     }
     if (possibly_identity(x)) {
-      data <- mutate(data, .x = .gx)
+      data <- dplyr::mutate(data, .x = .gx)
     } else {
       data <- data %>% 
-        mutate(
+        dplyr::mutate(
           !!.x := .gx + normalise(!!x, xmax = max_na(!!x)) * width
         )
     }
     if (possibly_identity(y)) {
-      data <- mutate(data, .y = .gy)
+      data <- dplyr::mutate(data, .y = .gy)
     } else {
       data <- data %>% 
-        mutate_at(
+        dplyr::mutate_at(
           .vars = vars(!!!y),
           .funs = funs(zzz = .gy + fn(., .ymax, .ymin))
         )
@@ -242,10 +242,10 @@ frame_calendar_ <- function(
 
   data <- data %>% 
     ungroup() %>% 
-    select(-(ROW:.gy)) %>% 
-    select(-c(.ymax, .ymin))
+    dplyr::select(-(ROW:.gy)) %>% 
+    dplyr::select(-c(.ymax, .ymin))
   if (scale %in% c("free_wday", "free_mday")) {
-    data <- select(data, -.day) # remove .day variable
+    data <- dplyr::select(data, -.day) # remove .day variable
   }
 
   # rename y's variables

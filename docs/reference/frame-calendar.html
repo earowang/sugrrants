@@ -118,12 +118,12 @@ It allows more flexibility for users to visualise the data in various ways.</p>
     </tr>
     <tr>
       <th>x</th>
-      <td><p>A variable mapping to time of day. If integer 1 is specified, it
-simply returns calendar grids on x without transformation.</p></td>
+      <td><p>A variable mapping to x axis, for example time of day. If integer 1
+is specified, it simply returns calendar grids on x without transformation.</p></td>
     </tr>
     <tr>
       <th>y</th>
-      <td><p>One variable or more mapping to value. If more than one variable,
+      <td><p>One variable or more mapping to y axis. If more than one variable,
 the variables needs to be quoted. If integer 1 is specified, it returns
 calendar grids on y without transformation.</p></td>
     </tr>
@@ -224,11 +224,12 @@ to have their individual scales. For more details, see <code><a href='https://cr
        <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>Time</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>Hourly_Counts</span>, <span class='kw'>date</span> <span class='kw'>=</span> <span class='no'>Date</span>, <span class='kw'>sunday</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
      )
 
-   <span class='no'>p2</span> <span class='kw'>&lt;-</span> <span class='no'>grped_calendar</span> <span class='kw'>%&gt;%</span>
+   <span class='no'>grped_calendar</span> <span class='kw'>%&gt;%</span>
      <span class='fu'>ggplot</span>(<span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>.Time</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>.Hourly_Counts</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='no'>Date</span>)) +
      <span class='fu'>geom_line</span>() +
-     <span class='fu'>facet_wrap</span>(~ <span class='no'>Sensor_Name</span>, <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>2</span>)
-   <span class='co'># prettify(p2, label = "text") not working for group_by</span></div></pre>
+     <span class='fu'>facet_wrap</span>(~ <span class='no'>Sensor_Name</span>, <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='img'><img src='frame-calendar-2.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>   # prettify() not working for group_by
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
