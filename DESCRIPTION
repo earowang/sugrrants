@@ -1,6 +1,6 @@
 Package: sugrrants
 Title: Supporting Graphics with R for Analysing Time Series
-Version: 0.0.1
+Version: 0.0.1.9000
 Authors@R: c(
     person("Earo", "Wang", email = "earo.wang@gmail.com", role = c("aut", "cre")),
     person("Di", "Cook", role = "aut"),
@@ -13,6 +13,7 @@ Depends:
     R (>= 3.1.3),
     ggplot2 (>= 2.2.0)
 Imports:
+    R6,
     grid,
     rlang,
     tidyr,
@@ -27,7 +28,7 @@ Suggests:
     rmarkdown,
     viridis
 VignetteBuilder: knitr
-License: GPL (>= 2)
+License: GPL (>= 3)
 URL: http://pkg.earo.me/sugrrants, https://github.com/earowang/sugrrants
 BugReports: https://github.com/earowang/sugrrants/issues
 Encoding: UTF-8

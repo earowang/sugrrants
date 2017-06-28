@@ -6,7 +6,7 @@
 #' @importFrom dplyr left_join mutate_at ends_with vars funs
 #' @importFrom tibble type_sum
 #' @importFrom tidyr nest unnest
-#' @importFrom purrr map map2
+#' @importFrom purrr map map2 map_lgl
 #' @importFrom ggplot2 resolution layer ggproto draw_key_rect draw_key_path 
 #' @importFrom ggplot2 geom_label geom_text scale_x_continuous scale_y_continuous
 #' @importFrom ggplot2 theme element_blank aes last_plot is.ggplot wrap_dims
@@ -14,6 +14,7 @@
 #' @importFrom rlang is_string syms sym
 #' @importFrom magrittr %>%
 #' @importFrom grid grobTree gList
+#' @importFrom R6 R6Class
 NULL
 
 #' @export
