@@ -146,7 +146,7 @@ frame_calendar_ <- function(
   .date <- quo_name(date)
   cls <- class(data)
 
-  date_eval <- sort(eval_tidy(date, data = data, parent.frame()))
+  date_eval <- sort(eval_tidy(date, data = data))
   if (type_sum(date_eval) != "date") {
     abort("'date' must be a 'Date' class.")
   }
