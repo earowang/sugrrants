@@ -6,6 +6,10 @@
 \alias{\%>\%}
 \alias{reexports}
 \alias{vars}
+\alias{reexports}
+\alias{year}
+\alias{reexports}
+\alias{as_date}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -14,6 +18,8 @@ below to see their documentation.
 
 \describe{
   \item{dplyr}{\code{\link[dplyr]{vars}}}
+
+  \item{lubridate}{\code{\link[lubridate]{year}}, \code{\link[lubridate]{as_date}}}
 
   \item{magrittr}{\code{\link[magrittr]{\%>\%}}}
 }}

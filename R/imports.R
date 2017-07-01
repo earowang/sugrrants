@@ -1,7 +1,7 @@
 #' @importFrom lubridate as_date wday year days weeks mday month days_in_month
-#' @importFrom lubridate isoweek month<- seconds_to_period
+#' @importFrom lubridate isoweek month<- seconds_to_period as_date
 #' @importFrom timeDate GoodFriday Easter
-#' @importFrom dplyr group_by is.grouped_df ungroup arrange
+#' @importFrom dplyr group_by is.grouped_df ungroup arrange groups
 #' @importFrom dplyr if_else mutate select filter right_join summarise distinct
 #' @importFrom dplyr left_join mutate_at ends_with vars funs
 #' @importFrom tibble type_sum as_tibble lst
@@ -12,7 +12,7 @@
 #' @importFrom ggplot2 theme element_blank aes last_plot is.ggplot wrap_dims
 #' @importFrom rlang eval_tidy quo enquo abort !! !!! := quo_name flatten_int
 #' @importFrom rlang syms sym get_expr is_quosure flatten_dbl is_empty set_attrs
-#' @importFrom rlang quos
+#' @importFrom rlang quos splice flatten_lgl as_quosure UQ names2 quos_auto_name
 #' @importFrom magrittr %>%
 #' @importFrom grid grobTree gList
 #' @importFrom R6 R6Class
@@ -23,3 +23,9 @@ magrittr::`%>%`
 
 #' @export
 dplyr::vars
+
+#' @export
+lubridate::year
+
+#' @export
+lubridate::as_date

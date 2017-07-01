@@ -49,7 +49,7 @@ tsibble_ <- function(..., key = key_vars(), index) {
     lst_interval <- vapply(eval_lst_idx, 
       function(x) gen_interval(x), numeric(1))
     if (!is_constant(lst_interval)) {
-      abort("Each key should share the same time interval.")
+      abort("Each key variable must have the same time interval in 'tsibble'.")
     } else {
       tbl_interval <- pull_interval(eval_lst_idx[[1]])
     }
