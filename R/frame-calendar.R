@@ -96,11 +96,7 @@ frame_calendar.grouped_df <- function(
   nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed"
 ) {
   x <- deparse(substitute(x))
-  if (!possibly_quosure(y)) {
-    y <- deparse(substitute(y)) 
-  } else {
-    y <- dots2str(y)
-  }
+  if (!possibly_quosure(y)) y <- deparse(substitute(y)) else y <- dots2str(y)
   date <- deparse(substitute(date))
 
   if (!possibly_identity(x)) x <- sym(x)
@@ -127,11 +123,7 @@ frame_calendar.default <- function(
   nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed"
 ) {
   x <- deparse(substitute(x))
-  if (!possibly_quosure(y)) {
-    y <- deparse(substitute(y)) 
-  } else {
-    y <- dots2str(y)
-  }
+  if (!possibly_quosure(y)) y <- deparse(substitute(y)) else y <- dots2str(y)
   date <- deparse(substitute(date))
 
   if (!possibly_identity(x)) x <- sym(x)

@@ -23,7 +23,7 @@ tsibble_interval <- R6Class(
     },
     display = function() {
       output <- self$present()
-      return(paste0(flatten_dbl(output), toupper(names(output))))
+      return(paste0(rlang::flatten_dbl(output), toupper(names(output))))
     },
     print = function(...) {
       cat(self$display(), "\n")
@@ -88,3 +88,60 @@ tsibble_hms <- R6Class(
     }
   )
 )
+
+# Number of time units
+gen_interval <- function(date) {
+  UseMethod("gen_interval")
+}
+
+gen_interval.default <- function(date) {
+  output <- min(abs(diff(date, na.rm = TRUE))) # num of years
+  return(output)
+}
+
+gen_interval.POSIXt <- function(date) {
+  dttm <- as.numeric(date)
+  output <- min(abs(diff(dttm, na.rm = TRUE))) # num of seconds
+  return(output)
+}
+
+gen_interval.Date <- function(date) {
+  date <- as.numeric(date)
+  output <- min(abs(diff(date, na.rm = TRUE))) # num of days
+  return(output)
+}
+
+# Assume date is regularly spaced
+# R6Class to manage tsibble interval, although the printing info is character.
+pull_interval <- function(date) {
+  UseMethod("pull_interval")
+}
+
+pull_interval.default <- function(date) {
+  nyrs <- gen_interval.default(date)
+  output <- tsibble_year$new(year = nyrs)
+}
+
+pull_interval.POSIXt <- function(date) {
+  nhms <- gen_interval.POSIXt(date)
+  period <- period2list(nhms)
+  output <- tsibble_hms$new(
+    hour = period$hour, minute = period$minute, second = period$second
+  )
+  return(output)
+}
+
+pull_interval.Date <- function(date) {
+  ndays <- gen_interval.Date(date)
+  output <- tsibble_day$new(day = ndays)
+  return(output)
+}
+
+## helper function
+period2list <- function(x) {
+  output <- seconds_to_period(x)
+  return(list(
+    year = output$year, month = output$month, day = output$day,
+    hour = output$hour, minute = output$minute, second = output$second
+  ))
+} 
