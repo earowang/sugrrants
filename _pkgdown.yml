@@ -25,7 +25,7 @@ reference:
 
 - title: Handle with temporal components
   desc: >
-    These functions provides tools to handle with temporal components.
+    These functions provides tools to handle temporal components.
   contents:
     - au_holiday
     - wday2
