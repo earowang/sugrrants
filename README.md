@@ -8,7 +8,7 @@ sugrrants
 Overview
 --------
 
-The goal of *sugrrants* is to provide supporting graphics with R for analysing time series data. It aims to fit into the *tidyverse* and grammar of graphics framework for handling with temporal data. The package is under development and highly experimental at this stage. Bug reporting and feature suggestions are welcome.
+The goal of *sugrrants* is to provide supporting graphics with R for analysing time series data. It aims to fit into the *tidyverse* and grammar of graphics framework for handling temporal data. The package is under development and highly experimental at this stage. Bug reporting and feature suggestions are welcome.
 
 Installation
 ------------

@@ -41,7 +41,7 @@
 #' @details The calendar-based graphic can be considered as small multiples
 #'    of sub-series arranged into many daily cells. For every multiple (or
 #'    facet), it requires the `x` variable mapped to be time of day and `y` to
-#'    value. New `x` and `y` are computed and named with a prefix `.`
+#'    value. New `x` and `y` are computed and named with a `.` prefixed to variable
 #'    according to `x` and `y` respectively, and get ready for `ggplot2` aesthetic 
 #'    mappings. In conjunction with `group_by()`, it allows the grouped variable 
 #'    to have their individual scales. For more details, see `vignette("frame-calendar",
@@ -443,11 +443,11 @@ gen_reference.monthly <- function(
 #' @rdname frame-calendar
 #' @param plot ggplot object
 #' @param label If "label" is specified, it will add month/week text on the 
-#'    `ggplot` object, which is actually passed to `geom_label`. If "text" is
+#'    `ggplot` object, which is actually passed to `geom_label()`. If "text" is
 #'    specified, it will add weekday/day of month text on the `ggplot` object,
-#'    which is actually passed to `geom_text`. By default, both "label" and 
+#'    which is actually passed to `geom_text()`. By default, both "label" and 
 #'    "text" are used.
-#' @param ... Extra arguments passed to geom_label and geom_text
+#' @param ... Extra arguments passed to `geom_label()` and `geom_text()`
 #' @export
 prettify <- function(plot, label = c("label", "text"), ...) {
   if (missing(plot)) {

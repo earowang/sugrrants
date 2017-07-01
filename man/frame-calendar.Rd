@@ -48,12 +48,12 @@ conditional on each daily cell, "free_wday" for scaling on weekdays,
 \item{plot}{ggplot object}
 
 \item{label}{If "label" is specified, it will add month/week text on the
-\code{ggplot} object, which is actually passed to \code{geom_label}. If "text" is
+\code{ggplot} object, which is actually passed to \code{geom_label()}. If "text" is
 specified, it will add weekday/day of month text on the \code{ggplot} object,
-which is actually passed to \code{geom_text}. By default, both "label" and
+which is actually passed to \code{geom_text()}. By default, both "label" and
 "text" are used.}
 
-\item{...}{Extra arguments passed to geom_label and geom_text}
+\item{...}{Extra arguments passed to \code{geom_label()} and \code{geom_text()}}
 }
 \value{
 A data frame or a tibble with newly added columns of \code{.x}, \code{.y}. \code{.x}
@@ -74,7 +74,7 @@ It allows more flexibility for users to visualise the data in various ways.
 The calendar-based graphic can be considered as small multiples
 of sub-series arranged into many daily cells. For every multiple (or
 facet), it requires the \code{x} variable mapped to be time of day and \code{y} to
-value. New \code{x} and \code{y} are computed and named with a prefix \code{.}
+value. New \code{x} and \code{y} are computed and named with a \code{.} prefixed to variable
 according to \code{x} and \code{y} respectively, and get ready for \code{ggplot2} aesthetic
 mappings. In conjunction with \code{group_by()}, it allows the grouped variable
 to have their individual scales. For more details, see \code{vignette("frame-calendar", package = "sugrrants")}
