@@ -69,7 +69,7 @@
       <h1>Calendar-based graphics</h1>
                         <h4 class="author">Earo Wang, Di Cook, Rob J Hyndman</h4>
             
-            <h4 class="date">2017-06-27</h4>
+            <h4 class="date">2017-07-01</h4>
           </div>
 
     
@@ -186,7 +186,7 @@ p3 &lt;-<span class="st"> </span>centre_lagged_calendar <span class="op">%&gt;%<
 <span class="kw"><a href="../reference/frame-calendar.html">prettify</a></span>(p3, <span class="dt">size =</span> <span class="dv">3</span>)</code></pre></div>
 <pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
 <p><img src="frame-calendar_files/figure-html/ped-lag-1.png" width="768"></p>
-<p>Furthermore, the argument <code>y</code> is possible to take multiple variable names that need to be quoted. It’s difficult to spot the differences between two sensors from the overlaying plot shown earlier. The rectangular glyphs arranged on a “weekly” calendar are plotted to illustrate the multiple <code>y</code>s use and the differences between sensors. The long data format is firstly converted to the wide format using <code><a href="http://www.rdocumentation.org/packages/tidyr/topics/spread">tidyr::spread()</a></code> <span class="citation">(Wickham <a href="#ref-wickham2014tidy">2014</a>)</span>. These two sensors are variables rather than values now, and hence can be passed to <code>y</code>.</p>
+<p>Furthermore, the argument <code>y</code> is possible to take multiple variable names in a way combined with <code><a href="http://dplyr.tidyverse.org/reference/vars.html">vars()</a></code>. It’s difficult to spot the differences between two sensors from the overlaying plot shown earlier. The rectangular glyphs arranged on a “weekly” calendar are plotted to illustrate the multiple <code>y</code>s use and the differences between sensors. The long data format is firstly converted to the wide format using <code><a href="http://www.rdocumentation.org/packages/tidyr/topics/spread">tidyr::spread()</a></code> <span class="citation">(Wickham <a href="#ref-wickham2014tidy">2014</a>)</span>. These two sensors are variables rather than values now, and hence can be passed to <code>y</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">two_sensors_wide &lt;-<span class="st"> </span>two_sensors <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="op">-</span>Sensor_ID) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/tidyr/topics/spread">spread</a></span>(<span class="dt">key =</span> Sensor_Name, <span class="dt">value =</span> Hourly_Counts) <span class="op">%&gt;%</span><span class="st"> </span>
@@ -199,7 +199,7 @@ p3 &lt;-<span class="st"> </span>centre_lagged_calendar <span class="op">%&gt;%<
     <span class="dt">More =</span> <span class="kw"><a href="http://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span>(Diff <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>, <span class="st">"Centre"</span>, <span class="st">"Lonsdale"</span>)
   )
 sensors_wide_calendar &lt;-<span class="st"> </span>two_sensors_wide <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw"><a href="../reference/frame-calendar.html">frame_calendar</a></span>(<span class="dt">x =</span> Time, <span class="dt">y =</span> <span class="kw">c</span>(<span class="st">"Centre"</span>, <span class="st">"Lonsdale"</span>), <span class="dt">date =</span> Date, 
+<span class="st">  </span><span class="kw"><a href="../reference/frame-calendar.html">frame_calendar</a></span>(<span class="dt">x =</span> Time, <span class="dt">y =</span> <span class="kw"><a href="http://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(Centre, Lonsdale), <span class="dt">date =</span> Date, 
     <span class="dt">calendar =</span> <span class="st">"weekly"</span> )
 <span class="kw">head</span>(sensors_wide_calendar)</code></pre></div>
 <pre><code>## # A tibble: 6 x 14

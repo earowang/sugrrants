@@ -131,7 +131,7 @@ p3 <- centre_lagged_calendar %>%
 prettify(p3, size = 3)
 ```
 
-Furthermore, the argument `y` is possible to take multiple variable names that need to be quoted. It's difficult to spot the differences between two sensors from the overlaying plot shown earlier. The rectangular glyphs arranged on a "weekly" calendar are plotted to illustrate the multiple `y`s use and the differences between sensors. The long data format is firstly converted to the wide format using `tidyr::spread()` [@wickham2014tidy]. These two sensors are variables rather than values now, and hence can be passed to `y`. 
+Furthermore, the argument `y` is possible to take multiple variable names in a way combined with `vars()`. It's difficult to spot the differences between two sensors from the overlaying plot shown earlier. The rectangular glyphs arranged on a "weekly" calendar are plotted to illustrate the multiple `y`s use and the differences between sensors. The long data format is firstly converted to the wide format using `tidyr::spread()` [@wickham2014tidy]. These two sensors are variables rather than values now, and hence can be passed to `y`. 
 
 ```{r ped-daily}
 two_sensors_wide <- two_sensors %>% 
@@ -146,7 +146,7 @@ two_sensors_wide <- two_sensors %>%
     More = if_else(Diff > 0, "Centre", "Lonsdale")
   )
 sensors_wide_calendar <- two_sensors_wide %>% 
-  frame_calendar(x = Time, y = c("Centre", "Lonsdale"), date = Date, 
+  frame_calendar(x = Time, y = vars(Centre, Lonsdale), date = Date, 
     calendar = "weekly" )
 head(sensors_wide_calendar)
 ```

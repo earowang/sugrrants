@@ -9,10 +9,11 @@
 #'    It allows more flexibility for users to visualise the data in various ways.
 #'
 #' @param data A data frame or a grouped data frame including a `Date` variable.
-#' @param x A variable mapping to x axis, for example time of day. If integer 1 
-#'    is specified, it simply returns calendar grids on x without transformation.
-#' @param y One variable or more mapping to y axis. If more than one variable,
-#'    the variables needs to be quoted. If integer 1 is specified, it returns
+#' @param x A bare (or unquoted) variable mapping to x axis, for example time of 
+#'    day. If integer 1 is specified, it simply returns calendar grids on x 
+#'    without transformation.
+#' @param y A bare (or unquoted) variable or more mapping to y axis. More than 
+#'    one variable need putting to `vars()`. If integer 1 is specified, it returns
 #'    calendar grids on y without transformation.
 #' @param date A `Date` variable mapping to dates in the calendar.
 #' @param calendar Type of calendar. "monthly" calendar (the default) organises
@@ -94,9 +95,13 @@ frame_calendar.grouped_df <- function(
   data, x, y, date, calendar = "monthly", dir = "h", sunday = FALSE, 
   nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed"
 ) {
-  if (!possibly_string(x)) x <- deparse(substitute(x))
-  if (!possibly_string(y)) y <- deparse(substitute(y))
-  if (!possibly_string(date)) date <- deparse(substitute(date))
+  x <- deparse(substitute(x))
+  if (!possibly_quosure(y)) {
+    y <- deparse(substitute(y)) 
+  } else {
+    y <- dots2str(y)
+  }
+  date <- deparse(substitute(date))
 
   if (!possibly_identity(x)) x <- sym(x)
   if (!possibly_identity(y)) y <- syms(y)
@@ -121,9 +126,13 @@ frame_calendar.default <- function(
   data, x, y, date, calendar = "monthly", dir = "h", sunday = FALSE, 
   nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed"
 ) {
-  if (!possibly_string(x)) x <- deparse(substitute(x))
-  if (!possibly_string(y)) y <- deparse(substitute(y))
-  if (!possibly_string(date)) date <- deparse(substitute(date))
+  x <- deparse(substitute(x))
+  if (!possibly_quosure(y)) {
+    y <- deparse(substitute(y)) 
+  } else {
+    y <- dots2str(y)
+  }
+  date <- deparse(substitute(date))
 
   if (!possibly_identity(x)) x <- sym(x)
   if (!possibly_identity(y)) y <- syms(y)
@@ -136,6 +145,7 @@ frame_calendar.default <- function(
   )
 }
 
+# frame_calendar_ takes strings as variable name
 frame_calendar_ <- function(
   data, x, y, date, calendar = "monthly", dir = "h", sunday = FALSE, 
   nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed"

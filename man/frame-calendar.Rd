@@ -15,11 +15,12 @@ prettify(plot, label = c("label", "text"), ...)
 \arguments{
 \item{data}{A data frame or a grouped data frame including a \code{Date} variable.}
 
-\item{x}{A variable mapping to x axis, for example time of day. If integer 1
-is specified, it simply returns calendar grids on x without transformation.}
+\item{x}{A bare (or unquoted) variable mapping to x axis, for example time of
+day. If integer 1 is specified, it simply returns calendar grids on x
+without transformation.}
 
-\item{y}{One variable or more mapping to y axis. If more than one variable,
-the variables needs to be quoted. If integer 1 is specified, it returns
+\item{y}{A bare (or unquoted) variable or more mapping to y axis. More than
+one variable need putting to \code{vars()}. If integer 1 is specified, it returns
 calendar grids on y without transformation.}
 
 \item{date}{A \code{Date} variable mapping to dates in the calendar.}
