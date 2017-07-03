@@ -111,6 +111,12 @@ gen_interval.Date <- function(date) {
   return(output)
 }
 
+gen_interval.yearmon <- function(date) {
+  # num of months
+  output <- ceiling(min(abs(diff(as.numeric(date), na.rm = TRUE))) * 12)
+  return(output)
+}
+
 # Assume date is regularly spaced
 # R6Class to manage tsibble interval, although the printing info is character.
 pull_interval <- function(date) {
@@ -135,6 +141,11 @@ pull_interval.Date <- function(date) {
   ndays <- gen_interval.Date(date)
   output <- tsibble_day$new(day = ndays)
   return(output)
+}
+
+pull_interval.yearmon <- function(date) {
+  nmonths <- gen_interval.yearmon(date)
+  output <- tsibble_month$new(month = nmonths)
 }
 
 ## helper function

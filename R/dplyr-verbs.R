@@ -55,6 +55,7 @@ group_by.tbl_ts <- function(.data, ..., add = FALSE) {
 summarise.tbl_ts <- function(.data, ...) {
   cls <- class(.data)
   grped <- is.grouped_df(.data)
+  if (grped) grps <- groups(.data)
   index <- get_index(.data)
   dots_cap <- quos(..., .named = TRUE)
   sp_f <- tilde_detect(dots_cap)
@@ -70,16 +71,25 @@ summarise.tbl_ts <- function(.data, ...) {
     if (identical(fun %in% builtin_dict(), FALSE)) {
       abort(paste(fun, "is not supported yet."))
     }
+    # using group_by, sometimes it drops class attributes, e.g. as.yearmon
     .data <- .data %>% 
+      ungroup() %>% 
       dplyr::mutate(!!str_time := UQ(sym(fun))(!!index))
     sum_args <- dots_cap[-idx] # used for summarise
+    if (grped) {
+      .data <- .data %>% 
+        dplyr::group_by(!!!grps) %>% 
+        dplyr::group_by(!!sym_time, add = TRUE)
+    } else {
+      .data <- .data %>% 
+        dplyr::group_by(!!sym_time)
+    }
     .data <- .data %>% 
-      dplyr::group_by(!!sym_time, add = grped) %>% 
-      dplyr::summarise(!!!sum_args)
+        dplyr::summarise(!!!sum_args)
     attr(.data, "key") <- if (grped) {
-        map(groups(.data), as_quosure)
+        map(grps, as_quosure)
       } else {
-        as_quosure(key_vars())
+        key_vars()
       }
     attr(.data, "index") <- sym_time
     attr(.data, "interval") <- pull_interval(
@@ -104,7 +114,7 @@ tilde_detect <- function(...) { # x be a list of quosures
 
 builtin_dict <- function() {
   return(c(
-    "year", "as_date", "as.Date"
+    "year", "as.yearmon", "as_date", "as.Date"
   ))
 }
 

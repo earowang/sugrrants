@@ -10,6 +10,8 @@
 \alias{year}
 \alias{reexports}
 \alias{as_date}
+\alias{reexports}
+\alias{as.yearmon}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -22,5 +24,7 @@ below to see their documentation.
   \item{lubridate}{\code{\link[lubridate]{year}}, \code{\link[lubridate]{as_date}}}
 
   \item{magrittr}{\code{\link[magrittr]{\%>\%}}}
+
+  \item{zoo}{\code{\link[zoo]{as.yearmon}}}
 }}
 

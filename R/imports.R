@@ -16,6 +16,7 @@
 #' @importFrom magrittr %>%
 #' @importFrom grid grobTree gList
 #' @importFrom R6 R6Class
+#' @importFrom zoo as.yearmon
 NULL
 
 #' @export
@@ -29,3 +30,6 @@ lubridate::year
 
 #' @export
 lubridate::as_date
+
+#' @export
+zoo::as.yearmon
