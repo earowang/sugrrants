@@ -114,7 +114,7 @@ tilde_detect <- function(...) { # x be a list of quosures
 
 builtin_dict <- function() {
   return(c(
-    "year", "as.yearmon", "as_date", "as.Date"
+    "year", "as.yearmon", "as.yearqtr", "as_date", "as.Date"
   ))
 }
 

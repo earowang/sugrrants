@@ -95,25 +95,33 @@ gen_interval <- function(date) {
 }
 
 gen_interval.default <- function(date) {
-  output <- min(abs(diff(date, na.rm = TRUE))) # num of years
+  output <- min_interval(date) # num of years
   return(output)
 }
 
 gen_interval.POSIXt <- function(date) {
   dttm <- as.numeric(date)
-  output <- min(abs(diff(dttm, na.rm = TRUE))) # num of seconds
+  output <- min_interval(dttm) # num of seconds
   return(output)
 }
 
 gen_interval.Date <- function(date) {
   date <- as.numeric(date)
-  output <- min(abs(diff(date, na.rm = TRUE))) # num of days
+  output <- min_interval(date) # num of days
   return(output)
 }
 
 gen_interval.yearmon <- function(date) {
   # num of months
-  output <- ceiling(min(abs(diff(as.numeric(date), na.rm = TRUE))) * 12)
+  mon <- as.numeric(date)
+  output <- ceiling(min_interval(mon) * 12)
+  return(output)
+}
+
+gen_interval.yearqtr <- function(date) {
+  # num of quarters
+  qtr <- as.numeric(date)
+  output <- ceiling(min_interval(qtr) * 4)
   return(output)
 }
 
@@ -126,6 +134,7 @@ pull_interval <- function(date) {
 pull_interval.default <- function(date) {
   nyrs <- gen_interval.default(date)
   output <- tsibble_year$new(year = nyrs)
+  return(output)
 }
 
 pull_interval.POSIXt <- function(date) {
@@ -146,6 +155,13 @@ pull_interval.Date <- function(date) {
 pull_interval.yearmon <- function(date) {
   nmonths <- gen_interval.yearmon(date)
   output <- tsibble_month$new(month = nmonths)
+  return(output)
+}
+
+pull_interval.yearqtr <- function(date) {
+  nqtrs <- gen_interval.yearqtr(date)
+  output <- tsibble_quarter$new(quarter = nqtrs)
+  return(output)
 }
 
 ## helper function
@@ -156,3 +172,7 @@ period2list <- function(x) {
     hour = output$hour, minute = output$minute, second = output$second
   ))
 } 
+
+min_interval <- function(date) {
+  return(min(abs(diff(as.numeric(date), na.rm = TRUE))))
+}
