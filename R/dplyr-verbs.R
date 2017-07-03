@@ -65,7 +65,7 @@ summarise.tbl_ts <- function(.data, ...) {
     return(structure(.data, class = cls[-1])) # remove tbl_ts
   } else {
     str_time <- sp_f$var_name
-    sym_time <- as_quosure(sym(str_time))
+    sym_time <- sym(str_time)
     fun <- sp_f$fun
     # check whether fun is in the dictionary
     if (identical(fun %in% builtin_dict(), FALSE)) {
