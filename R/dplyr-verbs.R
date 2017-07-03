@@ -4,8 +4,9 @@ filter.tbl_ts <- function(.data, ...) {
   interval <- get_interval(.data)
   cls <- class(.data)
   .data <- NextMethod()
-  attrs <- list(key = key, index = index, interval = interval, class = cls)
-  return(set_attrs(.data, splice(attrs)))
+  return(structure(
+    .data, key = key, index = index, interval = interval, class = cls
+  ))
 }
 
 select.tbl_ts <- function(.data, ...) {
@@ -20,22 +21,24 @@ select.tbl_ts <- function(.data, ...) {
     map_lgl(dots_cap, function(y) y == x)
   )))
   if (idx_there && key_there) {
-    attrs <- list(key = key, index = index, interval = interval, class = cls)
-    return(set_attrs(.data, splice(attrs)))
+    return(structure(
+      .data, key = key, index = index, interval = interval, class = cls
+    ))
   } else {
-    return(set_attrs(.data, class = cls[-1]))
+    return(structure(.data, class = cls[-1]))
   }
 }
 
-# mutate behaviour for tbl_ts needs giving more thoughts
+# mutate behaviour for tbl_ts is hard to think about atm
 mutate.tbl_ts <- function(.data, ...) {
   key <- get_key(.data)
   index <- get_index(.data)
   interval <- get_interval(.data)
   cls <- class(.data)
   .data <- NextMethod()
-  attrs <- list(key = key, index = index, interval = interval, class = cls)
-  return(set_attrs(.data, splice(attrs)))
+  return(structure(
+    .data, key = key, index = index, interval = interval, class = cls
+  ))
 }
 
 group_by.tbl_ts <- function(.data, ..., add = FALSE) {
@@ -44,8 +47,9 @@ group_by.tbl_ts <- function(.data, ..., add = FALSE) {
   interval <- get_interval(.data)
   .data <- NextMethod(.Generic, object = .data, add = add)
   cls <- c("tbl_ts", class(.data))
-  attrs <- list(key = key, index = index, interval = interval, class = cls)
-  return(set_attrs(.data, splice(attrs)))
+  return(structure(
+    .data, key = key, index = index, interval = interval, class = cls
+  ))
 }
 
 summarise.tbl_ts <- function(.data, ...) {
@@ -57,8 +61,7 @@ summarise.tbl_ts <- function(.data, ...) {
   idx <- sp_f$index
   if (is_empty(idx)) {
     .data <- NextMethod()
-    # have a smarter solution in dropping tbl_ts class?
-    return(set_attrs(.data, class = cls[-1])) # remove tbl_ts
+    return(structure(.data, class = cls[-1])) # remove tbl_ts
   } else {
     str_time <- sp_f$var_name
     sym_time <- as_quosure(sym(str_time))
@@ -68,7 +71,7 @@ summarise.tbl_ts <- function(.data, ...) {
       abort(paste(fun, "is not supported yet."))
     }
     .data <- .data %>% 
-      dplyr::mutate(!!str_time := UQ(sym(fun))(!!index)) # ToDo: lang
+      dplyr::mutate(!!str_time := UQ(sym(fun))(!!index))
     sum_args <- dots_cap[-idx] # used for summarise
     .data <- .data %>% 
       dplyr::group_by(!!sym_time, add = grped) %>% 
@@ -82,7 +85,7 @@ summarise.tbl_ts <- function(.data, ...) {
     attr(.data, "interval") <- pull_interval(
       eval_tidy(sym_time, data = .data)
     )
-    return(set_attrs(.data, class = cls))
+    return(structure(.data, class = cls))
   }
 }
 

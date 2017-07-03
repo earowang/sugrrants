@@ -22,6 +22,29 @@ pedestrian <- ped_counts %>%
 
 devtools::use_data(pedestrian, overwrite = TRUE)
 
+# Exchange rates
+# ----------------------------written by @cpsievert---------------------------
+# (1) Get a free plan from https://openexchangerates.org/signup/free
+# (2) Tell this function your API key -- Sys.setenv("OER_KEY", "your-key-here")
+# Sys.setenv("OER_KEY" = "")
+getDay <- function(day) {
+  u <- sprintf(
+    "https://openexchangerates.org/api/historical/%s.json?app_id=%s",
+    day, Sys.getenv("OER_KEY")
+  )
+  res <- jsonlite::fromJSON(u)
+  res$rates$date <- as.POSIXct(res$timestamp, origin = "1970-01-01")
+  data.frame(res$rates)
+}
+
+getRates <- function(start = end - 3, end = Sys.Date()) {
+  days <- seq(start, end, by = "1 day")
+  Reduce("rbind", lapply(days, getDay))
+}
+
+xrates <- getRates(start = Sys.Date() - 60)
+# --------------------------END------------------------------------------------
+
 # BoM data
 # devtools::install_github("toowoombatrio/bomrang")
 library(bomrang)

@@ -57,7 +57,7 @@ tsibble_ <- function(..., key = key_vars(), index) {
   attr(tbl, "key") <- key
   attr(tbl, "index") <- index
   attr(tbl, "interval") <- tbl_interval
- output <- set_attrs(tbl, class = c("tbl_ts", cls_tbl))
+ output <- structure(tbl, class = c("tbl_ts", cls_tbl))
 }
 
 get_key <- function(tbl_ts) {
