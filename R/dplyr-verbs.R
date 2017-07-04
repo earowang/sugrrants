@@ -52,15 +52,41 @@ group_by.tbl_ts <- function(.data, ..., add = FALSE) {
   ))
 }
 
+#' @title Aggregate over calendar periods
+#'
+#' @description It computes summary statistics for a tsibble over calendar
+#'    periods, usually used in combination of [group_by].
+#'  
+#' @param .data A tsibble (of `tbl_ts` class).
+#' @param ... Name-value pairs of summary functions. To aggregate tsibble over
+#'    a certain calendar period, for example yearly aggregates, `~ year()` needs
+#'    passing to `...`. Please see details.
+#'
+#' @author Earo Wang
+#' @rdname summarise
+#' @seealso [dplyr::summarise]
+#' @details It's S3 method implemented for [tsibble()] (`tbl_ts`) obtained from
+#'    [dplyr::summarise()]. A formula with `~` followed by one of calendar component 
+#'    functions from base, [lubridate] and [zoo] specifies the period when summary 
+#'    functions are carried out.  Currently `~ year()` indicates yearly aggregates. 
+#'    `~ yearqtr()` indicates quarterly aggregates. `~ yearmon()` indicates 
+#'    monthly aggregates. `~ as_date()` or `as.Date()` indicates daily aggregates.
+#' @return A tsibble class when the `~` is present.
+#'
+#' @examples
+#'    # Leave blank
+#'
+#' @export
 summarise.tbl_ts <- function(.data, ...) {
   cls <- class(.data)
   grped <- is.grouped_df(.data)
   if (grped) grps <- groups(.data)
   index <- get_index(.data)
   dots_cap <- quos(..., .named = TRUE)
+  # Find the special formula from a set of quos
   sp_f <- tilde_detect(dots_cap)
   idx <- sp_f$index
-  if (is_empty(idx)) {
+  if (is_empty(idx)) { # if there's no ~ in ..., tbl_ts is dropped
     .data <- NextMethod()
     return(structure(.data, class = cls[-1])) # remove tbl_ts
   } else {

@@ -3,6 +3,7 @@
 S3method(frame_calendar,default)
 S3method(frame_calendar,grouped_df)
 S3method(print,tbl_ts)
+S3method(summarise,tbl_ts)
 export("%>%")
 export(GeomAcf)
 export(as.yearmon)
