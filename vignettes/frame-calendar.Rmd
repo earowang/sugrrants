@@ -62,7 +62,7 @@ prettify(p1)
 
 ## Scales
 
-Scaling is controlled by the `scale` argument: `NULL` is the default suggesting to be scaled globally. The figure above shows the global scale that enables overall comparison. Another option `free` means to be scaled for each daily block individually. It puts more emphasis on a single day shape instead of magnitude comparison.
+Scaling is controlled by the `scale` argument: `fixed` is the default suggesting to be scaled globally. The figure above shows the global scale that enables overall comparison. Another option `free` means to be scaled for each daily block individually. It puts more emphasis on a single day shape instead of magnitude comparison.
 
 ```{r centre-free, fig.height = 2.5}
 centre_calendar_free <- centre %>%

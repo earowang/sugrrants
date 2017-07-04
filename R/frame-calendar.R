@@ -410,8 +410,12 @@ gen_reference.monthly <- function(
   # Prepare for the string texts
   yrs <- year(date)
   nyears <- unique(yrs)
-  month_labels <- paste(yrs, month(date, label = TRUE), sep = "-")
-  unique_labels <- substring(unique(month_labels), first = 6)
+  month_labels <- month(date, label = TRUE)
+  unique_labels <- if (has_length(nyears, 1)) {
+    unique(month_labels)
+  } else {
+    unique(paste(month_labels, yrs))
+  }
 
   # Month label positioned at the top left of each month panel
   xtext <- sort(xbreaks_df$.xmajor_min)

@@ -47,14 +47,7 @@
   <a href="../news/index.html">News</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right">
-<li>
-  <a href="https://github.com/earowang/sugrrants">
-    <span class="fa fa-github fa-lg"></span>
-     
-  </a>
-</li>
-      </ul>
+<ul class="nav navbar-nav navbar-right"></ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -69,7 +62,7 @@
       <h1>Calendar-based graphics</h1>
                         <h4 class="author">Earo Wang, Di Cook, Rob J Hyndman</h4>
             
-            <h4 class="date">2017-07-01</h4>
+            <h4 class="date">2017-07-04</h4>
           </div>
 
     
@@ -126,7 +119,7 @@ p1</code></pre></div>
 <div id="scales" class="section level2">
 <h2 class="hasAnchor">
 <a href="#scales" class="anchor"></a>Scales</h2>
-<p>Scaling is controlled by the <code>scale</code> argument: <code>NULL</code> is the default suggesting to be scaled globally. The figure above shows the global scale that enables overall comparison. Another option <code>free</code> means to be scaled for each daily block individually. It puts more emphasis on a single day shape instead of magnitude comparison.</p>
+<p>Scaling is controlled by the <code>scale</code> argument: <code>fixed</code> is the default suggesting to be scaled globally. The figure above shows the global scale that enables overall comparison. Another option <code>free</code> means to be scaled for each daily block individually. It puts more emphasis on a single day shape instead of magnitude comparison.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">centre_calendar_free &lt;-<span class="st"> </span>centre <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw"><a href="../reference/frame-calendar.html">frame_calendar</a></span>(<span class="dt">x =</span> Time, <span class="dt">y =</span> Hourly_Counts, <span class="dt">date =</span> Date, <span class="dt">calendar =</span> <span class="st">"monthly"</span>,
     <span class="dt">scale =</span> <span class="st">"free"</span>, <span class="dt">ncol =</span> <span class="dv">4</span>)
