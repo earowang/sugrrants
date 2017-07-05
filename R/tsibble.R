@@ -34,10 +34,14 @@ tsibble <- function(..., key = key_vars(), index) {
 tsibble_ <- function(..., key = key_vars(), index) {
   tbl <- as_tibble(tibble::lst(...))
   cls_tbl <- class(tbl)
+  eval_idx <- eval_tidy(index, data = tbl)
+  cls_idx <- class(eval_idx)
+  if (is_false(any(cls_idx %in% support_cls()))) {
+    abort(paste(cls_idx, "class is not supported."))
+  }
   if (is_empty(key)) { # if key = key_vars(), univariate time series
-    eval_idx <- eval_tidy(index, data = tbl)
     if (anyDuplicated(eval_idx) != 0) {
-      abort("'index' should be unique time objects across each key variable.")
+      abort("'index' must contain unique time index.")
     }
     tbl_interval <- pull_interval(eval_idx)
   } else { # otherwise multivariate time series
@@ -57,7 +61,7 @@ tsibble_ <- function(..., key = key_vars(), index) {
   attr(tbl, "key") <- key
   attr(tbl, "index") <- index
   attr(tbl, "interval") <- tbl_interval
- output <- structure(tbl, class = c("tbl_ts", cls_tbl))
+  output <- structure(tbl, class = c("tbl_ts", cls_tbl))
 }
 
 get_key <- function(tbl_ts) {
@@ -105,4 +109,3 @@ cat_chr <- function(.data, ...) {
 cat_chr.tbl_ts <- function(.data, ...) { # ... is quos
   paste(dots2str(...), collapse = ", ")
 }
-

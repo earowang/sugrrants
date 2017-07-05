@@ -176,3 +176,9 @@ period2list <- function(x) {
 min_interval <- function(date) {
   return(min(abs(diff(as.numeric(date), na.rm = TRUE))))
 }
+
+support_cls <- function() {
+  return(c(
+    "Date", "POSIXt", "yearmon", "yearqtr", "integer", "numeric"
+  ))
+}

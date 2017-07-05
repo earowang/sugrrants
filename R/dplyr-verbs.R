@@ -94,7 +94,7 @@ summarise.tbl_ts <- function(.data, ...) {
     sym_time <- sym(str_time)
     fun <- sp_f$fun
     # check whether fun is in the dictionary
-    if (identical(fun %in% builtin_dict(), FALSE)) {
+    if (is_false(fun %in% builtin_dict())) {
       abort(paste(fun, "is not supported yet."))
     }
     # using group_by, sometimes it drops class attributes, e.g. as.yearmon
