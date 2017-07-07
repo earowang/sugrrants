@@ -168,6 +168,18 @@ p5 <- sensors_wide_calendar %>%
 prettify(p5)
 ``` 
 
+A snapshot of foot traffic as a whole in the downtown area can be taken (or summarised) using a boxplot too.
+
+```{r ped-box, fig.height = 5}
+ped_calendar <- pedestrian17 %>% 
+  filter(Month == "January") %>%
+  frame_calendar(x = Time, y = Hourly_Counts, date = Date)
+p_boxplot <- ped_calendar %>% 
+  ggplot(aes(x = .Time, y = .Hourly_Counts, group = Date_Time)) +
+  geom_boxplot(outlier.size = 0.3, width = 0.004, position = "identity")
+prettify(p_boxplot)
+```
+
 Can we plot a heatmap using `frame_calendar()` too? Yep, either `x` or `y` can be given as 1 implying identity across days. If both `x` and `y` are given as 1, only calendar grids are returned. A heatmap therefore can be drawn.
 
 ```{r ped-max}

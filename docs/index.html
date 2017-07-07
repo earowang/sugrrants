@@ -98,7 +98,7 @@ calendar_df &lt;-<span class="st"> </span>pedestrian <span class="op">%&gt;%</sp
     <span class="dt">x =</span> Time, <span class="dt">y =</span> Hourly_Counts, <span class="dt">date =</span> Date, <span class="dt">calendar =</span> <span class="st">"monthly"</span>
   )
 calendar_df
-<span class="co">#&gt; # A tibble: 9,523 x 13</span>
+<span class="co">#&gt; # A tibble: 8,780 x 13</span>
 <span class="co">#&gt;              Date_Time  Year   Month Mdate    Day  Time Sensor_ID</span>
 <span class="co">#&gt;  *              &lt;dttm&gt; &lt;int&gt;   &lt;ord&gt; &lt;int&gt;  &lt;ord&gt; &lt;int&gt;     &lt;int&gt;</span>
 <span class="co">#&gt;  1 2016-01-01 00:00:00  2016 January     1 Friday     0         9</span>
@@ -111,7 +111,7 @@ calendar_df
 <span class="co">#&gt;  8 2016-01-01 07:00:00  2016 January     1 Friday     7         9</span>
 <span class="co">#&gt;  9 2016-01-01 08:00:00  2016 January     1 Friday     8         9</span>
 <span class="co">#&gt; 10 2016-01-01 09:00:00  2016 January     1 Friday     9         9</span>
-<span class="co">#&gt; # ... with 9,513 more rows, and 6 more variables: Sensor_Name &lt;chr&gt;,</span>
+<span class="co">#&gt; # ... with 8,770 more rows, and 6 more variables: Sensor_Name &lt;chr&gt;,</span>
 <span class="co">#&gt; #   Hourly_Counts &lt;int&gt;, Weekend &lt;chr&gt;, Date &lt;date&gt;, .Time &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   .Hourly_Counts &lt;dbl&gt;</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p &lt;-<span class="st"> </span>calendar_df <span class="op">%&gt;%</span>

@@ -38,7 +38,7 @@ calendar_df <- pedestrian %>%
     x = Time, y = Hourly_Counts, date = Date, calendar = "monthly"
   )
 calendar_df
-#> # A tibble: 9,523 x 13
+#> # A tibble: 8,780 x 13
 #>              Date_Time  Year   Month Mdate    Day  Time Sensor_ID
 #>  *              <dttm> <int>   <ord> <int>  <ord> <int>     <int>
 #>  1 2016-01-01 00:00:00  2016 January     1 Friday     0         9
@@ -51,7 +51,7 @@ calendar_df
 #>  8 2016-01-01 07:00:00  2016 January     1 Friday     7         9
 #>  9 2016-01-01 08:00:00  2016 January     1 Friday     8         9
 #> 10 2016-01-01 09:00:00  2016 January     1 Friday     9         9
-#> # ... with 9,513 more rows, and 6 more variables: Sensor_Name <chr>,
+#> # ... with 8,770 more rows, and 6 more variables: Sensor_Name <chr>,
 #> #   Hourly_Counts <int>, Weekend <chr>, Date <date>, .Time <dbl>,
 #> #   .Hourly_Counts <dbl>
 ```
