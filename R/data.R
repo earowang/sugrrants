@@ -3,7 +3,7 @@
 #' A dataset containing the pedestrian counts at hourly intervals from 2016-01-01
 #' to 2017-04-20 at 7 sensors in the city of Melbourne. The variables are as follows:
 #'
-#' @format A tibble with 89837 rows and 9 variables:
+#' @format A tibble with 78755 rows and 9 variables:
 #' \describe{
 #'   \item{Date_Time}{Date time when the pedestrian counts are recorded}
 #'   \item{Year}{Year associated with Date_Time}

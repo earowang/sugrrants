@@ -4,7 +4,7 @@
 \name{pedestrian}
 \alias{pedestrian}
 \title{Pedestrian counts in Melbourne city}
-\format{A tibble with 89837 rows and 9 variables:
+\format{A tibble with 78755 rows and 9 variables:
 \describe{
 \item{Date_Time}{Date time when the pedestrian counts are recorded}
 \item{Year}{Year associated with Date_Time}

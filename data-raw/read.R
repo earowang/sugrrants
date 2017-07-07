@@ -19,6 +19,7 @@ pedestrian <- ped_counts %>%
     Date_Time, Date, Year, Month, Mdate, Day, Time, 
     Sensor_ID, Sensor_Name, Hourly_Counts
   )
+pedestrian <- pedestrian[!duplicated(pedestrian), ]
 
 devtools::use_data(pedestrian, overwrite = TRUE)
 
