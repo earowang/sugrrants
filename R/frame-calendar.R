@@ -418,7 +418,6 @@ gen_reference.monthly <- function(
   } else {
     unique(paste(month_labels, yrs))
   }
-  mday_labels <- mday(unique(date))
 
   # Month label positioned at the top left of each month panel
   xtext <- sort(xbreaks_df$.xmajor_min)
@@ -442,8 +441,11 @@ gen_reference.monthly <- function(
   dtext$label <- gen_wday_labels(sunday = sunday)
 
   # Day of month text
-  mday_text <- data.frame(x = grids$.gx, y = grids$.gy + min_height)
-  mday_text$label <- mday_labels
+  mday_text <- data.frame(
+    x = grids$.gx, 
+    y = grids$.gy + min_height,
+    label = mday(grids$PANEL)
+  )
 
   return(list(
     breaks = breaks, minor_breaks = minor_breaks,
