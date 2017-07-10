@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Objects exported from other packages — reexports • sugrrants</title>
+<title>Return rows with matching conditions — filter.tbl_ts • sugrrants</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -84,29 +84,57 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Objects exported from other packages</h1>
+    <h1>Return rows with matching conditions</h1>
     </div>
 
     
-    <p>These objects are imported from other packages. Follow the links
-below to see their documentation.</p><dl class='dl-horizontal'>
-  <dt>dplyr</dt><dd><p><code><a href='http://dplyr.tidyverse.org/reference/vars.html'>vars</a></code>, <code><a href='http://dplyr.tidyverse.org/reference/filter.html'>filter</a></code></p></dd>
-
-    <dt>lubridate</dt><dd><p><code><a href='http://www.rdocumentation.org/packages/lubridate/topics/year'>year</a></code>, <code><a href='http://www.rdocumentation.org/packages/lubridate/topics/as_date'>as_date</a></code></p></dd>
-
-    <dt>magrittr</dt><dd><p><code>%&gt;%</code></p></dd>
-
-    <dt>zoo</dt><dd><p><code><a href='http://www.rdocumentation.org/packages/zoo/topics/yearmon'>as.yearmon</a></code>, <code><a href='http://www.rdocumentation.org/packages/zoo/topics/yearqtr'>as.yearqtr</a></code></p></dd>
-</dl>
+    <p>Return rows with matching conditions</p>
     
 
-        
+    <pre class="usage"><span class='co'># S3 method for tbl_ts</span>
+<span class='fu'><a href='http://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='no'>.data</span>, <span class='no'>...</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>.data</th>
+      <td><p>A <code>tbl_ts</code></p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Logical expression.</p></td>
+    </tr>
+    </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
+    <p>A tsibble</p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p><a href='http://dplyr.tidyverse.org/reference/filter.html'>dplyr::filter</a></p>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>   # Leave blank
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-                </ul>
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
+
+    <h2>Author</h2>
+    
+Earo Wang
 
   </div>
 </div>

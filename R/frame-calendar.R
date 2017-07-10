@@ -238,7 +238,7 @@ frame_calendar_ <- function(
   # generate breaks and labels for prettify()
   class(cal_grids) <- c(calendar, class(cal_grids))
   data_ref <- gen_reference(
-    cal_grids, date = date_eval, margins, calendar = calendar, 
+    cal_grids, margins, calendar = calendar, 
     sunday = sunday, dir = dir, polar = polar
   )
 
@@ -281,18 +281,19 @@ assign_grids <- function(ROW, COL) {
 
 # Compute grid lines and text labels for frame_calendar()
 # ToDo: polar = TRUE
-gen_reference <- function(grids, date, dir = "h", polar = FALSE, ...) {
+gen_reference <- function(grids, dir = "h", polar = FALSE, ...) {
   dir <- match.arg(dir, c("h", "v"))
   UseMethod("gen_reference")
 }
 
-gen_reference.daily <- function(grids, date, dir = "h", polar = FALSE, ...) {
+gen_reference.daily <- function(grids, dir = "h", polar = FALSE, ...) {
   # day breaks
   minor_breaks <- gen_day_breaks(grids)
   min_width <- min(abs(diff(minor_breaks$x)))
   min_height <- min(abs(diff(minor_breaks$y)))
 
   # Prepare for the string texts
+  date <- grids$PANEL
   yrs <- year(date)
   nyears <- unique(yrs)
   month_labels <- paste(yrs, month(date, label = TRUE), sep = "-")
@@ -329,13 +330,14 @@ gen_reference.daily <- function(grids, date, dir = "h", polar = FALSE, ...) {
   ))
 }
 
-gen_reference.weekly <- function(grids, date, dir = "h", polar = FALSE, ...) {
+gen_reference.weekly <- function(grids, dir = "h", polar = FALSE, ...) {
   # day breaks
   minor_breaks <- gen_day_breaks(grids)
   min_width <- min(abs(diff(minor_breaks$x)))
   min_height <- min(abs(diff(minor_breaks$y)))
 
   # Prepare for the string texts
+  date <- grids$PANEL
   yrs <- year(date)
   nyears <- unique(yrs)
   week_labels <- paste(yrs, isoweek(date), sep = "-")
@@ -376,7 +378,7 @@ gen_reference.weekly <- function(grids, date, dir = "h", polar = FALSE, ...) {
 }
 
 gen_reference.monthly <- function(
-  grids, date, margins, dir = "h", sunday = FALSE, polar = FALSE, ...
+  grids, margins, dir = "h", sunday = FALSE, polar = FALSE, ...
 ) {
   # Month breaks
   grids <- arrange(grids, PANEL)
@@ -410,6 +412,7 @@ gen_reference.monthly <- function(
   breaks <- list(x = xbreaks, y = ybreaks)
 
   # Prepare for the string texts
+  date <- grids$PANEL
   yrs <- year(date)
   nyears <- unique(yrs)
   month_labels <- month(date, label = TRUE)
