@@ -5,6 +5,9 @@ magrittr::`%>%`
 dplyr::vars
 
 #' @export
+dplyr::filter
+
+#' @export
 lubridate::year
 
 #' @export

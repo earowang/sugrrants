@@ -1,3 +1,15 @@
+#' Return rows with matching conditions
+#'
+#' @param .data A `tbl_ts`
+#' @param ... Logical expression.
+#'
+#' @return A tsibble
+#' @author Earo Wang
+#' @seealso [dplyr::filter]
+#' @export
+#'
+#' @examples
+#'    # Leave blank
 filter.tbl_ts <- function(.data, ...) {
   key <- get_key(.data)
   index <- get_index(.data)
@@ -9,6 +21,18 @@ filter.tbl_ts <- function(.data, ...) {
   ))
 }
 
+#' Select variables by name
+#'
+#' @param .data A `tbl_ts`.
+#' @param ... Unquoted variables to be selected.
+#'
+#' @return A tsibble when keeping the key and the index variables.
+#' @author Earo Wang
+#' @seealso [dplyr::select]
+#' @export
+#'
+#' @examples
+#'    # Leave blank
 select.tbl_ts <- function(.data, ...) {
   cls <- class(.data)
   key <- get_key(.data)
@@ -41,6 +65,20 @@ mutate.tbl_ts <- function(.data, ...) {
   ))
 }
 
+#' Group by one or more variabels
+#'
+#' @param .data A `tbl_ts`.
+#' @param ... Unquoted variables to be grouped by.
+#' @param add Logical. `FALSE` is the default suggesting to override the exisiting
+#'    groups. `TRUE` for adding the exisiting groups.
+#'
+#' @return A grouped tsibble
+#' @author Earo Wang
+#' @seealso [dplyr::group_by]
+#' @export
+#'
+#' @examples
+#'    # Leave blank
 group_by.tbl_ts <- function(.data, ..., add = FALSE) {
   key <- get_key(.data)
   index <- get_index(.data)
@@ -56,7 +94,7 @@ group_by.tbl_ts <- function(.data, ..., add = FALSE) {
 #'
 #' @description It computes summary statistics for a tsibble over calendar
 #'    periods, usually used in combination of [group_by].
-#'  
+#'
 #' @param .data A tsibble (of `tbl_ts` class).
 #' @param ... Name-value pairs of summary functions. To aggregate tsibble over
 #'    a certain calendar period, for example yearly aggregates, `~ year()` needs
@@ -66,10 +104,10 @@ group_by.tbl_ts <- function(.data, ..., add = FALSE) {
 #' @rdname summarise
 #' @seealso [dplyr::summarise]
 #' @details It's S3 method implemented for [tsibble()] (`tbl_ts`) obtained from
-#'    [dplyr::summarise()]. A formula with `~` followed by one of calendar component 
-#'    functions from base, [lubridate] and [zoo] specifies the period when summary 
-#'    functions are carried out.  Currently `~ year()` indicates yearly aggregates. 
-#'    `~ yearqtr()` indicates quarterly aggregates. `~ yearmon()` indicates 
+#'    [dplyr::summarise()]. A formula with `~` followed by one of calendar component
+#'    functions from base, [lubridate] and [zoo] specifies the period when summary
+#'    functions are carried out.  Currently `~ year()` indicates yearly aggregates.
+#'    `~ yearqtr()` indicates quarterly aggregates. `~ yearmon()` indicates
 #'    monthly aggregates. `~ as_date()` or `as.Date()` indicates daily aggregates.
 #' @return A tsibble class when the `~` is present.
 #'
@@ -98,21 +136,22 @@ summarise.tbl_ts <- function(.data, ...) {
       abort(paste(fun, "is not supported yet."))
     }
     # using group_by, sometimes it drops class attributes, e.g. as.yearmon
-    .data <- .data %>% 
-      ungroup() %>% 
+    .data <- .data %>%
+      ungroup() %>%
       dplyr::mutate(!!str_time := UQ(sym(fun))(!!index))
     sum_args <- dots_cap[-idx] # used for summarise
     if (grped) {
-      .data <- .data %>% 
-        dplyr::group_by(!!!grps) %>% 
+      .data <- .data %>%
+        dplyr::group_by(!!!grps) %>%
         dplyr::group_by(!!sym_time, add = TRUE)
     } else {
-      .data <- .data %>% 
+      .data <- .data %>%
         dplyr::group_by(!!sym_time)
     }
-    .data <- .data %>% 
+    .data <- .data %>%
         dplyr::summarise(!!!sum_args)
     attr(.data, "key") <- if (grped) {
+      # ToDo: check if grouping vars should be key variables
         map(grps, as_quosure)
       } else {
         key_vars()
@@ -132,8 +171,8 @@ tilde_detect <- function(...) { # x be a list of quosures
   sp_idx <- which(sp_f == TRUE, useNames = FALSE)
   sp_time <- gsub("^~(.*)\\()", "\\1", strs[sp_idx])
   return(list(
-    index = sp_idx, 
-    fun = sp_time, 
+    index = sp_idx,
+    fun = sp_time,
     var_name = dots_names[sp_idx]
   ))
 }

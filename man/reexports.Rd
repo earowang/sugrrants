@@ -7,6 +7,8 @@
 \alias{reexports}
 \alias{vars}
 \alias{reexports}
+\alias{filter}
+\alias{reexports}
 \alias{year}
 \alias{reexports}
 \alias{as_date}
@@ -21,7 +23,7 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{dplyr}{\code{\link[dplyr]{vars}}}
+  \item{dplyr}{\code{\link[dplyr]{vars}}, \code{\link[dplyr]{filter}}}
 
   \item{lubridate}{\code{\link[lubridate]{year}}, \code{\link[lubridate]{as_date}}}
 
