@@ -260,6 +260,7 @@ frame_calendar_ <- function(
       minor_breaks = data_ref$minor_breaks,
       label = data_ref$label,
       text = data_ref$text,
+      text2 = data_ref$text2,
       dir = dir,
       polar = polar,
       class = c("ggcalendar", cls)
@@ -378,6 +379,7 @@ gen_reference.monthly <- function(
   grids, date, margins, dir = "h", sunday = FALSE, polar = FALSE, ...
 ) {
   # Month breaks
+  grids <- arrange(grids, PANEL)
   grids <- grids %>% 
     group_by(MPANEL) %>% 
     mutate(
@@ -416,6 +418,7 @@ gen_reference.monthly <- function(
   } else {
     unique(paste(month_labels, yrs))
   }
+  mday_labels <- mday(unique(date))
 
   # Month label positioned at the top left of each month panel
   xtext <- sort(xbreaks_df$.xmajor_min)
@@ -438,9 +441,13 @@ gen_reference.monthly <- function(
   }
   dtext$label <- gen_wday_labels(sunday = sunday)
 
+  # Day of month text
+  mday_text <- data.frame(x = grids$.gx, y = grids$.gy + min_height)
+  mday_text$label <- mday_labels
+
   return(list(
     breaks = breaks, minor_breaks = minor_breaks,
-    label = mtext, text = dtext
+    label = mtext, text = dtext, text2 = mday_text
   ))
 }
 
@@ -450,7 +457,8 @@ gen_reference.monthly <- function(
 #'    `ggplot` object, which is actually passed to `geom_label()`. If "text" is
 #'    specified, it will add weekday/day of month text on the `ggplot` object,
 #'    which is actually passed to `geom_text()`. By default, both "label" and 
-#'    "text" are used.
+#'    "text" are used. If "text2" is specified for the "monthly" calendar only, 
+#'    it will add day of month to the `ggplot` object.
 #' @param ... Extra arguments passed to `geom_label()` and `geom_text()`
 #' @export
 prettify <- function(plot, label = c("label", "text"), ...) {
@@ -463,7 +471,10 @@ prettify <- function(plot, label = c("label", "text"), ...) {
   if (is.null(label)) {
     label_arg <- NULL
   } else {
-    label_arg <- match.arg(label, c("label", "text"), several.ok = TRUE)
+    label_arg <- match.arg(
+      label, c("label", "text", "text2"), 
+      several.ok = TRUE
+    )
   }
   if (!("ggcalendar" %in% class(plot$data))) {
     abort("'prettify' does not know how to handle with this type of data.")
@@ -497,6 +508,18 @@ prettify <- function(plot, label = c("label", "text"), ...) {
         )
     }
   }
+  if ("text2" %in% label_arg) {
+    text2 <- get_text2(plot$data)
+    if (is.null(text2)) {
+      warning("label = 'text2' is ignored for this type of calendar.")
+    } else {
+      plot <- plot + 
+        geom_text(
+          aes(x, y, label = label), data = text2, nudge_y = -0.01, 
+          hjust = 0, vjust = 1, inherit.aes = FALSE, ...
+        )
+    }
+  }
   plot <- plot + 
     scale_x_continuous(breaks = breaks$x, minor_breaks = minor_breaks$x)
   plot <- plot + 
@@ -527,6 +550,10 @@ get_text <- function(data) {
   attr(data, "text")
 }
 
+get_text2 <- function(data) {
+  attr(data, "text2")
+}
+
 get_dir <- function(data) {
   attr(data, "dir")
 }
@@ -535,7 +562,7 @@ get_polar <- function(data) {
   attr(data, "polar")
 }
 
-gen_wday_labels <- function(..., sunday = FALSE) { # simply ignore ...
+gen_wday_labels <- function(sunday = FALSE) { 
   wday_labels <- c("M", "T", "W", "T", "F", "S", "S")
   if (sunday) {
     wday_labels <- wday_labels[c(2:7, 1)]

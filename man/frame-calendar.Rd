@@ -51,7 +51,8 @@ conditional on each daily cell, "free_wday" for scaling on weekdays,
 \code{ggplot} object, which is actually passed to \code{geom_label()}. If "text" is
 specified, it will add weekday/day of month text on the \code{ggplot} object,
 which is actually passed to \code{geom_text()}. By default, both "label" and
-"text" are used.}
+"text" are used. If "text2" is specified for the "monthly" calendar only,
+it will add day of month to the \code{ggplot} object.}
 
 \item{...}{Extra arguments passed to \code{geom_label()} and \code{geom_text()}}
 }
