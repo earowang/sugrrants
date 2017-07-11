@@ -8,6 +8,18 @@ dplyr::vars
 dplyr::filter
 
 #' @export
+dplyr::select
+
+#' @export
+dplyr::summarise
+
+#' @export
+dplyr::mutate
+
+#' @export
+dplyr::group_by
+
+#' @export
 lubridate::year
 
 #' @export

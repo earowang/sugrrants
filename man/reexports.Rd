@@ -9,6 +9,14 @@
 \alias{reexports}
 \alias{filter}
 \alias{reexports}
+\alias{select}
+\alias{reexports}
+\alias{summarise}
+\alias{reexports}
+\alias{mutate}
+\alias{reexports}
+\alias{group_by}
+\alias{reexports}
 \alias{year}
 \alias{reexports}
 \alias{as_date}
@@ -23,7 +31,7 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{dplyr}{\code{\link[dplyr]{vars}}, \code{\link[dplyr]{filter}}}
+  \item{dplyr}{\code{\link[dplyr]{vars}}, \code{\link[dplyr]{filter}}, \code{\link[dplyr]{select}}, \code{\link[dplyr]{summarise}}, \code{\link[dplyr]{mutate}}, \code{\link[dplyr]{group_by}}}
 
   \item{lubridate}{\code{\link[lubridate]{year}}, \code{\link[lubridate]{as_date}}}
 

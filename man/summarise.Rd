@@ -2,9 +2,12 @@
 % Please edit documentation in R/dplyr-verbs.R
 \name{summarise.tbl_ts}
 \alias{summarise.tbl_ts}
+\alias{summarize}
 \title{Aggregate over calendar periods}
 \usage{
 \method{summarise}{tbl_ts}(.data, ...)
+
+summarize(.data, ...)
 }
 \arguments{
 \item{.data}{A tsibble (of \code{tbl_ts} class).}

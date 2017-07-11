@@ -53,7 +53,18 @@ select.tbl_ts <- function(.data, ...) {
   }
 }
 
-# mutate behaviour for tbl_ts is hard to think about atm
+#' Add new variables
+#'
+#' @param .data A `tbl_ts`.
+#' @param ... Name-value pairs of expressions.
+#'
+#' @return A tsibble.
+#' @author Earo Wang
+#' @seealso [dplyr::mutate]
+#' @export
+#'
+#' @examples
+#'    # Leave blank
 mutate.tbl_ts <- function(.data, ...) {
   key <- get_key(.data)
   index <- get_index(.data)
@@ -163,6 +174,10 @@ summarise.tbl_ts <- function(.data, ...) {
     return(structure(.data, class = cls))
   }
 }
+
+#' @rdname summarise
+#' @export
+summarize <- summarise
 
 tilde_detect <- function(...) { # x be a list of quosures
   dots_names <- names2(quos_auto_name(...))
