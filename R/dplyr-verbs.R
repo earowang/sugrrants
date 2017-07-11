@@ -9,7 +9,12 @@
 #' @export
 #'
 #' @examples
-#'    # Leave blank
+#'    pkgs_ts <- as_tsibble(tidypkgs, key = key_vars(package), index = date)
+#'    filter(pkgs_ts, package == "dplyr")
+#'    filter(pkgs_ts, date >= as_date("2016-01-01"))
+#'    
+# ToDo: filter(pkgs_ts, ~ year() == 2016)? => tbl_ts
+# ToDo: filter(pkgs_ts, ~ month() == 1)? => tbl_df
 filter.tbl_ts <- function(.data, ...) {
   key <- get_key(.data)
   index <- get_index(.data)
@@ -32,7 +37,10 @@ filter.tbl_ts <- function(.data, ...) {
 #' @export
 #'
 #' @examples
-#'    # Leave blank
+#'    pkgs_ts <- as_tsibble(tidypkgs, key = key_vars(package), index = date)
+#'    select(pkgs_ts, date, package)
+#'    
+# ToDo: select should work with everything(), ends_with() and etc. too
 select.tbl_ts <- function(.data, ...) {
   cls <- class(.data)
   key <- get_key(.data)
@@ -64,7 +72,11 @@ select.tbl_ts <- function(.data, ...) {
 #' @export
 #'
 #' @examples
-#'    # Leave blank
+#'    pkgs_ts <- as_tsibble(tidypkgs, key = key_vars(package), index = date)
+#'    pkgs_ts %>% 
+#'      group_by(package) %>% 
+#'      mutate(pkg_avg = mean(count))
+#'    
 mutate.tbl_ts <- function(.data, ...) {
   key <- get_key(.data)
   index <- get_index(.data)
@@ -89,7 +101,9 @@ mutate.tbl_ts <- function(.data, ...) {
 #' @export
 #'
 #' @examples
-#'    # Leave blank
+#'    pkgs_ts <- as_tsibble(tidypkgs, key = key_vars(package), index = date)
+#'    group_by(pkgs_ts, package)
+#'
 group_by.tbl_ts <- function(.data, ..., add = FALSE) {
   key <- get_key(.data)
   index <- get_index(.data)
@@ -123,7 +137,10 @@ group_by.tbl_ts <- function(.data, ..., add = FALSE) {
 #' @return A tsibble class when the `~` is present.
 #'
 #' @examples
-#'    # Leave blank
+#'    pkgs_ts <- as_tsibble(tidypkgs, key = key_vars(package), index = date)
+#'    pkgs_ts %>% 
+#'      group_by(package) %>% 
+#'      summarise(avg_count = mean(count), month = ~ as.yearmon())
 #'
 #' @export
 summarise.tbl_ts <- function(.data, ...) {

@@ -23,8 +23,8 @@ A tsibble object.
 Coerce to a tsibble object
 }
 \examples{
-   tidypkgs_ts <- as_tsibble(tidypkgs, key = key_vars(package), index = date) 
-   print(tidypkgs_ts)
+   pkgs_ts <- as_tsibble(tidypkgs, key = key_vars(package), index = date) 
+   print(pkgs_ts)
 
 }
 \seealso{

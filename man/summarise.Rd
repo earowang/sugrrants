@@ -32,7 +32,10 @@ functions are carried out.  Currently \code{~ year()} indicates yearly aggregate
 monthly aggregates. \code{~ as_date()} or \code{as.Date()} indicates daily aggregates.
 }
 \examples{
-   # Leave blank
+   pkgs_ts <- as_tsibble(tidypkgs, key = key_vars(package), index = date)
+   pkgs_ts \%>\% 
+     group_by(package) \%>\% 
+     summarise(avg_count = mean(count), month = ~ as.yearmon())
 
 }
 \seealso{

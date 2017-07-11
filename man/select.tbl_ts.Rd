@@ -18,7 +18,9 @@ A tsibble when keeping the key and the index variables.
 Select variables by name
 }
 \examples{
-   # Leave blank
+   pkgs_ts <- as_tsibble(tidypkgs, key = key_vars(package), index = date)
+   select(pkgs_ts, date, package)
+   
 }
 \seealso{
 \link[dplyr:select]{dplyr::select}

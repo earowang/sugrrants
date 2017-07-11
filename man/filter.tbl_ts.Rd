@@ -18,7 +18,10 @@ A tsibble
 Return rows with matching conditions
 }
 \examples{
-   # Leave blank
+   pkgs_ts <- as_tsibble(tidypkgs, key = key_vars(package), index = date)
+   filter(pkgs_ts, package == "dplyr")
+   filter(pkgs_ts, date >= as_date("2016-01-01"))
+   
 }
 \seealso{
 \link[dplyr:filter]{dplyr::filter}

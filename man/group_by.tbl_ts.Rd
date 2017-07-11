@@ -21,7 +21,9 @@ A grouped tsibble
 Group by one or more variabels
 }
 \examples{
-   # Leave blank
+   pkgs_ts <- as_tsibble(tidypkgs, key = key_vars(package), index = date)
+   group_by(pkgs_ts, package)
+
 }
 \seealso{
 \link[dplyr:group_by]{dplyr::group_by}

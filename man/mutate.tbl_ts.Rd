@@ -18,7 +18,11 @@ A tsibble.
 Add new variables
 }
 \examples{
-   # Leave blank
+   pkgs_ts <- as_tsibble(tidypkgs, key = key_vars(package), index = date)
+   pkgs_ts \%>\% 
+     group_by(package) \%>\% 
+     mutate(pkg_avg = mean(count))
+   
 }
 \seealso{
 \link[dplyr:mutate]{dplyr::mutate}

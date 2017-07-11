@@ -38,8 +38,8 @@ tsibble <- function(..., key = key_vars(), index) {
 #' @seealso [tibble::as_tibble]
 #'
 #' @examples
-#'    tidypkgs_ts <- as_tsibble(tidypkgs, key = key_vars(package), index = date) 
-#'    print(tidypkgs_ts)
+#'    pkgs_ts <- as_tsibble(tidypkgs, key = key_vars(package), index = date) 
+#'    print(pkgs_ts)
 #'
 #' @export
 as_tsibble <- function(x, key = key_vars(), index, ...) {
