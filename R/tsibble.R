@@ -22,7 +22,34 @@
 #' @export
 tsibble <- function(..., key = key_vars(), index) {
   index <- enquo(index)
-  tsibble_(..., key = key, index = index)
+  tsibble_(lst(...), key = key, index = index)
+}
+
+#' Coerce to a tsibble object
+#'
+#' @param x Other objects to be coerced to tsibble.
+#' @param ... Other arguments to be passed.
+#' @param key Unquoted variable(s) indicating the key variables for tsibble, 
+#'    used in combination with `key_vars()`.
+#' @param index An unquoted variable indicating the time index variable
+#'
+#' @return A tsibble object.
+#' @author Earo Wang
+#' @seealso [tibble::as_tibble]
+#'
+#' @examples
+#'    tidypkgs_ts <- as_tsibble(tidypkgs, key = key_vars(package), index = date) 
+#'    print(tidypkgs_ts)
+#'
+#' @export
+as_tsibble <- function(x, key = key_vars(), index, ...) {
+  UseMethod("as_tsibble")
+}
+
+#' @export
+as_tsibble.default <- function(x, key = key_vars(), index, ...) {
+  index <- enquo(index)
+  return(tsibble_(x, key = key, index = index))
 }
 
 ## tsibble is a special class of tibble that handles with temporal data. It
@@ -32,7 +59,7 @@ tsibble <- function(..., key = key_vars(), index) {
 ## objects, it would fail when tsibble contain multiple time objects. Better
 ## to let user specify.
 tsibble_ <- function(..., key = key_vars(), index) {
-  tbl <- as_tibble(tibble::lst(...))
+  tbl <- as_tibble(...)
   cls_tbl <- class(tbl)
   eval_idx <- eval_tidy(index, data = tbl)
   cls_idx <- class(eval_idx)

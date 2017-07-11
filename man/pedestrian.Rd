@@ -24,5 +24,6 @@ A dataset containing the pedestrian counts at hourly intervals from 2016-01-01
 to 2017-04-20 at 7 sensors in the city of Melbourne. The variables are as follows:
 }
 \examples{
-pedestrian
+   pedestrian
 }
+\keyword{datasets}
