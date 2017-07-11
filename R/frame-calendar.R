@@ -158,7 +158,7 @@ frame_calendar_ <- function(
     nrow = nrow, ncol = ncol)
 
   # Assign grids to the panels
-  grids <- assign_grids(max(cal_layout$ROW), max(cal_layout$COL))
+  grids <- assign_grids(max(cal_layout$ROW), max(cal_layout$COL), polar = polar)
   cal_grids <- cal_layout %>% 
     left_join(grids, by = c("COL", "ROW"))
 
@@ -180,6 +180,15 @@ frame_calendar_ <- function(
         .gx = .gx + MCOL * margins,
         .gy = .gy - MROW * margins
       ) 
+    if (polar) {
+      data <- data %>% 
+        dplyr::group_by(MPANEL) %>% 
+        dplyr::mutate(
+          .cx = .cx + MCOL * margins,
+          .cy = .cy - MROW * margins
+        ) 
+      # centre <- data[, c(".cx", ".cy")]
+    }
   }
 
   data <- ungroup(data) # is.null(scale)
@@ -209,10 +218,10 @@ frame_calendar_ <- function(
       dplyr::mutate(
         theta = 2 * pi * normalise(!!x, xmax = max_na(!!x)),
         radius = normalise(!!!y, xmax = max_na(!!!y)),
-        !!.x := .gx + width * radius * sin(theta),
-        !!.y := .gy + height * radius * cos(theta)
+        !!.x := .cx + width / 2 * radius * sin(theta),
+        !!.y := .cy + height / 2 * radius * cos(theta)
       ) %>% 
-      dplyr::select(-c(theta, radius))
+      dplyr::select(-c(theta, radius, .cx, .cy))
   } else {
     fn <- function(x, ymax, ymin) { # temporal function for mutate at
       normalise(x, xmax = max_na(ymax), xmin = min_na(ymin)) * height
@@ -238,8 +247,7 @@ frame_calendar_ <- function(
   # generate breaks and labels for prettify()
   class(cal_grids) <- c(calendar, class(cal_grids))
   data_ref <- gen_reference(
-    cal_grids, margins, calendar = calendar, 
-    sunday = sunday, dir = dir, polar = polar
+    cal_grids, margins, calendar = calendar, sunday = sunday, dir = dir
   )
 
   data <- data %>% 
@@ -270,27 +278,32 @@ frame_calendar_ <- function(
 
 ## calendar functions -------------------
 # Assign grids from 0 to 1
-assign_grids <- function(ROW, COL) {
+assign_grids <- function(ROW, COL, polar = FALSE) {
   col_grids <- seq(1, 0, length.out = ROW)
   row_grids <- seq(0, 1, length.out = COL)
   grids <- expand.grid2(.gx = row_grids, .gy = col_grids)
   combs <- expand.grid2(COL = seq_len(COL), ROW = seq_len(ROW))
   out <- cbind(combs, grids)
+  if (polar) {
+    min_x <- min_diff(row_grids)
+    min_y <- min_diff(col_grids)
+    out$.cx <- out$.gx + min_x / 2
+    out$.cy <- out$.gy + min_y / 2
+  }
   return(out)
 }
 
 # Compute grid lines and text labels for frame_calendar()
-# ToDo: polar = TRUE
-gen_reference <- function(grids, dir = "h", polar = FALSE, ...) {
+gen_reference <- function(grids, dir = "h", ...) {
   dir <- match.arg(dir, c("h", "v"))
   UseMethod("gen_reference")
 }
 
-gen_reference.daily <- function(grids, dir = "h", polar = FALSE, ...) {
+gen_reference.daily <- function(grids, dir = "h", ...) {
   # day breaks
   minor_breaks <- gen_day_breaks(grids)
-  min_width <- min(abs(diff(minor_breaks$x)))
-  min_height <- min(abs(diff(minor_breaks$y)))
+  min_width <- min_diff(minor_breaks$x)
+  min_height <- min_diff(minor_breaks$y)
 
   # Prepare for the string texts
   date <- grids$PANEL
@@ -330,11 +343,11 @@ gen_reference.daily <- function(grids, dir = "h", polar = FALSE, ...) {
   ))
 }
 
-gen_reference.weekly <- function(grids, dir = "h", polar = FALSE, ...) {
+gen_reference.weekly <- function(grids, dir = "h", ...) {
   # day breaks
   minor_breaks <- gen_day_breaks(grids)
-  min_width <- min(abs(diff(minor_breaks$x)))
-  min_height <- min(abs(diff(minor_breaks$y)))
+  min_width <- min_diff(minor_breaks$x)
+  min_height <- min_diff(minor_breaks$y)
 
   # Prepare for the string texts
   date <- grids$PANEL
@@ -378,7 +391,7 @@ gen_reference.weekly <- function(grids, dir = "h", polar = FALSE, ...) {
 }
 
 gen_reference.monthly <- function(
-  grids, margins, dir = "h", sunday = FALSE, polar = FALSE, ...
+  grids, margins, dir = "h", sunday = FALSE, ...
 ) {
   # Month breaks
   grids <- arrange(grids, PANEL)
@@ -403,8 +416,8 @@ gen_reference.monthly <- function(
 
   # day breaks
   minor_breaks <- gen_day_breaks(grids)
-  min_width <- min(abs(diff(minor_breaks$x)))
-  min_height <- min(abs(diff(minor_breaks$y)))
+  min_width <- min_diff(minor_breaks$x)
+  min_height <- min_diff(minor_breaks$y)
 
   # month breaks update
   xbreaks <- c(xbreaks_df$.xmajor_min, xbreaks_df$.xmajor_max + min_width)
@@ -525,6 +538,14 @@ prettify <- function(plot, label = c("label", "text"), ...) {
         )
     }
   }
+  # polar <- get_polar(plot$data)
+  # if (!is.null(polar)) {
+  #   plot <- plot +
+  #     geom_point(
+  #       aes(x = .cx, y = .cy), data = polar, colour = "white", size = 0.01,
+  #       inherit.aes = FALSE
+  #     )
+  # }
   plot <- plot + 
     scale_x_continuous(breaks = breaks$x, minor_breaks = minor_breaks$x)
   plot <- plot + 

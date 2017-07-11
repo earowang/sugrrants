@@ -22,3 +22,7 @@ normalise <- function(x, xmin = NULL, xmax = NULL) {
   if (is.null(xmax)) xmax <- max_na(x)
   return((x - xmin) / (xmax - xmin))
 }
+
+min_diff <- function(x) {
+  return(min(abs(diff(x, na.rm = TRUE))))
+}
