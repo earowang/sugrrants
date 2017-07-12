@@ -11,8 +11,8 @@
 #'
 #' @examples
 #'    pkgs_ts <- as_tsibble(tidypkgs, key = key_vars(package), index = date)
-#'    filter(pkgs_ts, package == "dplyr")
-#'    filter(pkgs_ts, date >= as_date("2016-01-01"))
+#'    # filter(pkgs_ts, package == "dplyr")
+#'    # filter(pkgs_ts, date >= as_date("2016-01-01"))
 #'    
 # ToDo: filter(pkgs_ts, ~ year() == 2016)? => tbl_ts
 # ToDo: filter(pkgs_ts, ~ month() == 1)? => tbl_df
