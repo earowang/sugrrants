@@ -235,7 +235,7 @@ frame_calendar_ <- function(
         !!.x := .cx + width / 2 * radius * sin(theta),
         !!.y := .cy + height / 2 * radius * cos(theta)
       ) %>% 
-      dplyr::select(-c(theta, radius, .cx, .cy))
+      dplyr::select(-c(theta, radius))
   } else {
     fn <- function(x, ymax, ymin) { # temporal function for mutate at
       normalise(x, xmax = max_na(ymax), xmin = min_na(ymin)) * height
@@ -266,7 +266,7 @@ frame_calendar_ <- function(
 
   data <- data %>% 
     ungroup() %>% 
-    dplyr::select(-(ROW:.gy)) %>% 
+    dplyr::select(-(ROW:.cy)) %>% 
     dplyr::select(-c(.ymax, .ymin))
   if (scale %in% c("free_wday", "free_mday")) {
     data <- dplyr::select(data, -.day) # remove .day variable
