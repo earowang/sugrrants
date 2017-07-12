@@ -192,17 +192,10 @@ frame_calendar_ <- function(
       dplyr::group_by(MPANEL) %>% 
       dplyr::mutate(
         .gx = .gx + MCOL * margins,
-        .gy = .gy - MROW * margins
+        .gy = .gy - MROW * margins,
+        .cx = .cx + MCOL * margins,
+        .cy = .cy - MROW * margins
       ) 
-    # if (polar) {
-      data <- data %>% 
-        dplyr::group_by(MPANEL) %>% 
-        dplyr::mutate(
-          .cx = .cx + MCOL * margins,
-          .cy = .cy - MROW * margins
-        ) 
-      # centre <- data[, c(".cx", ".cy")]
-    # }
   }
 
   data <- ungroup(data) # is.null(scale)
