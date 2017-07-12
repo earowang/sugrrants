@@ -30,6 +30,8 @@
 #' @param scale "fixed" (the default) for fixed scale. "free" for scaling
 #'    conditional on each daily cell, "free_wday" for scaling on weekdays, 
 #'    "free_mday" for scaling on day of month.
+#' @param width,height Numerics between 0 and 1 to specify the width/height for 
+#'    each glyph.
 #'
 #' @return A data frame or a tibble with newly added columns of `.x`, `.y`. `.x` 
 #'    and `.y` together give new coordinates computed for different types of 
@@ -81,7 +83,8 @@
 #' @export
 frame_calendar <- function(
   data, x, y, date, calendar = "monthly", dir = "h", sunday = FALSE, 
-  nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed"
+  nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed",
+  width = 0.95, height = 0.95
 ) {
   calendar <- match.arg(calendar, c("monthly", "weekly", "daily"))
   dir <- match.arg(dir, c("h", "v"))
@@ -93,7 +96,8 @@ frame_calendar <- function(
 #' @export
 frame_calendar.grouped_df <- function(
   data, x, y, date, calendar = "monthly", dir = "h", sunday = FALSE, 
-  nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed"
+  nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed",
+  width = 0.95, height = 0.95
 ) {
   x <- deparse(substitute(x))
   if (!possibly_quosure(y)) y <- deparse(substitute(y)) else y <- dots2str(y)
@@ -110,7 +114,8 @@ frame_calendar.grouped_df <- function(
       function(data) frame_calendar_(
         data = data, x = x, y = y, date = date,
         calendar = calendar, dir = dir, sunday = sunday, 
-        nrow = nrow, ncol = ncol, polar = polar, scale = scale
+        nrow = nrow, ncol = ncol, polar = polar, scale = scale,
+        width = width, height = height
       )
     )) %>% 
     unnest()
@@ -120,7 +125,8 @@ frame_calendar.grouped_df <- function(
 #' @export
 frame_calendar.default <- function(
   data, x, y, date, calendar = "monthly", dir = "h", sunday = FALSE, 
-  nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed"
+  nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed",
+  width = 0.95, height = 0.95
 ) {
   x <- deparse(substitute(x))
   if (!possibly_quosure(y)) y <- deparse(substitute(y)) else y <- dots2str(y)
@@ -133,15 +139,20 @@ frame_calendar.default <- function(
   frame_calendar_(
     data, x = x, y = y, date = date,
     calendar = calendar, dir = dir, sunday = sunday, 
-    nrow = nrow, ncol = ncol, polar = polar, scale = scale
+    nrow = nrow, ncol = ncol, polar = polar, scale = scale,
+    width = width, height = height
   )
 }
 
 # frame_calendar_ takes strings as variable name
 frame_calendar_ <- function(
   data, x, y, date, calendar = "monthly", dir = "h", sunday = FALSE, 
-  nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed"
+  nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed",
+  width = 0.95, height = 0.95
 ) {
+  if (identical(between(width, 0, 1) && between(height, 0, 1), FALSE)) {
+    abort("width/height must be between 0 and 1.")
+  }
   # data <- arrange(data, !!date) # I don't think I need to change row order
   .x <- paste0(".", quo_name(x))
   # .y <- paste0(".", quo_name(y))
@@ -158,7 +169,10 @@ frame_calendar_ <- function(
     nrow = nrow, ncol = ncol)
 
   # Assign grids to the panels
-  grids <- assign_grids(max(cal_layout$ROW), max(cal_layout$COL), polar = polar)
+  grids <- assign_grids(
+    max(cal_layout$ROW), max(cal_layout$COL), 
+    width = width, height = height, polar = polar
+  )
   cal_grids <- cal_layout %>% 
     left_join(grids, by = c("COL", "ROW"))
 
@@ -169,8 +183,8 @@ frame_calendar_ <- function(
     dplyr::mutate(!!.date := PANEL)
 
   # Define a small multiple width and height
-  width <- resolution(data$.gx, zero = FALSE) * 0.98
-  height <- resolution(data$.gy, zero = FALSE) * 0.98
+  width <- resolution(data$.gx, zero = FALSE) * width
+  height <- resolution(data$.gy, zero = FALSE) * height
   margins <- min(c(width, height)) # Month by month margin
 
   if (calendar == "monthly") {
@@ -180,7 +194,7 @@ frame_calendar_ <- function(
         .gx = .gx + MCOL * margins,
         .gy = .gy - MROW * margins
       ) 
-    if (polar) {
+    # if (polar) {
       data <- data %>% 
         dplyr::group_by(MPANEL) %>% 
         dplyr::mutate(
@@ -188,7 +202,7 @@ frame_calendar_ <- function(
           .cy = .cy - MROW * margins
         ) 
       # centre <- data[, c(".cx", ".cy")]
-    }
+    # }
   }
 
   data <- ungroup(data) # is.null(scale)
@@ -227,20 +241,20 @@ frame_calendar_ <- function(
       normalise(x, xmax = max_na(ymax), xmin = min_na(ymin)) * height
     }
     if (possibly_identity(x)) {
-      data <- dplyr::mutate(data, .x = .gx)
+      data <- dplyr::mutate(data, .x = .cx)
     } else {
       data <- data %>% 
         dplyr::mutate(
-          !!.x := .gx + normalise(!!x, xmax = max_na(!!x)) * width
+          !!.x := .cx + normalise(!!x, xmax = max_na(!!x)) * width
         )
     }
     if (possibly_identity(y)) {
-      data <- dplyr::mutate(data, .y = .gy)
+      data <- dplyr::mutate(data, .y = .cy)
     } else {
       data <- data %>% 
         dplyr::mutate_at(
           .vars = vars(!!!y),
-          .funs = funs(zzz = .gy + fn(., .ymax, .ymin))
+          .funs = funs(zzz = .cy + fn(., .ymax, .ymin))
         )
     }
   }
@@ -278,17 +292,20 @@ frame_calendar_ <- function(
 
 ## calendar functions -------------------
 # Assign grids from 0 to 1
-assign_grids <- function(ROW, COL, polar = FALSE) {
+assign_grids <- function(ROW, COL, width, height, polar = FALSE) {
   col_grids <- seq(1, 0, length.out = ROW)
   row_grids <- seq(0, 1, length.out = COL)
   grids <- expand.grid2(.gx = row_grids, .gy = col_grids)
   combs <- expand.grid2(COL = seq_len(COL), ROW = seq_len(ROW))
   out <- cbind(combs, grids)
+  min_x <- min_diff(row_grids)
+  min_y <- min_diff(col_grids)
   if (polar) {
-    min_x <- min_diff(row_grids)
-    min_y <- min_diff(col_grids)
     out$.cx <- out$.gx + min_x / 2
     out$.cy <- out$.gy + min_y / 2
+  } else {
+    out$.cx <- out$.gx + (min_x - (width / (COL - 1))) / 2
+    out$.cy <- out$.gy
   }
   return(out)
 }

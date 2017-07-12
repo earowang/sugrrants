@@ -38,22 +38,22 @@ calendar_df <- pedestrian %>%
     x = Time, y = Hourly_Counts, date = Date, calendar = "monthly"
   )
 calendar_df
-#> # A tibble: 8,780 x 13
-#>              Date_Time  Year   Month Mdate    Day  Time Sensor_ID
-#>  *              <dttm> <int>   <ord> <int>  <ord> <int>     <int>
-#>  1 2016-01-01 00:00:00  2016 January     1 Friday     0         9
-#>  2 2016-01-01 01:00:00  2016 January     1 Friday     1         9
-#>  3 2016-01-01 02:00:00  2016 January     1 Friday     2         9
-#>  4 2016-01-01 03:00:00  2016 January     1 Friday     3         9
-#>  5 2016-01-01 04:00:00  2016 January     1 Friday     4         9
-#>  6 2016-01-01 05:00:00  2016 January     1 Friday     5         9
-#>  7 2016-01-01 06:00:00  2016 January     1 Friday     6         9
-#>  8 2016-01-01 07:00:00  2016 January     1 Friday     7         9
-#>  9 2016-01-01 08:00:00  2016 January     1 Friday     8         9
-#> 10 2016-01-01 09:00:00  2016 January     1 Friday     9         9
-#> # ... with 8,770 more rows, and 6 more variables: Sensor_Name <chr>,
-#> #   Hourly_Counts <int>, Weekend <chr>, Date <date>, .Time <dbl>,
-#> #   .Hourly_Counts <dbl>
+#> # A tibble: 8,780 x 15
+#>          .cx       .cy           Date_Time  Year   Month Mdate    Day
+#>  *     <dbl>     <dbl>              <dttm> <int>   <ord> <int>  <ord>
+#>  1 0.1842593 0.9648148 2016-01-01 00:00:00  2016 January     1 Friday
+#>  2 0.1842593 0.9648148 2016-01-01 01:00:00  2016 January     1 Friday
+#>  3 0.1842593 0.9648148 2016-01-01 02:00:00  2016 January     1 Friday
+#>  4 0.1842593 0.9648148 2016-01-01 03:00:00  2016 January     1 Friday
+#>  5 0.1842593 0.9648148 2016-01-01 04:00:00  2016 January     1 Friday
+#>  6 0.1842593 0.9648148 2016-01-01 05:00:00  2016 January     1 Friday
+#>  7 0.1842593 0.9648148 2016-01-01 06:00:00  2016 January     1 Friday
+#>  8 0.1842593 0.9648148 2016-01-01 07:00:00  2016 January     1 Friday
+#>  9 0.1842593 0.9648148 2016-01-01 08:00:00  2016 January     1 Friday
+#> 10 0.1842593 0.9648148 2016-01-01 09:00:00  2016 January     1 Friday
+#> # ... with 8,770 more rows, and 8 more variables: Time <int>,
+#> #   Sensor_ID <int>, Sensor_Name <chr>, Hourly_Counts <int>,
+#> #   Weekend <chr>, Date <date>, .Time <dbl>, .Hourly_Counts <dbl>
 ```
 
 ``` r
