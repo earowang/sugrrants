@@ -169,8 +169,8 @@ frame_calendar_ <- function(
     dplyr::mutate(!!.date := PANEL)
 
   # Define a small multiple width and height
-  width <- resolution(data$.gx, zero = FALSE) * 0.95
-  height <- resolution(data$.gy, zero = FALSE) * 0.95
+  width <- resolution(data$.gx, zero = FALSE) * 0.98
+  height <- resolution(data$.gy, zero = FALSE) * 0.98
   margins <- min(c(width, height)) # Month by month margin
 
   if (calendar == "monthly") {

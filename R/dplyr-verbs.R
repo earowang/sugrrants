@@ -5,6 +5,7 @@
 #'
 #' @return A tsibble
 #' @author Earo Wang
+#' @rdname filter
 #' @seealso [dplyr::filter]
 #' @export
 #'
@@ -33,6 +34,7 @@ filter.tbl_ts <- function(.data, ...) {
 #'
 #' @return A tsibble when keeping the key and the index variables.
 #' @author Earo Wang
+#' @rdname select
 #' @seealso [dplyr::select]
 #' @export
 #'
@@ -68,6 +70,7 @@ select.tbl_ts <- function(.data, ...) {
 #'
 #' @return A tsibble.
 #' @author Earo Wang
+#' @rdname mutate
 #' @seealso [dplyr::mutate]
 #' @export
 #'
@@ -97,6 +100,7 @@ mutate.tbl_ts <- function(.data, ...) {
 #'
 #' @return A grouped tsibble
 #' @author Earo Wang
+#' @rdname group_by
 #' @seealso [dplyr::group_by]
 #' @export
 #'
