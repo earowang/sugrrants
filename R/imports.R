@@ -11,6 +11,7 @@
 #' @importFrom ggplot2 resolution layer ggproto draw_key_rect draw_key_path 
 #' @importFrom ggplot2 geom_label geom_text scale_x_continuous scale_y_continuous
 #' @importFrom ggplot2 theme element_blank aes last_plot is.ggplot wrap_dims
+#' @importFrom ggplot2 GeomLabel GeomText
 #' @importFrom rlang eval_tidy quo enquo abort !! !!! := quo_name flatten_int
 #' @importFrom rlang syms sym get_expr is_quosure flatten_dbl is_empty is_false
 #' @importFrom rlang quos splice flatten_lgl as_quosure UQ names2 quos_auto_name

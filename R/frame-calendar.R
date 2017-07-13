@@ -108,6 +108,7 @@ frame_calendar.grouped_df <- function(
   date <- sym(date)
   cls <- class(data)
 
+  # other attributes obtained from the grouped var of largest group size
   idx_max <- which.max(group_size(data))
   data <- data %>% 
     nest(.key = .calendar_tbl) %>% 
@@ -526,27 +527,40 @@ prettify <- function(plot, label = c("label", "text"), ...) {
   minor_breaks <- get_minor_breaks(plot$data)
   dir <- get_dir(plot$data)
 
+  # separate params for geom_label and geom_text from ...
+  param_list <- list(...)
+  if (has_length(param_list, 0)) {
+    label_param <- text_param <- text2_param <- list()
+  } else {
+    names_param <- names(param_list)
+    label_all <- c(GeomLabel$aesthetics(), GeomLabel$parameters(TRUE))
+    text_all <- c(GeomText$aesthetics(), GeomText$parameters(TRUE))
+    label_param <- param_list[which(names_param %in% label_all)]
+    text_param <- text2_param <- param_list[which(names_param %in% text_all)]
+  }
+
   if ("label" %in% label_arg) {
+    label_param$data <- label
+    label_param$mapping <- aes(x, y, label = label)
+    label_param$hjust <- label_param$vjust <- 0
+    label_param$inherit.aes <- FALSE
     plot <- plot + 
-      geom_label(
-        aes(x, y, label = label), data = label,
-        hjust = 0, vjust = 0, inherit.aes = FALSE,
-        ...
-      )
+      do.call(geom_label, label_param)
   }
   if ("text" %in% label_arg) {
+    text_param$data <- text
+    text_param$mapping <- aes(x, y, label = label)
+    text_param$inherit.aes <- FALSE
     if (dir == "h") {
+      text_param$nudge_y <- -0.01
+      text_param$vjust <- 1
       plot <- plot + 
-        geom_text(
-          aes(x, y, label = label), data = text,
-          nudge_y = -0.01, vjust = 1, inherit.aes = FALSE, ...
-        )
+        do.call(geom_text, text_param)
     } else {
-      plot <- plot + 
-        geom_text(
-          aes(x, y, label = label), data = text,
-          nudge_x = -0.01, hjust = 1, inherit.aes = FALSE, ...
-        )
+      text_param$nudge_x <- -0.01
+      text_param$hjust <- 1
+      plot <- plot +
+        do.call(geom_text, text_param)
     }
   }
   if ("text2" %in% label_arg) {
@@ -554,11 +568,14 @@ prettify <- function(plot, label = c("label", "text"), ...) {
     if (is.null(text2)) {
       warning("label = 'text2' is ignored for this type of calendar.")
     } else {
-      plot <- plot + 
-        geom_text(
-          aes(x, y, label = label), data = text2, nudge_y = -0.01, 
-          hjust = 0, vjust = 1, inherit.aes = FALSE, ...
-        )
+      text2_param$data <- text2
+      text2_param$mapping <- aes(x, y, label = label)
+      text2_param$inherit.aes <- FALSE
+      text2_param$nudge_y <- -0.01
+      text2_param$hjust <- 0
+      text2_param$vjust <- 1
+      plot <- plot +
+        do.call(geom_text, text2_param)
     }
   }
   plot <- plot + 
