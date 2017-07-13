@@ -104,11 +104,11 @@ to have their individual scales. For more details, see \code{vignette("frame-cal
        x = Time, y = Hourly_Counts, date = Date, sunday = TRUE
      )
    
-   grped_calendar \%>\% 
+   p2 <- grped_calendar \%>\% 
      ggplot(aes(x = .Time, y = .Hourly_Counts, group = Date)) +
      geom_line() +
      facet_wrap(~ Sensor_Name, nrow = 2)
-   # prettify() not working for group_by
+   prettify(p2)
 
 }
 \author{

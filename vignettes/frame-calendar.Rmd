@@ -53,7 +53,7 @@ p1 <- centre_calendar %>%
 p1
 ```
 
-To make the plot more accessible and informative, we provide another function `prettify()` to go hand in hand with `frame_calendar()`. It takes a `ggplot` object and gives sensible breaks and labels. It can be noted that the calendar-based graphic depicts time of day, day of week, and other calendar effects like public holiday in a clear manner. (NOTE: `prettify()` works better with line and point geoms at this stage.)
+To make the plot more accessible and informative, we provide another function `prettify()` to go hand in hand with `frame_calendar()`. It takes a `ggplot` object and gives sensible breaks and labels. It can be noted that the calendar-based graphic depicts time of day, day of week, and other calendar effects like public holiday in a clear manner.
 
 ```{r centre-more}
 prettify(p1)
@@ -109,14 +109,17 @@ prettify(p4, label = NULL)
 
 The `frame_calendar()` function can be naturally combined with `group_by()`, and hence the grouped variable has its own scale.
 
-```{r ped-facet}
+```{r ped-facet, fig.height = 6}
 grped_calendar <- two_sensors_df %>% 
   group_by(Sensor_Name) %>%
   frame_calendar(x = Time, y = Hourly_Counts, date = Date, ncol = 4)
-grped_calendar %>%
+p5 <- grped_calendar %>%
   ggplot(aes(x = .Time, y = .Hourly_Counts, group = Date)) +
-  geom_line() +
-  facet_grid(Sensor_Name ~ .)
+  geom_line(aes(colour = Sensor_Name)) +
+  facet_grid(Sensor_Name ~ .) +
+  scale_color_brewer(palette = "Dark2") +
+  theme(legend.position = "bottom")
+prettify(p5, label = NULL)
 ```
 
 ## More geoms
@@ -129,10 +132,10 @@ centre_lagged <- centre %>%
 centre_lagged_calendar <- centre_lagged %>% 
   frame_calendar(x = Hourly_Counts, y = Lagged_Counts, date = Date,
     calendar = "daily")
-p3 <- centre_lagged_calendar %>%
+p6 <- centre_lagged_calendar %>%
   ggplot(aes(x = .Hourly_Counts, y = .Lagged_Counts, group = Date)) +
   geom_point(size = 0.5)
-prettify(p3, size = 3)
+prettify(p6, size = 3)
 ```
 
 Furthermore, the argument `y` can take multiple variable names in combination with `vars()`. The rectangular glyphs arranged on a "weekly" calendar are plotted to illustrate the usage of the multiple `y`s and the differences between sensors. The long data format is firstly converted to the wide format using `tidyr::spread()` [@wickham2014tidy]. These two sensors are variables rather than values now, and hence can be passed to `y`.
@@ -158,14 +161,14 @@ head(sensors_wide_calendar)
 Having multiple `y`s makes it a little easier when mapping to some geoms that contain the `ymin` and `ymax` arguments, such as `geom_rect` and `geom_ribbon`. Interestingly, Lonsdale Street is busier than the Convention Centre in the evening, vice versa in the day time.
 
 ```{r ped-daily-plot}
-p5 <- sensors_wide_calendar %>%
+p7 <- sensors_wide_calendar %>%
   ggplot() +
   geom_rect(aes(xmin = .Time, xmax = .Time + 0.005,
     ymin = .Lonsdale, ymax = .Centre, fill = More
   )) +
   scale_fill_brewer(palette = "Dark2") +
   theme(legend.position = "bottom")
-prettify(p5)
+prettify(p7)
 ``` 
 
 Can we plot a heatmap using `frame_calendar()` too? Yep, either `x` or `y` can be given as 1 implying identity across days. If both `x` and `y` are given as 1, only calendar grids are returned. A heatmap therefore can be drawn.
@@ -178,10 +181,11 @@ centre_daily <- centre %>%
 centre_max_calendar <- centre_daily %>%
   frame_calendar(x = 1, y = 1, date = Date, calendar = "monthly")
 head(centre_max_calendar)
-centre_max_calendar %>%
+p8 <- centre_max_calendar %>%
   ggplot(aes(x = .x, y = .y)) +
   geom_tile(aes(fill = Max_Counts), colour = "grey50") +
   scale_fill_viridis()
+prettify(p8, label = NULL)
 ```
 
 ## Summary

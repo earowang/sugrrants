@@ -74,11 +74,11 @@
 #'        x = Time, y = Hourly_Counts, date = Date, sunday = TRUE
 #'      )
 #'    
-#'    grped_calendar %>% 
+#'    p2 <- grped_calendar %>% 
 #'      ggplot(aes(x = .Time, y = .Hourly_Counts, group = Date)) +
 #'      geom_line() +
 #'      facet_wrap(~ Sensor_Name, nrow = 2)
-#'    # prettify() not working for group_by
+#'    prettify(p2)
 #'
 #' @export
 frame_calendar <- function(
@@ -106,7 +106,9 @@ frame_calendar.grouped_df <- function(
   if (!possibly_identity(x)) x <- sym(x)
   if (!possibly_identity(y)) y <- syms(y)
   date <- sym(date)
+  cls <- class(data)
 
+  idx_max <- which.max(group_size(data))
   data <- data %>% 
     nest(.key = .calendar_tbl) %>% 
     mutate(.calendar_tbl = map(
@@ -117,9 +119,21 @@ frame_calendar.grouped_df <- function(
         nrow = nrow, ncol = ncol, polar = polar, scale = scale,
         width = width, height = height
       )
-    )) %>% 
-    unnest()
-  return(data)
+    )) 
+  xattr <- data$.calendar_tbl[[idx_max]]
+  data <- unnest(data)
+
+  return(
+    structure(data,
+      breaks = get_breaks(xattr),
+      minor_breaks = get_minor_breaks(xattr),
+      label = get_label(xattr),
+      text = get_text(xattr),
+      text2 = get_text2(xattr),
+      dir = get_dir(xattr),
+      class = c("ggcalendar", cls)
+    )
+  )
 }
 
 #' @export
@@ -277,7 +291,6 @@ frame_calendar_ <- function(
       text = data_ref$text,
       text2 = data_ref$text2,
       dir = dir,
-      polar = polar,
       class = c("ggcalendar", cls)
     )
   )
@@ -548,14 +561,6 @@ prettify <- function(plot, label = c("label", "text"), ...) {
         )
     }
   }
-  # polar <- get_polar(plot$data)
-  # if (!is.null(polar)) {
-  #   plot <- plot +
-  #     geom_point(
-  #       aes(x = .cx, y = .cy), data = polar, colour = "white", size = 0.01,
-  #       inherit.aes = FALSE
-  #     )
-  # }
   plot <- plot + 
     scale_x_continuous(breaks = breaks$x, minor_breaks = minor_breaks$x)
   plot <- plot + 
@@ -592,10 +597,6 @@ get_text2 <- function(data) {
 
 get_dir <- function(data) {
   attr(data, "dir")
-}
-
-get_polar <- function(data) {
-  attr(data, "polar")
 }
 
 gen_wday_labels <- function(sunday = FALSE) { 

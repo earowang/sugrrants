@@ -4,6 +4,7 @@
 #' @importFrom dplyr group_by is.grouped_df ungroup arrange groups
 #' @importFrom dplyr if_else mutate select filter right_join summarise distinct
 #' @importFrom dplyr left_join mutate_at ends_with vars funs summarize between
+#' @importFrom dplyr group_size
 #' @importFrom tibble type_sum as_tibble lst
 #' @importFrom tidyr nest unnest
 #' @importFrom purrr map map2 map_lgl map_chr

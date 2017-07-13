@@ -111,7 +111,7 @@ centre_calendar &lt;-<span class="st"> </span>centre <span class="op">%&gt;%</sp
 <span class="st">  </span><span class="kw">geom_line</span>()
 p1</code></pre></div>
 <p><img src="frame-calendar_files/figure-html/centre-plot-1.png" width="672"></p>
-<p>To make the plot more accessible and informative, we provide another function <code><a href="../reference/frame-calendar.html">prettify()</a></code> to go hand in hand with <code><a href="../reference/frame-calendar.html">frame_calendar()</a></code>. It takes a <code>ggplot</code> object and gives sensible breaks and labels. It can be noted that the calendar-based graphic depicts time of day, day of week, and other calendar effects like public holiday in a clear manner. (NOTE: <code><a href="../reference/frame-calendar.html">prettify()</a></code> works better with line and point geoms at this stage.)</p>
+<p>To make the plot more accessible and informative, we provide another function <code><a href="../reference/frame-calendar.html">prettify()</a></code> to go hand in hand with <code><a href="../reference/frame-calendar.html">frame_calendar()</a></code>. It takes a <code>ggplot</code> object and gives sensible breaks and labels. It can be noted that the calendar-based graphic depicts time of day, day of week, and other calendar effects like public holiday in a clear manner.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/frame-calendar.html">prettify</a></span>(p1)</code></pre></div>
 <p><img src="frame-calendar_files/figure-html/centre-more-1.png" width="672"></p>
 </div>
@@ -162,10 +162,13 @@ p4 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(two_sensors_cale
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">grped_calendar &lt;-<span class="st"> </span>two_sensors_df <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(Sensor_Name) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw"><a href="../reference/frame-calendar.html">frame_calendar</a></span>(<span class="dt">x =</span> Time, <span class="dt">y =</span> Hourly_Counts, <span class="dt">date =</span> Date, <span class="dt">ncol =</span> <span class="dv">4</span>)
-grped_calendar <span class="op">%&gt;%</span>
+p5 &lt;-<span class="st"> </span>grped_calendar <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> .Time, <span class="dt">y =</span> .Hourly_Counts, <span class="dt">group =</span> Date)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">facet_grid</span>(Sensor_Name <span class="op">~</span><span class="st"> </span>.)</code></pre></div>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">colour =</span> Sensor_Name)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">facet_grid</span>(Sensor_Name <span class="op">~</span><span class="st"> </span>.) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_color_brewer</span>(<span class="dt">palette =</span> <span class="st">"Dark2"</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">"bottom"</span>)
+<span class="kw"><a href="../reference/frame-calendar.html">prettify</a></span>(p5, <span class="dt">label =</span> <span class="ot">NULL</span>)</code></pre></div>
 <p><img src="frame-calendar_files/figure-html/ped-facet-1.png" width="672"></p>
 </div>
 <div id="more-geoms" class="section level2">
@@ -177,10 +180,10 @@ grped_calendar <span class="op">%&gt;%</span>
 centre_lagged_calendar &lt;-<span class="st"> </span>centre_lagged <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw"><a href="../reference/frame-calendar.html">frame_calendar</a></span>(<span class="dt">x =</span> Hourly_Counts, <span class="dt">y =</span> Lagged_Counts, <span class="dt">date =</span> Date,
     <span class="dt">calendar =</span> <span class="st">"daily"</span>)
-p3 &lt;-<span class="st"> </span>centre_lagged_calendar <span class="op">%&gt;%</span>
+p6 &lt;-<span class="st"> </span>centre_lagged_calendar <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> .Hourly_Counts, <span class="dt">y =</span> .Lagged_Counts, <span class="dt">group =</span> Date)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size =</span> <span class="fl">0.5</span>)
-<span class="kw"><a href="../reference/frame-calendar.html">prettify</a></span>(p3, <span class="dt">size =</span> <span class="dv">3</span>)</code></pre></div>
+<span class="kw"><a href="../reference/frame-calendar.html">prettify</a></span>(p6, <span class="dt">size =</span> <span class="dv">3</span>)</code></pre></div>
 <pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
 <p><img src="frame-calendar_files/figure-html/ped-lag-1.png" width="768"></p>
 <p>Furthermore, the argument <code>y</code> can take multiple variable names in combination with <code><a href="http://dplyr.tidyverse.org/reference/vars.html">vars()</a></code>. The rectangular glyphs arranged on a “weekly” calendar are plotted to illustrate the usage of the multiple <code>y</code>s and the differences between sensors. The long data format is firstly converted to the wide format using <code><a href="http://www.rdocumentation.org/packages/tidyr/topics/spread">tidyr::spread()</a></code> <span class="citation">(Wickham <a href="#ref-wickham2014tidy">2014</a>)</span>. These two sensors are variables rather than values now, and hence can be passed to <code>y</code>.</p>
@@ -211,14 +214,14 @@ sensors_wide_calendar &lt;-<span class="st"> </span>two_sensors_wide <span class
 ## # ... with 6 more variables: Diff &lt;int&gt;, More &lt;chr&gt;, Date &lt;date&gt;,
 ## #   .Time &lt;dbl&gt;, .Centre &lt;dbl&gt;, .Lonsdale &lt;dbl&gt;</code></pre>
 <p>Having multiple <code>y</code>s makes it a little easier when mapping to some geoms that contain the <code>ymin</code> and <code>ymax</code> arguments, such as <code>geom_rect</code> and <code>geom_ribbon</code>. Interestingly, Lonsdale Street is busier than the Convention Centre in the evening, vice versa in the day time.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p5 &lt;-<span class="st"> </span>sensors_wide_calendar <span class="op">%&gt;%</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p7 &lt;-<span class="st"> </span>sensors_wide_calendar <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_rect</span>(<span class="kw">aes</span>(<span class="dt">xmin =</span> .Time, <span class="dt">xmax =</span> .Time <span class="op">+</span><span class="st"> </span><span class="fl">0.005</span>,
     <span class="dt">ymin =</span> .Lonsdale, <span class="dt">ymax =</span> .Centre, <span class="dt">fill =</span> More
   )) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_fill_brewer</span>(<span class="dt">palette =</span> <span class="st">"Dark2"</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">"bottom"</span>)
-<span class="kw"><a href="../reference/frame-calendar.html">prettify</a></span>(p5)</code></pre></div>
+<span class="kw"><a href="../reference/frame-calendar.html">prettify</a></span>(p7)</code></pre></div>
 <p><img src="frame-calendar_files/figure-html/ped-daily-plot-1.png" width="672"></p>
 <p>Can we plot a heatmap using <code><a href="../reference/frame-calendar.html">frame_calendar()</a></code> too? Yep, either <code>x</code> or <code>y</code> can be given as 1 implying identity across days. If both <code>x</code> and <code>y</code> are given as 1, only calendar grids are returned. A heatmap therefore can be drawn.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">centre_daily &lt;-<span class="st"> </span>centre <span class="op">%&gt;%</span>
@@ -237,10 +240,11 @@ centre_max_calendar &lt;-<span class="st"> </span>centre_daily <span class="op">
 ## 4       1175 2017-01-04 0.2288462 0.8158120
 ## 5       1134 2017-01-05 0.3057692 0.8158120
 ## 6       1008 2017-01-06 0.3826923 0.8158120</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">centre_max_calendar <span class="op">%&gt;%</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p8 &lt;-<span class="st"> </span>centre_max_calendar <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> .x, <span class="dt">y =</span> .y)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_tile</span>(<span class="kw">aes</span>(<span class="dt">fill =</span> Max_Counts), <span class="dt">colour =</span> <span class="st">"grey50"</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/viridis/topics/scale_viridis">scale_fill_viridis</a></span>()</code></pre></div>
+<span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/viridis/topics/scale_viridis">scale_fill_viridis</a></span>()
+<span class="kw"><a href="../reference/frame-calendar.html">prettify</a></span>(p8, <span class="dt">label =</span> <span class="ot">NULL</span>)</code></pre></div>
 <p><img src="frame-calendar_files/figure-html/ped-max-1.png" width="672"></p>
 </div>
 <div id="summary" class="section level2">
