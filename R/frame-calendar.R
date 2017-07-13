@@ -602,7 +602,7 @@ get_dir <- function(data) {
 gen_wday_labels <- function(sunday = FALSE) { 
   wday_labels <- c("M", "T", "W", "T", "F", "S", "S")
   if (sunday) {
-    wday_labels <- wday_labels[c(2:7, 1)]
+    wday_labels <- wday_labels[c(7, 1:6)]
   }
   return(wday_labels)
 }
