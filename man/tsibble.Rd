@@ -2,13 +2,10 @@
 % Please edit documentation in R/tsibble.R
 \name{tsibble}
 \alias{tsibble}
-\alias{print.tbl_ts}
 \alias{key_vars}
 \title{Create a tsibble object}
 \usage{
 tsibble(..., key = key_vars(), index)
-
-\method{print}{tbl_ts}(x, ...)
 
 key_vars(...)
 }
@@ -19,10 +16,6 @@ key_vars(...)
 used in combination with \code{key_vars()}.}
 
 \item{index}{An unquoted variable indicating the time index variable}
-
-\item{x}{A tsibble object.}
-
-\item{...}{Extra arguments.}
 
 \item{...}{Unquoted variable(s).}
 }

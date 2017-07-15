@@ -143,9 +143,6 @@ get_index <- function(tbl_ts) {
   attr(tbl_ts, "index")
 }
 
-#' @param x A tsibble object.
-#' @param ... Extra arguments.
-#' @rdname tsibble
 #' @export
 print.tbl_ts <- function(x, ...) {
   int_x <- get_interval(x)
