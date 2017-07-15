@@ -1,5 +1,5 @@
 #' @importFrom lubridate as_date wday year days weeks mday month days_in_month
-#' @importFrom lubridate isoweek month<- seconds_to_period as_date
+#' @importFrom lubridate isoweek month<- seconds_to_period as_date date_decimal
 #' @importFrom timeDate GoodFriday Easter
 #' @importFrom dplyr group_by is.grouped_df ungroup arrange groups
 #' @importFrom dplyr if_else mutate select filter right_join summarise distinct
@@ -20,4 +20,5 @@
 #' @importFrom grid grobTree gList
 #' @importFrom R6 R6Class
 #' @importFrom zoo as.yearmon as.yearqtr
+#' @importFrom stats frequency time
 NULL

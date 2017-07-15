@@ -182,3 +182,23 @@ support_cls <- function() {
     "Date", "POSIXt", "yearmon", "yearqtr", "integer", "numeric"
   ))
 }
+
+# from ts time to dates
+time2date <- function(x, ...) {
+  UseMethod("time2date")
+}
+
+time2date.ts <- function(x, tz = "UTC", ...) {
+  freq <- frequency(x)
+  time_x <- time(x)
+  if (freq == 12) { # monthly
+    output <- as.yearmon(time_x)
+  } else if (freq == 4) { # quarterly
+    output <- as.yearqtr(time_x)
+  } else if (freq == 1) { # yearly
+    output <- as.numeric(time_x)
+  } else {
+    output <- date_decimal(as.numeric(time_x), tz = tz)
+  }
+  return(output)
+}

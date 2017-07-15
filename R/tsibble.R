@@ -29,27 +29,54 @@ tsibble <- function(..., key = key_vars(), index) {
 #'
 #' @param x Other objects to be coerced to tsibble.
 #' @param ... Other arguments to be passed.
-#' @param key Unquoted variable(s) indicating the key variables for tsibble, 
-#'    used in combination with `key_vars()`.
-#' @param index An unquoted variable indicating the time index variable
 #'
 #' @return A tsibble object.
 #' @author Earo Wang
 #' @seealso [tibble::as_tibble]
+#' @rdname as_tsibble
 #'
 #' @examples
-#'    pkgs_ts <- as_tsibble(tidypkgs, key = key_vars(package), index = date) 
-#'    print(pkgs_ts)
+#'    # coerce data.frame to tsibble
+#'    as_tsibble(tidypkgs, key = key_vars(package), index = date) 
+#'
+#'    # coerce ts to tsibble
+#'    as_tsibble(AirPassengers)
+#'    as_tsibble(sunspot.year)
+#'    as_tsibble(sunspot.month)
+#'    as_tsibble(austres)
 #'
 #' @export
-as_tsibble <- function(x, key = key_vars(), index, ...) {
+as_tsibble <- function(x, ...) {
   UseMethod("as_tsibble")
 }
 
+#' @rdname as_tsibble
+#' @param key Unquoted variable(s) indicating the key variables for tsibble, 
+#'    used in combination with `key_vars()`.
+#' @param index An unquoted variable indicating the time index variable
 #' @export
 as_tsibble.default <- function(x, key = key_vars(), index, ...) {
   index <- enquo(index)
-  return(tsibble_(x, key = key, index = index))
+  output <- tsibble_(x, key = key, index = index)
+  return(output)
+}
+
+#' @rdname as_tsibble
+#' @param tz Time zone.
+#' @export
+as_tsibble.ts <- function(x, tz = "UTC", ...) {
+  name_x <- deparse(substitute(x))
+  freq <- frequency(x)
+  time_x <- time(x)
+  idx <- time2date(x)
+  value <- unclass(x) # rm its ts class
+
+  output <- tsibble(
+    time = idx, value = value, 
+    key = key_vars(), index = time,
+  )
+  colnames(output)[2] <- name_x
+  return(output)
 }
 
 ## tsibble is a special class of tibble that handles with temporal data. It

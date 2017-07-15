@@ -2,19 +2,27 @@
 % Please edit documentation in R/tsibble.R
 \name{as_tsibble}
 \alias{as_tsibble}
+\alias{as_tsibble.default}
+\alias{as_tsibble.ts}
 \title{Coerce to a tsibble object}
 \usage{
-as_tsibble(x, key = key_vars(), index, ...)
+as_tsibble(x, ...)
+
+\method{as_tsibble}{default}(x, key = key_vars(), index, ...)
+
+\method{as_tsibble}{ts}(x, tz = "UTC", ...)
 }
 \arguments{
 \item{x}{Other objects to be coerced to tsibble.}
+
+\item{...}{Other arguments to be passed.}
 
 \item{key}{Unquoted variable(s) indicating the key variables for tsibble,
 used in combination with \code{key_vars()}.}
 
 \item{index}{An unquoted variable indicating the time index variable}
 
-\item{...}{Other arguments to be passed.}
+\item{tz}{Time zone.}
 }
 \value{
 A tsibble object.
@@ -23,8 +31,14 @@ A tsibble object.
 Coerce to a tsibble object
 }
 \examples{
-   pkgs_ts <- as_tsibble(tidypkgs, key = key_vars(package), index = date) 
-   print(pkgs_ts)
+   # coerce data.frame to tsibble
+   as_tsibble(tidypkgs, key = key_vars(package), index = date) 
+
+   # coerce ts to tsibble
+   as_tsibble(AirPassengers)
+   as_tsibble(sunspot.year)
+   as_tsibble(sunspot.month)
+   as_tsibble(austres)
 
 }
 \seealso{
