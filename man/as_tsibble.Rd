@@ -4,6 +4,7 @@
 \alias{as_tsibble}
 \alias{as_tsibble.default}
 \alias{as_tsibble.ts}
+\alias{as_tsibble.mts}
 \title{Coerce to a tsibble object}
 \usage{
 as_tsibble(x, ...)
@@ -11,6 +12,8 @@ as_tsibble(x, ...)
 \method{as_tsibble}{default}(x, key = key_vars(), index, ...)
 
 \method{as_tsibble}{ts}(x, tz = "UTC", ...)
+
+\method{as_tsibble}{mts}(x, tz = "UTC", ...)
 }
 \arguments{
 \item{x}{Other objects to be coerced to tsibble.}

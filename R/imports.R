@@ -4,9 +4,9 @@
 #' @importFrom dplyr group_by is.grouped_df ungroup arrange groups
 #' @importFrom dplyr if_else mutate select filter right_join summarise distinct
 #' @importFrom dplyr left_join mutate_at ends_with vars funs summarize between
-#' @importFrom dplyr group_size
+#' @importFrom dplyr group_size bind_cols
 #' @importFrom tibble type_sum as_tibble lst
-#' @importFrom tidyr nest unnest
+#' @importFrom tidyr nest unnest gather
 #' @importFrom purrr map map2 map_lgl map_chr
 #' @importFrom ggplot2 resolution layer ggproto draw_key_rect draw_key_path 
 #' @importFrom ggplot2 geom_label geom_text scale_x_continuous scale_y_continuous

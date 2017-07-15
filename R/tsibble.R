@@ -68,7 +68,7 @@ as_tsibble.ts <- function(x, tz = "UTC", ...) {
   name_x <- deparse(substitute(x))
   freq <- frequency(x)
   time_x <- time(x)
-  idx <- time2date(x)
+  idx <- time2date(x, tz = tz)
   value <- unclass(x) # rm its ts class
 
   output <- tsibble(
@@ -79,7 +79,20 @@ as_tsibble.ts <- function(x, tz = "UTC", ...) {
   return(output)
 }
 
-## tsibble is a special class of tibble that handles with temporal data. It
+#' @rdname as_tsibble
+#' @export
+as_tsibble.mts <- function(x, tz = "UTC", ...) {
+  name_x <- deparse(substitute(x))
+  long_tbl <- bind_cols(
+    time = rep(time2date(x, tz = tz), ncol(x)),
+    gather(as_tibble(x), key = key, value = value)
+  )
+  colnames(long_tbl)[3] <- name_x
+  output <- as_tsibble.default(long_tbl, key = key_vars(key), index = time)
+  return(output)
+}
+
+## tsibble is a special class of tibble that handles temporal data. It
 ## requires a sequence of time index to be unique across every identifier.
 ## The way to distinguish univariate or multivariate series is based on "key".
 ## Although the "index" arg is possible to automate the detection of time
