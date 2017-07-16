@@ -59,7 +59,7 @@ select.tbl_ts <- function(.data, ...) {
       .data, key = key, index = index, interval = interval, class = cls
     ))
   } else {
-    return(structure(.data, class = cls[-1]))
+    return(structure(.data, class = c("tbl_df", "tbl", "data.frame")))
   }
 }
 
@@ -158,7 +158,8 @@ summarise.tbl_ts <- function(.data, ...) {
   idx <- sp_f$index
   if (is_empty(idx)) { # if there's no ~ in ..., tbl_ts is dropped
     .data <- NextMethod()
-    return(structure(.data, class = cls[-1])) # remove tbl_ts
+    # drop tbl_ts
+    return(structure(.data, class = c("tbl_ts", "tbl_df", "data.frame")))
   } else {
     str_time <- sp_f$var_name
     sym_time <- sym(str_time)
