@@ -109,30 +109,43 @@ tsibble_ <- function(..., key = key_vars(), index) {
   }
 
   pkey <- parse_key(tbl, key = key)
-  if (class(pkey) == "key_ts") {
-    if (is_empty(pkey)) { # if key = key_vars(), univariate time series
-      if (anyDuplicated(eval_idx) != 0) {
-        abort("'index' must contain unique time index.")
-      }
-      tbl_interval <- pull_interval(eval_idx)
-    } else { # otherwise multivariate time series
-      tbl_nest <- tbl %>%
-        group_by(!!!pkey) %>%
-        nest()
-      eval_lst_idx <- tbl_nest$data %>%
-        map(function(data) eval_tidy(index, data = data))
-      lst_interval <- vapply(eval_lst_idx, 
-        function(x) gen_interval(x), numeric(1))
-      if (!is_constant(lst_interval)) {
-        abort("Each key variable must have the same time interval in 'tsibble'.")
-      } else {
-        tbl_interval <- pull_interval(eval_lst_idx[[1]])
-      }
+  if (class(pkey) == "key_ts" && is_empty(pkey)) { # univariate
+    if (anyDuplicated(eval_idx) != 0) {
+      abort("'index' must contain unique time index.")
     }
+    tbl_interval <- pull_interval(eval_idx)
     cls_tbl <- c("tbl_ts", cls_tbl)
-  } # else {
-    
-  # }
+  } else {
+    if (class(pkey) == "key_ts") { # multivariate
+        tbl_nest <- tbl %>%
+          group_by(!!!pkey) %>%
+          nest()
+      cls_tbl <- c("tbl_ts", cls_tbl)
+    } else if (class(pkey) == "key_hts") {
+        tbl_nest <- tbl %>% 
+          group_by(!!pkey[[2]]) %>%  # the bottom level group
+          nest()
+      cls_tbl <- c("tbl_hts", "tbl_gts", "tbl_ts", cls_tbl)
+    } else { # key_gts
+        tbl_nest <- tbl %>% 
+          group_by(!!!pkey[[-1]]) %>%  # the comb of all the groups
+          nest()
+      cls_tbl <- c("tbl_gts", "tbl_ts", cls_tbl)
+    }
+    eval_lst_idx <- tbl_nest$data %>%
+      map(function(data) eval_tidy(index, data = data))
+    lst_interval <- vapply(eval_lst_idx, 
+      function(x) gen_interval(x), numeric(1))
+    check_idx <- map_int(eval_lst_idx, anyDuplicated)
+    if (!is_constant(lst_interval)) {
+      abort("Each key variable must have the same time interval in 'tsibble'.")
+    } else if (any(check_idx != 0)) {
+      abort("'index' must contain unique time index for each key variable.")
+    } else {
+      tbl_interval <- pull_interval(eval_lst_idx[[1]])
+    }
+  } 
+
   attr(tbl, "key") <- pkey
   attr(tbl, "index") <- index
   attr(tbl, "interval") <- tbl_interval
@@ -181,4 +194,12 @@ cat_chr <- function(.data, ...) {
 
 cat_chr.tbl_ts <- function(.data, ...) { # ... is quos
   paste(dots2str(...), collapse = ", ")
+}
+
+cat_chr.tbl_hts <- function(.data, ...) { # ... is quos
+  paste(dots2str(...)[-1], collapse = " | ")
+}
+
+cat_chr.tbl_gts <- function(.data, ...) { # ... is quos
+  paste(dots2str(...)[-1], collapse = " * ")
 }
