@@ -18,7 +18,6 @@
 #' @importFrom rlang has_length is_symbol exprs
 #' @importFrom magrittr %>%
 #' @importFrom grid grobTree gList
-#' @importFrom R6 R6Class
 #' @importFrom zoo as.yearmon as.yearqtr
 #' @importFrom stats frequency time
 NULL

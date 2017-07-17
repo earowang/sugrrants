@@ -168,10 +168,10 @@ print.tbl_ts <- function(x, ...) {
   int_x <- get_interval(x)
   grp_var <- get_key(x)
   if (is_empty(grp_var)) {
-    cat("# A tsibble of", int_x$display(), "time interval", "\n")
+    cat("# A tsibble of", display_int(int_x), "time interval", "\n")
   } else {
     cat(
-      "# A tsibble of", int_x$display(), "time interval", "for", 
+      "# A tsibble of", display_int(int_x), "time interval", "for", 
       cat_chr(x, grp_var), "\n"
     )
   }
