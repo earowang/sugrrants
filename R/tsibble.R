@@ -100,34 +100,43 @@ as_tsibble.mts <- function(x, tz = "UTC", ...) {
 tsibble_ <- function(..., key = key_vars(), index) {
   tbl <- as_tibble(...)
   cls_tbl <- class(tbl)
+
+  # check time index type
   eval_idx <- eval_tidy(index, data = tbl)
   cls_idx <- class(eval_idx)
   if (is_false(any(cls_idx %in% support_cls()))) {
     abort(paste(cls_idx, "class is not supported."))
   }
-  if (is_empty(key)) { # if key = key_vars(), univariate time series
-    if (anyDuplicated(eval_idx) != 0) {
-      abort("'index' must contain unique time index.")
+
+  pkey <- parse_key(tbl, key = key)
+  if (class(pkey) == "key_ts") {
+    if (is_empty(pkey)) { # if key = key_vars(), univariate time series
+      if (anyDuplicated(eval_idx) != 0) {
+        abort("'index' must contain unique time index.")
+      }
+      tbl_interval <- pull_interval(eval_idx)
+    } else { # otherwise multivariate time series
+      tbl_nest <- tbl %>%
+        group_by(!!!pkey) %>%
+        nest()
+      eval_lst_idx <- tbl_nest$data %>%
+        map(function(data) eval_tidy(index, data = data))
+      lst_interval <- vapply(eval_lst_idx, 
+        function(x) gen_interval(x), numeric(1))
+      if (!is_constant(lst_interval)) {
+        abort("Each key variable must have the same time interval in 'tsibble'.")
+      } else {
+        tbl_interval <- pull_interval(eval_lst_idx[[1]])
+      }
     }
-    tbl_interval <- pull_interval(eval_idx)
-  } else { # otherwise multivariate time series
-    tbl_nest <- tbl %>%
-      group_by(!!!key) %>%
-      nest()
-    eval_lst_idx <- tbl_nest$data %>%
-      map(function(data) eval_tidy(index, data = data))
-    lst_interval <- vapply(eval_lst_idx, 
-      function(x) gen_interval(x), numeric(1))
-    if (!is_constant(lst_interval)) {
-      abort("Each key variable must have the same time interval in 'tsibble'.")
-    } else {
-      tbl_interval <- pull_interval(eval_lst_idx[[1]])
-    }
-  }
-  attr(tbl, "key") <- key
+    cls_tbl <- c("tbl_ts", cls_tbl)
+  } # else {
+    
+  # }
+  attr(tbl, "key") <- pkey
   attr(tbl, "index") <- index
   attr(tbl, "interval") <- tbl_interval
-  output <- structure(tbl, class = c("tbl_ts", cls_tbl))
+  output <- structure(tbl, class = cls_tbl)
   return(output)
 }
 

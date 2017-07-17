@@ -4,7 +4,7 @@
 #' @importFrom dplyr group_by is.grouped_df ungroup arrange groups
 #' @importFrom dplyr if_else mutate select filter right_join summarise distinct
 #' @importFrom dplyr left_join mutate_at ends_with vars funs summarize between
-#' @importFrom dplyr group_size bind_cols
+#' @importFrom dplyr group_size bind_cols select_vars
 #' @importFrom tibble type_sum as_tibble lst
 #' @importFrom tidyr nest unnest gather
 #' @importFrom purrr map map2 map_lgl map_chr
@@ -15,7 +15,7 @@
 #' @importFrom rlang eval_tidy quo enquo abort !! !!! := quo_name flatten_int
 #' @importFrom rlang syms sym get_expr is_quosure flatten_dbl is_empty is_false
 #' @importFrom rlang quos splice flatten_lgl as_quosure UQ names2 quos_auto_name
-#' @importFrom rlang has_length
+#' @importFrom rlang has_length is_symbol exprs
 #' @importFrom magrittr %>%
 #' @importFrom grid grobTree gList
 #' @importFrom R6 R6Class
