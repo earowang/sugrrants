@@ -203,12 +203,14 @@ time2date.ts <- function(x, tz = "UTC", ...) {
   return(output)
 }
 
+#' @export
 # rep S3 methods for yearmon & yearqtr
 rep.yearmon <- function(x, ...) {
   x <- NextMethod()
   return(structure(x, class = "yearmon"))
 }
 
+#' @export
 rep.yearqtr <- function(x, ...) {
   x <- NextMethod()
   return(structure(x, class = "yearqtr"))

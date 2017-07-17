@@ -83,10 +83,9 @@ as_tsibble.ts <- function(x, tz = "UTC", ...) {
 #' @export
 as_tsibble.mts <- function(x, tz = "UTC", ...) {
   name_x <- deparse(substitute(x))
-  long_tbl <- bind_cols(
-    time = rep(time2date(x, tz = tz), ncol(x)),
-    gather(as_tibble(x), key = key, value = value)
-  )
+  tbl <- bind_cols(time = time2date(x, tz = tz), as_tibble(x))
+  long_tbl <- tbl %>% 
+    gather(key = key, value = value, -time)
   colnames(long_tbl)[3] <- name_x
   output <- as_tsibble.default(long_tbl, key = key_vars(key), index = time)
   return(output)
@@ -129,6 +128,7 @@ tsibble_ <- function(..., key = key_vars(), index) {
   attr(tbl, "index") <- index
   attr(tbl, "interval") <- tbl_interval
   output <- structure(tbl, class = c("tbl_ts", cls_tbl))
+  return(output)
 }
 
 get_key <- function(tbl_ts) {
