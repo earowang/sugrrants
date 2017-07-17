@@ -66,8 +66,6 @@ as_tsibble.default <- function(x, key = key_vars(), index, ...) {
 #' @export
 as_tsibble.ts <- function(x, tz = "UTC", ...) {
   name_x <- deparse(substitute(x))
-  freq <- frequency(x)
-  time_x <- time(x)
   idx <- time2date(x, tz = tz)
   value <- unclass(x) # rm its ts class
 
