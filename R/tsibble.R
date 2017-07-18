@@ -134,6 +134,7 @@ as_tsibble.gts <- function(x, tz = "UTC", ...) {
 
   tbl <- mts2tbl(bts, tz = tz) %>% 
     dplyr::select(time, value)
+  colnames(tbl)[2] <- deparse(substitute(x))
   out_hts <- bind_cols(tbl, full_labs)
   # this would work around the special character issue in headers for parse()
   sym_key <- syms(colnames(out_hts)[c(3, ncol(out_hts))])
