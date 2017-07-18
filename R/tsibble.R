@@ -50,7 +50,7 @@ as_tsibble <- function(x, ...) {
   UseMethod("as_tsibble")
 }
 
-#' @rdname as_tsibble
+#' @rdname as-tsibble
 #' @param key Unquoted variable(s) indicating the key variables for tsibble, 
 #'    used in combination with `key_vars()`.
 #' @param index An unquoted variable indicating the time index variable
@@ -110,6 +110,40 @@ as_tsibble.hts <- function(x, tz = "UTC", ...) {
   return(output)
 }
 
+#' @rdname as-tsibble
+#' @export
+as_tsibble.gts <- function(x, tz = "UTC", ...) {
+  bts <- x$bts
+  group <- x$group[-1, , drop = FALSE]
+  group <- group[-nrow(group), , drop = FALSE]
+  labels <- x$labels
+  if (is_empty(labels)) {
+    abort("I don't know how to handle a grouped time series with 2 levels.")
+  }
+  seq_labs <- seq_along(labels)
+  grp_label <- map(seq_labs, ~ labels[[.]][group[., ]])
+  chr_labs <- vector(mode = "list", length = length(labels))
+  for (i in seq_labs) {
+    chr_labs[[i]] <- map_chr(
+      strsplit(grp_label[[i]], split = "/", fixed = TRUE), ~ .[2]
+    )
+  }
+  nr <- nrow(bts)
+  full_labs <- map(chr_labs, ~ rep(., each = nr))
+  names(full_labs) <- names(labels)
+
+  tbl <- mts2tbl(bts) %>% 
+    dplyr::select(time, value)
+  out_hts <- bind_cols(tbl, full_labs)
+  # this would work around the special character issue in headers for parse()
+  sym_key <- syms(colnames(out_hts)[c(3, ncol(out_hts))])
+  chr_key <- paste(sym_key, collapse = ":")
+  output <- as_tsibble.default(
+    out_hts, key = key_vars(!!parse_expr(chr_key), "*"), index = time
+  )
+  return(output)
+}
+
 ## tsibble is a special class of tibble that handles temporal data. It
 ## requires a sequence of time index to be unique across every identifier.
 ## The way to distinguish univariate or multivariate series is based on "key".
@@ -147,7 +181,7 @@ tsibble_ <- function(..., key = key_vars(), index) {
       cls_tbl <- c("tbl_hts", "tbl_gts", "tbl_ts", cls_tbl)
     } else { # key_gts
         tbl_nest <- tbl %>% 
-          group_by(!!!pkey[[-1]]) %>%  # the comb of all the groups
+          group_by(!!!pkey[-1]) %>%  # the comb of all the groups
           nest()
       cls_tbl <- c("tbl_gts", "tbl_ts", cls_tbl)
     }
