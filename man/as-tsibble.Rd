@@ -2,28 +2,23 @@
 % Please edit documentation in R/tsibble.R
 \name{as_tsibble}
 \alias{as_tsibble}
-\alias{as_tsibble.default}
 \alias{as_tsibble.ts}
 \alias{as_tsibble.mts}
+\alias{as_tsibble.hts}
 \title{Coerce to a tsibble object}
 \usage{
 as_tsibble(x, ...)
 
-\method{as_tsibble}{default}(x, key = key_vars(), index, ...)
-
 \method{as_tsibble}{ts}(x, tz = "UTC", ...)
 
 \method{as_tsibble}{mts}(x, tz = "UTC", ...)
+
+\method{as_tsibble}{hts}(x, tz = "UTC", ...)
 }
 \arguments{
 \item{x}{Other objects to be coerced to tsibble.}
 
 \item{...}{Other arguments to be passed.}
-
-\item{key}{Unquoted variable(s) indicating the key variables for tsibble,
-used in combination with \code{key_vars()}.}
-
-\item{index}{An unquoted variable indicating the time index variable}
 
 \item{tz}{Time zone.}
 }

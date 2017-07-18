@@ -119,6 +119,10 @@ time2date.ts <- function(x, tz = "UTC", ...) {
   return(output)
 }
 
+time2date.hts <- function(x, tz = "UTC", ...) {
+  
+}
+
 #' @export
 # rep S3 methods for yearmon & yearqtr
 rep.yearmon <- function(x, ...) {

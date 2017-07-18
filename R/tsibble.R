@@ -33,7 +33,7 @@ tsibble <- function(..., key = key_vars(), index) {
 #' @return A tsibble object.
 #' @author Earo Wang
 #' @seealso [tibble::as_tibble]
-#' @rdname as_tsibble
+#' @rdname as-tsibble
 #'
 #' @examples
 #'    # coerce data.frame to tsibble
@@ -61,11 +61,10 @@ as_tsibble.default <- function(x, key = key_vars(), index, ...) {
   return(output)
 }
 
-#' @rdname as_tsibble
+#' @rdname as-tsibble
 #' @param tz Time zone.
 #' @export
 as_tsibble.ts <- function(x, tz = "UTC", ...) {
-  name_x <- deparse(substitute(x))
   idx <- time2date(x, tz = tz)
   value <- unclass(x) # rm its ts class
 
@@ -73,19 +72,41 @@ as_tsibble.ts <- function(x, tz = "UTC", ...) {
     time = idx, value = value, 
     key = key_vars(), index = time,
   )
-  colnames(output)[2] <- name_x
+  colnames(output)[2] <- deparse(substitute(x))
   return(output)
 }
 
-#' @rdname as_tsibble
+#' @rdname as-tsibble
 #' @export
 as_tsibble.mts <- function(x, tz = "UTC", ...) {
-  name_x <- deparse(substitute(x))
-  tbl <- bind_cols(time = time2date(x, tz = tz), as_tibble(x))
-  long_tbl <- tbl %>% 
-    gather(key = key, value = value, -time)
-  colnames(long_tbl)[3] <- name_x
+  long_tbl <- mts2tbl(x)
+  colnames(long_tbl)[3] <- deparse(substitute(x))
   output <- as_tsibble.default(long_tbl, key = key_vars(key), index = time)
+  return(output)
+}
+
+#' @rdname as-tsibble
+#' @export
+as_tsibble.hts <- function(x, tz = "UTC", ...) {
+  bts <- x$bts
+  nodes <- x$nodes[-1]
+  labels <- x$labels[-1]
+  labels <- labels[-length(labels)]
+  nr <- nrow(bts)
+  chr_labs <- map(seq_along(labels), ~ rep_nodes(labels[[.]], nodes, level = .))
+  full_labs <- map(rev.default(chr_labs), ~ rep(., each = nr))
+  names(full_labs) <- names(labels)
+
+  tbl <- mts2tbl(bts) %>% 
+    dplyr::select(time, value, key)
+  colnames(tbl)[3] <- deparse(substitute(x))
+  out_hts <- bind_cols(tbl, full_labs)
+  # this would work around the special character issue in headers for parse()
+  sym_key <- syms(colnames(out_hts)[c(3, ncol(out_hts))])
+  chr_key <- paste(sym_key, collapse = ":")
+  output <- as_tsibble.default(
+    out_hts, key = key_vars(!!parse_expr(chr_key), "|"), index = time
+  )
   return(output)
 }
 
@@ -201,3 +222,21 @@ cat_chr.tbl_hts <- function(.data, ...) { # ... is quos
 cat_chr.tbl_gts <- function(.data, ...) { # ... is quos
   paste(dots2str(...)[-1], collapse = " * ")
 }
+
+mts2tbl <- function(x) {
+  tbl <- bind_cols(time = time2date(x), as_tibble(x))
+  long_tbl <- tbl %>% 
+    gather(key = key, value = value, -time)
+  return(long_tbl)
+}
+
+# recursive function to repeat nodes for hts
+rep_nodes <- function(labels, nodes, level) {
+  labels <- rep(labels, nodes[[level]])
+  if (level == length(nodes)) {
+    return(labels)
+  } else {
+    return(rep_nodes(labels, nodes, level + 1))
+  }
+}
+

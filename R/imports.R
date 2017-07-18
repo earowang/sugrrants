@@ -15,7 +15,7 @@
 #' @importFrom rlang eval_tidy quo enquo abort !! !!! := quo_name flatten_int
 #' @importFrom rlang syms sym get_expr is_quosure flatten_dbl is_empty is_false
 #' @importFrom rlang quos splice flatten_lgl as_quosure UQ names2 quos_auto_name
-#' @importFrom rlang has_length is_symbol exprs
+#' @importFrom rlang has_length is_symbol exprs parse_expr
 #' @importFrom magrittr %>%
 #' @importFrom grid grobTree gList
 #' @importFrom zoo as.yearmon as.yearqtr
