@@ -79,7 +79,7 @@ as_tsibble.ts <- function(x, tz = "UTC", ...) {
 #' @rdname as-tsibble
 #' @export
 as_tsibble.mts <- function(x, tz = "UTC", ...) {
-  long_tbl <- mts2tbl(x)
+  long_tbl <- mts2tbl(x, tz = tz)
   colnames(long_tbl)[3] <- deparse(substitute(x))
   output <- as_tsibble.default(long_tbl, key = key_vars(key), index = time)
   return(output)
@@ -97,7 +97,7 @@ as_tsibble.hts <- function(x, tz = "UTC", ...) {
   full_labs <- map(rev.default(chr_labs), ~ rep(., each = nr))
   names(full_labs) <- names(labels)
 
-  tbl <- mts2tbl(bts) %>% 
+  tbl <- mts2tbl(bts, tz = tz) %>% 
     dplyr::select(time, value, key)
   colnames(tbl)[3] <- deparse(substitute(x))
   out_hts <- bind_cols(tbl, full_labs)
@@ -132,7 +132,7 @@ as_tsibble.gts <- function(x, tz = "UTC", ...) {
   full_labs <- map(chr_labs, ~ rep(., each = nr))
   names(full_labs) <- names(labels)
 
-  tbl <- mts2tbl(bts) %>% 
+  tbl <- mts2tbl(bts, tz = tz) %>% 
     dplyr::select(time, value)
   out_hts <- bind_cols(tbl, full_labs)
   # this would work around the special character issue in headers for parse()
@@ -257,8 +257,8 @@ cat_chr.tbl_gts <- function(.data, ...) { # ... is quos
   paste(dots2str(...)[-1], collapse = " * ")
 }
 
-mts2tbl <- function(x) {
-  tbl <- bind_cols(time = time2date(x), as_tibble(x))
+mts2tbl <- function(x, tz = "UTC") {
+  tbl <- bind_cols(time = time2date(x, tz = tz), as_tibble(x))
   long_tbl <- tbl %>% 
     gather(key = key, value = value, -time)
   return(long_tbl)
