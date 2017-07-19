@@ -15,7 +15,7 @@ key_vars(...)
 \item{key}{Unquoted variable(s) indicating the key variables for tsibble,
 used in combination with \code{key_vars()}.}
 
-\item{index}{An unquoted variable indicating the time index variable}
+\item{index}{An unquoted variable indicating the time index variable.}
 
 \item{...}{Unquoted variable(s).}
 }

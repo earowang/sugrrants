@@ -3,7 +3,7 @@
 #' @param ... A set of name-value pairs.
 #' @param key Unquoted variable(s) indicating the key variables for tsibble, 
 #'    used in combination with `key_vars()`.
-#' @param index An unquoted variable indicating the time index variable
+#' @param index An unquoted variable indicating the time index variable.
 #'
 #' @return A tsibble object.
 #' @author Earo Wang
@@ -177,12 +177,12 @@ tsibble_ <- function(..., key = key_vars(), index) {
       cls_tbl <- c("tbl_ts", cls_tbl)
     } else if (class(pkey) == "key_hts") {
         tbl_nest <- tbl %>% 
-          group_by(!!pkey[[2]]) %>%  # the bottom level group
+          group_by(!!!pkey[1]) %>%  # the bottom level group
           nest()
       cls_tbl <- c("tbl_hts", "tbl_gts", "tbl_ts", cls_tbl)
     } else { # key_gts
         tbl_nest <- tbl %>% 
-          group_by(!!!pkey[-1]) %>%  # the comb of all the groups
+          group_by(!!!pkey) %>%  # the comb of all the groups
           nest()
       cls_tbl <- c("tbl_gts", "tbl_ts", cls_tbl)
     }
@@ -251,11 +251,11 @@ cat_chr.tbl_ts <- function(.data, ...) { # ... is quos
 }
 
 cat_chr.tbl_hts <- function(.data, ...) { # ... is quos
-  paste(dots2str(...)[-1], collapse = " | ")
+  paste(dots2str(...), collapse = " | ")
 }
 
 cat_chr.tbl_gts <- function(.data, ...) { # ... is quos
-  paste(dots2str(...)[-1], collapse = " * ")
+  paste(dots2str(...), collapse = " * ")
 }
 
 mts2tbl <- function(x, tz = "UTC") {
