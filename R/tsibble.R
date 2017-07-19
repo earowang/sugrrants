@@ -118,7 +118,7 @@ as_tsibble.gts <- function(x, tz = "UTC", ...) {
   group <- group[-nrow(group), , drop = FALSE]
   labels <- x$labels
   if (is_empty(labels)) {
-    abort("I don't know how to handle a grouped time series with 2 levels.")
+    abort("I don't know how to handle a grouped time series with no group.")
   }
   seq_labs <- seq_along(labels)
   grp_label <- map(seq_labs, ~ labels[[.]][group[., ]])

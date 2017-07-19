@@ -32,7 +32,9 @@ parse_key <- function(data, key = key_vars()) {
       syms_has <- all_exprs[1]
       if (is_false(syms_has %in% syms_all)) {
         # parse_key(key = key_vars(x))
-        return(structure(key_exprs, class = "key_ts"))
+        # parse_key(key = key_vars(x:z))
+        key2 <- syms(select_vars(cn, !!key_exprs[[1]]))
+        return(structure(key2, class = "key_ts"))
       } else if (syms_has == syms_all[2]) {
         # parse_key(key = key_vars(x * y * z))
         key_lst <- map(all_exprs, sym)
