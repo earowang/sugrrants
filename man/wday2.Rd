@@ -22,15 +22,10 @@ The day of the week as a number (Monday is 1) or an ordered factor
 A simple wrapper of \code{lubridate::wday()}, but starts with
 Monday instead of Sunday.
 }
-\examples{
-   # x is a vector of class POSIXct
-   x <- as.POSIXct(c("2014-01-31", "2015-07-31", "2016-10-31"))
-   wday2(x, label = TRUE)
-
-}
 \seealso{
 \link[lubridate:wday]{lubridate::wday}
 }
 \author{
 Earo Wang
 }
+\keyword{internal}

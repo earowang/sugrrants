@@ -60,12 +60,3 @@ darwin <- get_current_weather("Darwin Airport")
 au_weather <- bind_rows(
   sydney, melbourne, brisbane, perth, adelaide, hobart, canberra, darwin
  )
-
-# tidyverse core pkgs daily downloads
-# devtools::install_github("metacran/cranlogs")
-library(cranlogs)
-start <- "2015-01-01"
-end <- "2016-12-31"
-pkgs <- c("ggplot2", "tibble", "tidyr", "readr", "purrr", "dplyr")
-tidypkgs <- map_df(pkgs, ~ cran_downloads(.x, from = start, to = end))
-devtools::use_data(tidypkgs, overwrite = TRUE)

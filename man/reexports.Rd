@@ -6,24 +6,6 @@
 \alias{\%>\%}
 \alias{reexports}
 \alias{vars}
-\alias{reexports}
-\alias{filter}
-\alias{reexports}
-\alias{select}
-\alias{reexports}
-\alias{summarise}
-\alias{reexports}
-\alias{mutate}
-\alias{reexports}
-\alias{group_by}
-\alias{reexports}
-\alias{year}
-\alias{reexports}
-\alias{as_date}
-\alias{reexports}
-\alias{as.yearmon}
-\alias{reexports}
-\alias{as.yearqtr}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -31,12 +13,8 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{dplyr}{\code{\link[dplyr]{vars}}, \code{\link[dplyr]{filter}}, \code{\link[dplyr]{select}}, \code{\link[dplyr]{summarise}}, \code{\link[dplyr]{mutate}}, \code{\link[dplyr]{group_by}}}
-
-  \item{lubridate}{\code{\link[lubridate]{year}}, \code{\link[lubridate]{as_date}}}
+  \item{dplyr}{\code{\link[dplyr]{vars}}}
 
   \item{magrittr}{\code{\link[magrittr]{\%>\%}}}
-
-  \item{zoo}{\code{\link[zoo]{as.yearmon}}, \code{\link[zoo]{as.yearqtr}}}
 }}
 

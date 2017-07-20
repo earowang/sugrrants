@@ -21,21 +21,3 @@
 #' @examples
 #'    pedestrian
 "pedestrian"
-
-#' Tidyverse core packages daily downloads
-#'
-#' A dataset containing the daily downloads of tidyverse core packages from 
-#' 2015-01-01 to 2016-12-31. The variables are as follows:
-#'
-#' @format A data frame with 4386 rows and 3 variables:
-#' \describe{
-#'   \item{date}{Date when the downloads are made}
-#'   \item{count}{Daily downloads}
-#'   \item{package}{Tidyverse core package name}
-#' }
-#' @docType data
-#' @name tidypkgs
-#' @usage tidypkgs
-#' @examples
-#'    tidypkgs
-"tidypkgs"

@@ -28,7 +28,6 @@ reference:
     These functions provides tools to handle temporal components.
   contents:
     - au_holiday
-    - wday2
 
 navbar:
   type: default

@@ -12,16 +12,9 @@
 #'    (Monday is first).
 #'
 #' @seealso [lubridate::wday]
-#'
 #' @author Earo Wang
-#' 
 #' @export
-#'
-#' @examples
-#'    # x is a vector of class POSIXct
-#'    x <- as.POSIXct(c("2014-01-31", "2015-07-31", "2016-10-31"))
-#'    wday2(x, label = TRUE)
-#'
+#' @keywords internal
 # Allow reorder the wday levels (Starting from Monday by default)
 wday2 <- function(x, label = FALSE, abbr = TRUE) {
   wdays <- wday(x, label = label, abbr = abbr)
