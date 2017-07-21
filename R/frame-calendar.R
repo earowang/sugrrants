@@ -87,6 +87,12 @@ globalVariables(c(
 #'      geom_line() +
 #'      facet_wrap(~ Sensor_Name, nrow = 2)
 #'    prettify(p2)
+#'    \dontrun{
+#'      # allow for different languages
+#'      # below gives the simplief chinese label along with STKaiti font family 
+#'      # if this font is installed in user's local system
+#'      prettify(p2, locale = "zh", family = "STKaiti")
+#'    }
 #'
 #' @export
 frame_calendar <- function(
@@ -140,6 +146,7 @@ frame_calendar.grouped_df <- function(
       text = get_text(xattr),
       text2 = get_text2(xattr),
       dir = get_dir(xattr),
+      calendar = calendar,
       class = c("ggcalendar", cls)
     )
   )
@@ -300,6 +307,7 @@ frame_calendar_ <- function(
       text = data_ref$text,
       text2 = data_ref$text2,
       dir = dir,
+      calendar = calendar,
       class = c("ggcalendar", cls)
     )
   )
@@ -340,9 +348,10 @@ gen_reference.daily <- function(grids, dir = "h", ...) {
   # Prepare for the string texts
   date <- grids$PANEL
   yrs <- year(date)
-  nyears <- unique(yrs)
-  month_labels <- paste(yrs, month(date, label = TRUE), sep = "-")
-  unique_labels <- substring(unique(month_labels), first = 6)
+  nyears <- unique.default(yrs)
+  month_idx <- month(date)
+  unique_idx <- unique.default(paste(yrs, month_idx))
+  unique_labels <- as.integer(substring(unique_idx, first = 6))
 
   if (dir == "h") {
     # Month text positioned at the right of each month panel (dir == "h")
@@ -366,7 +375,7 @@ gen_reference.daily <- function(grids, dir = "h", ...) {
       y = minor_breaks$y + min_height / 2
     )
   }
-  mtext$label <- unique_labels
+  mtext$mon <- unique_labels
   dtext$label <- seq_len(max(mday(date)))
 
   return(list(
@@ -384,12 +393,13 @@ gen_reference.weekly <- function(grids, dir = "h", ...) {
   # Prepare for the string texts
   date <- grids$PANEL
   yrs <- year(date)
-  nyears <- unique(yrs)
+  nyears <- unique.default(yrs)
   week_labels <- paste(yrs, isoweek(date), sep = "-")
   unique_labels <- formatC( # make week index to be fixed-width 2 digits
     as.integer(substring(unique(week_labels), first = 6)), 
     width = 2, flag = "0"
   )
+  unique_labels <- rle(unique_labels)$values # rm duplicates in run length
 
   if (dir == "h") {
     # Week index text positioned at the right of each week panel (dir == "h")
@@ -414,7 +424,7 @@ gen_reference.weekly <- function(grids, dir = "h", ...) {
     )
   }
   mtext$label <- unique_labels
-  dtext$label <- gen_wday_labels(sunday = FALSE)
+  dtext$day <- gen_wday_index(sunday = FALSE)
 
   return(list(
     breaks = NULL, minor_breaks = minor_breaks,
@@ -459,20 +469,18 @@ gen_reference.monthly <- function(
   # Prepare for the string texts
   date <- grids$PANEL
   yrs <- year(date)
-  nyears <- unique(yrs)
-  month_labels <- month(date, label = TRUE)
-  unique_labels <- if (has_length(nyears, 1)) {
-    unique(month_labels)
-  } else {
-    unique(paste(month_labels, yrs))
-  }
+  nyears <- unique.default(yrs)
+  month_idx <- month(date)
+  unique_idx <- unique.default(paste(yrs, month_idx))
+  unique_labels <- as.integer(substring(unique_idx, first = 6))
 
   # Month label positioned at the top left of each month panel
   xtext <- sort(xbreaks_df$.xmajor_min)
   ytext <- sort(ybreaks_df$.ymajor_max + min_height, decreasing = TRUE)
   mtext <- expand.grid2(x = xtext, y = ytext)
-  mtext <- mtext[seq_along(unique_labels), , drop = FALSE]
-  mtext$label <- unique_labels
+  mtext <- mtext[seq_along(unique_idx), , drop = FALSE]
+  mtext$mon <- unique_labels
+  mtext$year <- substring(unique_idx, first = 1, last = 4)
 
   # Weekday text
   if (dir == "h") {
@@ -486,7 +494,7 @@ gen_reference.monthly <- function(
       y = minor_breaks$y + min_height / 2
     )
   }
-  dtext$label <- gen_wday_labels(sunday = sunday)
+  dtext$day <- gen_wday_index(sunday = sunday)
 
   # Day of month text
   mday_text <- data.frame(
@@ -509,14 +517,22 @@ gen_reference.monthly <- function(
 #'    which is actually passed to `geom_text()`. By default, both "label" and 
 #'    "text" are used. If "text2" is specified for the "monthly" calendar only, 
 #'    it will add day of month to the `ggplot` object.
+#' @param locale ISO 639 language code. The default is "en" (i.e. US English).
+#'    See [readr::locale] for more details.
+#' @param abbr Logical to specify if the abbreviated version of label should be
+#'    used.
 #' @param ... Extra arguments passed to `geom_label()` and `geom_text()`
 #' @export
-prettify <- function(plot, label = c("label", "text"), ...) {
+prettify <- function(plot, label = c("label", "text"), locale, abbr = TRUE, 
+  ...) {
   if (missing(plot)) {
     plot <- last_plot()
   }
   if (!is.ggplot(plot)) {
     abort("'plot' must be a ggplot object.")
+  }
+  if (!("ggcalendar" %in% class(plot$data))) {
+    abort("'prettify' does not know how to handle with this type of data.")
   }
   if (is.null(label)) {
     label_arg <- NULL
@@ -526,11 +542,34 @@ prettify <- function(plot, label = c("label", "text"), ...) {
       several.ok = TRUE
     )
   }
-  if (!("ggcalendar" %in% class(plot$data))) {
-    abort("'prettify' does not know how to handle with this type of data.")
+  if (missing(locale)) {
+    locale <- "en"
+  }
+  loc_dn <- locale(date_names = locale)$date_names
+  if (abbr) {
+    mtext <- loc_dn$mon_ab
+    dtext <- loc_dn$day_ab
+    # a single letter
+    if (locale == "en") dtext <- substring(dtext, first = 1, last = 1)
+  } else {
+    mtext <- loc_dn$mon
+    dtext <- loc_dn$day
   }
   label <- get_label(plot$data)
   text <- get_text(plot$data)
+  cal <- get_calendar(plot$data)
+  if (cal == "monthly") {
+    nyr <- unique.default(label$year)
+    seq_label <- mtext[label$mon] 
+    if (!has_length(nyr, 1)) seq_label <- paste(seq_label, label$year)
+    label <- bind_cols(label, label = seq_label)
+    text <- bind_cols(text, label = dtext[text$day])
+  } else if (cal == "weekly") {
+    text <- bind_cols(text, label = dtext[text$day])
+  } else if (cal == "daily") {
+    seq_label <- mtext[label$mon] 
+    label <- bind_cols(label, label = seq_label)
+  }
   breaks <- get_breaks(plot$data)
   minor_breaks <- get_minor_breaks(plot$data)
   dir <- get_dir(plot$data)
@@ -624,12 +663,12 @@ get_dir <- function(data) {
   attr(data, "dir")
 }
 
-gen_wday_labels <- function(sunday = FALSE) { 
-  wday_labels <- c("M", "T", "W", "T", "F", "S", "S")
-  if (sunday) {
-    wday_labels <- wday_labels[c(7, 1:6)]
-  }
-  return(wday_labels)
+get_calendar <- function(data) {
+  attr(data, "calendar")
+}
+
+gen_wday_index <- function(sunday = FALSE) {
+  if (sunday) return(1:7) else return(c(2:7, 1))
 }
 
 gen_day_breaks <- function(grids) {

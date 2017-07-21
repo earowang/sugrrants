@@ -10,7 +10,7 @@ frame_calendar(data, x, y, date, calendar = "monthly", dir = "h",
   sunday = FALSE, nrow = NULL, ncol = NULL, polar = FALSE,
   scale = "fixed", width = 0.95, height = 0.95)
 
-prettify(plot, label = c("label", "text"), ...)
+prettify(plot, label = c("label", "text"), locale, abbr = TRUE, ...)
 }
 \arguments{
 \item{data}{A data frame or a grouped data frame including a \code{Date} variable.}
@@ -56,6 +56,12 @@ specified, it will add weekday/day of month text on the \code{ggplot} object,
 which is actually passed to \code{geom_text()}. By default, both "label" and
 "text" are used. If "text2" is specified for the "monthly" calendar only,
 it will add day of month to the \code{ggplot} object.}
+
+\item{locale}{ISO 639 language code. The default is "en" (i.e. US English).
+See \link[readr:locale]{readr::locale} for more details.}
+
+\item{abbr}{Logical to specify if the abbreviated version of label should be
+used.}
 
 \item{...}{Extra arguments passed to \code{geom_label()} and \code{geom_text()}}
 }
@@ -109,6 +115,12 @@ to have their individual scales. For more details, see \code{vignette("frame-cal
      geom_line() +
      facet_wrap(~ Sensor_Name, nrow = 2)
    prettify(p2)
+   \dontrun{
+     # allow for different languages
+     # below gives the simplief chinese label along with STKaiti font family 
+     # if this font is installed in user's local system
+     prettify(p2, locale = "zh", family = "STKaiti")
+   }
 
 }
 \author{
