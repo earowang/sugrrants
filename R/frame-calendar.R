@@ -188,6 +188,23 @@ frame_calendar_ <- function(
   # .y <- paste0(".", quo_name(y))
   .date <- quo_name(date)
   cls <- class(data)
+  old_cn <- colnames(data)
+
+  # as some variables have been created for the computation,
+  # if `data` has those variables, they're likely to be overwritten.
+  # a warning of conflicts is thrown away.
+  int_vars <- c(".gx", ".gy", ".cx", ".cy", ".ymax", ".ymin")
+  if (polar) int_vars <- c(int_vars, "theta", "radius")
+  if (scale %in% c("free_wday", "free_mday")) int_vars <- c(int_vars, ".day")
+  check_vars <- int_vars %in% old_cn
+  if (any(check_vars)) {
+    str_vars <- int_vars[check_vars]
+    abort(paste(
+      "The variables including",
+      paste(str_vars, collapse = ", "),
+      "must be renamed to proceed."
+    ))
+  }
 
   date_eval <- sort(eval_tidy(date, data = data))
   if (class(date_eval) != "Date") {
@@ -613,7 +630,7 @@ prettify <- function(plot, label = c("label", "text"), locale, abbr = TRUE,
   if ("text2" %in% label_arg) {
     text2 <- get_text2(plot$data)
     if (is.null(text2)) {
-      warning("label = 'text2' is ignored for this type of calendar.")
+      warn("label = 'text2' is ignored for this type of calendar.")
     } else {
       text2_param$data <- text2
       text2_param$mapping <- aes(x, y, label = label)
