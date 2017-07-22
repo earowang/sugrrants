@@ -194,6 +194,9 @@ frame_calendar_ <- function(
   # if `data` has those variables, they're likely to be overwritten.
   # a warning of conflicts is thrown away.
   int_vars <- c(".gx", ".gy", ".cx", ".cy", ".ymax", ".ymin")
+  if (possibly_identity(x)) int_vars <- c(int_vars, ".x")
+  if (possibly_identity(y)) int_vars <- c(int_vars, ".y")
+
   if (polar) int_vars <- c(int_vars, "theta", "radius")
   if (scale %in% c("free_wday", "free_mday")) int_vars <- c(int_vars, ".day")
   check_vars <- int_vars %in% old_cn
@@ -207,8 +210,17 @@ frame_calendar_ <- function(
   }
 
   date_eval <- sort(eval_tidy(date, data = data))
-  if (class(date_eval) != "Date") {
+  if (!("Date" %in% class(date_eval))) {
     abort("'date' must be a 'Date' class.")
+  }
+
+  if (calendar != "monthly") {
+    if (sunday) {
+      inform("The argument sunday only works for the monthly calendar.")
+    }
+    if (!is.null(nrow) || !is.null(ncol)) {
+      inform("The argument nrow/ncol only works for the monthly calendar.")
+    }
   }
 
   class(date_eval) <- c(calendar, class(date_eval))

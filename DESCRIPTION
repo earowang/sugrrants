@@ -26,7 +26,8 @@ Suggests:
     knitr,
     rmarkdown,
     viridis,
-    covr
+    covr,
+    testthat
 VignetteBuilder: knitr
 License: GPL (>= 3)
 URL: http://pkg.earo.me/sugrrants

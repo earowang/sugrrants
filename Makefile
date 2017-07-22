@@ -18,3 +18,6 @@ winbuild:
 
 pkgdown:
 	Rscript -e "pkgdown::clean_site(); pkgdown::build_site(run_dont_run = TRUE)"
+
+test:
+	Rscript -e "devtools::test()"
