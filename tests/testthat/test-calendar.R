@@ -161,6 +161,20 @@ test_that("The identity 1", {
   expect_true(".y" %in% cn_cal)
 })
 
+test_that("The argument dir", {
+  hcal <- frame_calendar(pedestrian, x = Time, y = Hourly_Counts, date = Date)
+  vcal <- frame_calendar(pedestrian, x = Time, y = Hourly_Counts, date = Date,
+    dir = "v")
+  expect_equal(dim(hcal), dim(vcal))
+})
+
+test_that("The argument polar", {
+  ccal <- frame_calendar(pedestrian, x = Time, y = Hourly_Counts, date = Date)
+  pcal <- frame_calendar(pedestrian, x = Time, y = Hourly_Counts, date = Date,
+    polar = TRUE)
+  expect_equal(dim(ccal), dim(pcal))
+})
+
 test_that("The output", {
   cal <- frame_calendar(pedestrian, x = Time, y = Hourly_Counts, date = Date)
   expect_is(cal, c("ggcalendar", "tbl_df"))
