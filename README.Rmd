@@ -15,6 +15,7 @@ knitr::opts_chunk$set(
 # sugrrants
 
 [![Travis-CI Build Status](https://travis-ci.org/earowang/sugrrants.svg?branch=master)](https://travis-ci.org/earowang/sugrrants)
+[![Coverage Status](https://img.shields.io/codecov/c/github/earowang/sugrrants/master.svg)](https://codecov.io/github/earowang/sugrrants?branch=master)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/sugrrants)](https://cran.r-project.org/package=sugrrants)
 
 ## Overview
