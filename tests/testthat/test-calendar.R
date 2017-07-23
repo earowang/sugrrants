@@ -1,6 +1,6 @@
 library(dplyr)
 library(sugrrants)
-context("Test frame_calendar() input")
+context("Test frame_calendar()")
 
 test_that("The argument date is Date class", {
   expect_error(
@@ -180,4 +180,8 @@ test_that("The output", {
   expect_is(cal, c("ggcalendar", "tbl_df"))
   expect_equal(nrow(cal), nrow(pedestrian))
   expect_equal(ncol(cal), ncol(pedestrian) + 2)
+
+  pedestrian2 <- sample_frac(pedestrian)
+  cal2 <- frame_calendar(pedestrian2, x = Time, y = Hourly_Counts, date = Date)
+  expect_equal(cal, cal2)
 })

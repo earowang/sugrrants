@@ -18,6 +18,9 @@
 #'    au_holiday(2013:2016, state = "VIC")
 #'
 au_holiday <- function(year, state = "VIC") {
+  if (!is.numeric(year)) {
+    abort("The argument year must be double/integer.")
+  }
   year_length <- length(year)
   state <- match.arg(state)
   public_holidays <- vector(mode = "list", length = 10)
