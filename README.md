@@ -3,7 +3,7 @@
 sugrrants
 =========
 
-[![Travis-CI Build Status](https://travis-ci.org/earowang/sugrrants.svg?branch=master)](https://travis-ci.org/earowang/sugrrants) [![Coverage Status](https://img.shields.io/codecov/c/github/earowang/sugrrants/master.svg)](https://codecov.io/github/earowang/sugrrants?branch=master) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/sugrrants)](https://cran.r-project.org/package=sugrrants)
+[![Travis-CI Build Status](https://travis-ci.org/earowang/sugrrants.svg?branch=master)](https://travis-ci.org/earowang/sugrrants) [![Coverage Status](https://img.shields.io/codecov/c/github/earowang/sugrrants/master.svg)](https://codecov.io/github/earowang/sugrrants?branch=master) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/sugrrants)](https://cran.r-project.org/package=sugrrants) [![Downloads](http://cranlogs.r-pkg.org/badges/sugrrants)](https://cran.r-project.org/package=sugrrants)
 
 Overview
 --------
@@ -13,11 +13,22 @@ The goal of *sugrrants* is to provide supporting graphics with R for analysing t
 Installation
 ------------
 
-You could install the development version from Github using
+You could install the stable version on CRAN:
+
+``` r
+install.packages("sugrrants")
+#> Installing package into '/usr/local/lib/R/3.4/site-library'
+#> (as 'lib' is unspecified)
+#> Warning: package 'sugrrants' is not available (for R version 3.4.1)
+```
+
+You could also install the development version from Github using:
 
 ``` r
 # install.packages("devtools")
 devtools::install_github("earowang/sugrrants", build_vignettes = TRUE)
+#> Skipping install of 'sugrrants' from a github remote, the SHA1 (4a468d11) has not changed since last install.
+#>   Use `force = TRUE` to force installation
 ```
 
 Usage
@@ -60,7 +71,7 @@ calendar_df
 p <- calendar_df %>%
   ggplot(aes(x = .Time, y = .Hourly_Counts, group = Date, colour = Weekend)) +
   geom_line() +
-  theme(legend.position = "none")
+  theme(legend.position = "bottom")
 prettify(p)
 ```
 
