@@ -27,13 +27,13 @@ The goal of *sugrrants* is to provide supporting graphics with R for analysing t
 
 You could install the stable version on CRAN:
 
-```{r}
+```{r, eval = FALSE}
 install.packages("sugrrants")
 ```
 
 You could also install the development version from Github using:
 
-```{r}
+```{r, eval = FALSE}
 # install.packages("devtools")
 devtools::install_github("earowang/sugrrants", build_vignettes = TRUE)
 ```

@@ -17,9 +17,6 @@ You could install the stable version on CRAN:
 
 ``` r
 install.packages("sugrrants")
-#> Installing package into '/usr/local/lib/R/3.4/site-library'
-#> (as 'lib' is unspecified)
-#> Warning: package 'sugrrants' is not available (for R version 3.4.1)
 ```
 
 You could also install the development version from Github using:
@@ -27,8 +24,6 @@ You could also install the development version from Github using:
 ``` r
 # install.packages("devtools")
 devtools::install_github("earowang/sugrrants", build_vignettes = TRUE)
-#> Skipping install of 'sugrrants' from a github remote, the SHA1 (4a468d11) has not changed since last install.
-#>   Use `force = TRUE` to force installation
 ```
 
 Usage
