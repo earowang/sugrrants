@@ -4,6 +4,7 @@ This is a re-submission of new release. I've fixed the DESCRIPTION file as follo
 
 * omitted the redundant 'with R' in Title
 * omitted the redundant 'with R' in Description
+* replaced double quotes with single quotes for package names and software names
 * specified 'ggplot2' graphics for temporal data
 
 Thanks.
