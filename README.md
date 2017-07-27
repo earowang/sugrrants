@@ -8,7 +8,7 @@ sugrrants
 Overview
 --------
 
-The goal of *sugrrants* is to provide supporting graphics with R for analysing time series data. It aims to fit into the *tidyverse* and grammar of graphics framework for handling temporal data.
+The goal of *sugrrants* is to provide supporting graphs with R for analysing time series data. It aims to fit into the *tidyverse* and grammar of graphics framework for handling temporal data.
 
 Installation
 ------------
@@ -75,4 +75,4 @@ prettify(p)
 Miscellaneous
 -------------
 
-The acronym of *sugrrants* is **SU**pporting **GR**aphics with **R** for **AN**alysing **T**ime **S**eries, pronounced as "sugar ants" that are a species of ant endemic to Australia.
+The acronym of *sugrrants* is **SU**pporting **GR**aphs with **R** for **AN**alysing **T**ime **S**eries, pronounced as "sugar ants" that are a species of ant endemic to Australia.

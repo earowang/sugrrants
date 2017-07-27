@@ -1,14 +1,14 @@
 Package: sugrrants
-Title: Supporting Graphics with R for Analysing Time Series
+Title: Supporting Graphs for Analysing Time Series
 Version: 0.1.0
 Authors@R: c(
     person("Earo", "Wang", email = "earo.wang@gmail.com", role = c("aut", "cre")),
     person("Di", "Cook", role = c("aut", "ths")),
     person("Rob", "Hyndman", role = c("aut", "ths"))
     )
-Description: The goal of "sugrrants" is to provide supporting graphics with R for
-    analysing time series data. It aims to fit into the "tidyverse" and grammar of
-    graphics framework for handling temporal data.
+Description: The goal of 'sugrrants' is to provide 'ggplot2' graphics for 
+    analysing time series data. It aims to fit into the 'tidyverse' and grammar 
+    of graphics framework for handling temporal data.
 Depends:
     R (>= 3.1.3),
     ggplot2 (>= 2.2.0)
