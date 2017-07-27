@@ -2,7 +2,7 @@
 % Please edit documentation in R/stat-acf.R
 \name{stat_acf}
 \alias{stat_acf}
-\title{Compute autocorrelation for temporal data}
+\title{Autocorrelation for temporal data}
 \usage{
 stat_acf(mapping = NULL, data = NULL, geom = "bar",
   position = "identity", na.rm = FALSE, show.legend = NA,

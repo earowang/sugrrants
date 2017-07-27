@@ -4,7 +4,7 @@
 \name{geom_acf}
 \alias{geom_acf}
 \alias{GeomAcf}
-\title{Compute autocorrelation for temporal data}
+\title{Autocorrelation for temporal data}
 \usage{
 geom_acf(mapping = NULL, data = NULL, position = "identity",
   na.rm = FALSE, show.legend = NA, inherit.aes = TRUE, lag.max = NULL,

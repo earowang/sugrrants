@@ -2,6 +2,23 @@ library(dplyr)
 library(sugrrants)
 context("Test frame_calendar()")
 
+test_that("Multiple y's and NA's", {
+  set.seed(1234)
+  dat <- data.frame(
+    Date = rep(seq(as.Date("2017-01-01"), as.Date("2017-03-31"), by = 1), 100),
+    x = rnorm(9000), ymin = rnorm(9000), ymax = rnorm(9000, mean = 4)
+  )
+  cal_dat <- dat %>% 
+    frame_calendar(x = x, y = vars(ymin, ymax), date = Date)
+  cn_cal <- colnames(cal_dat)
+  expect_true(all(c(".x", ".ymin", ".ymax") %in% cn_cal))
+  dat_na <- dat
+  dat_na[sample(1:9000, 100), ] <- NA
+  cal_dat_na <- dat_na %>% 
+    frame_calendar(x = x, y = vars(ymin, ymax), date = Date)
+  expect_equal(dim(cal_dat), dim(cal_dat_na))
+})
+
 test_that("The argument date is Date class", {
   expect_error(
     frame_calendar(pedestrian, x = Time, y = Hourly_Counts, date = Date_Time)

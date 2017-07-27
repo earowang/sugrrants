@@ -1,4 +1,4 @@
-#' @title Compute autocorrelation for temporal data
+#' @title Autocorrelation for temporal data
 #'
 #' @description Since the data input is `data.frame`, it's better to sort
 #'  the date-times from early to recent and make implicit missing values explicit

@@ -1,4 +1,4 @@
-#' @title Compute autocorrelation for temporal data
+#' @title Autocorrelation for temporal data
 #'
 #' @description Since the data input is `data.frame`, it's better to sort
 #'  the date-times from early to recent and make implicit missing values explicit
@@ -41,10 +41,20 @@ StatAcf <- ggproto("StatAcf", Stat,
   required_aes = "y",
   default_aes = aes(x = ..lag..),
 
-  compute_group = function(data, scales, params, 
+  compute_group = function(data, scales, params, na.rm = FALSE,
     lag.max = NULL, type = "correlation", level = 0.95) {
 
-    acf_y <- acf(data$y, lag.max = lag.max, type = type, plot = FALSE)
+    if (na.rm) {
+      acf_y <- acf(
+        data$y, lag.max = lag.max, type = type, plot = FALSE,
+        na.action = na.pass
+      )
+    } else {
+      acf_y <- acf(
+        data$y, lag.max = lag.max, type = type, plot = FALSE,
+        na.action = na.fail
+      )
+    }
     acf_df <- data.frame(lag = acf_y$lag[-1, , 1], y = acf_y$acf[-1, , 1])
 
     nr_acf <- nrow(acf_df)
