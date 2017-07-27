@@ -223,7 +223,7 @@ to have their individual scales. For more details, see <code><a href='https://cr
    <span class='no'>p1</span> <span class='kw'>&lt;-</span> <span class='no'>calendar_df</span> <span class='kw'>%&gt;%</span>
      <span class='fu'>ggplot</span>(<span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>.Time</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>.Hourly_Counts</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='no'>Date</span>)) +
      <span class='fu'>geom_line</span>()
-   <span class='fu'>prettify</span>(<span class='no'>p1</span>)</div><div class='img'><img src='frame-calendar-3.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+   <span class='fu'>prettify</span>(<span class='no'>p1</span>)</div><div class='img'><img src='frame-calendar-1.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
    <span class='co'># use in conjunction with group_by()</span>
    <span class='no'>grped_calendar</span> <span class='kw'>&lt;-</span> <span class='no'>pedestrian</span> <span class='kw'>%&gt;%</span>
      <span class='fu'><a href='http://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='no'>Year</span> <span class='kw'>==</span> <span class='st'>"2017"</span>, <span class='no'>Month</span> <span class='kw'>==</span> <span class='st'>"March"</span>) <span class='kw'>%&gt;%</span>
@@ -236,10 +236,10 @@ to have their individual scales. For more details, see <code><a href='https://cr
      <span class='fu'>ggplot</span>(<span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>.Time</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>.Hourly_Counts</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='no'>Date</span>)) +
      <span class='fu'>geom_line</span>() +
      <span class='fu'>facet_wrap</span>(~ <span class='no'>Sensor_Name</span>, <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>2</span>)
-   <span class='fu'>prettify</span>(<span class='no'>p2</span>)</div><div class='img'><img src='frame-calendar-4.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>   </div><div class='input'>     <span class='co'># allow for different languages</span>
+   <span class='fu'>prettify</span>(<span class='no'>p2</span>)</div><div class='img'><img src='frame-calendar-2.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>   </div><div class='input'>     <span class='co'># allow for different languages</span>
      <span class='co'># below gives the simplief chinese label along with STKaiti font family </span>
      <span class='co'># if this font is installed in user's local system</span>
-     <span class='fu'>prettify</span>(<span class='no'>p2</span>, <span class='kw'>locale</span> <span class='kw'>=</span> <span class='st'>"zh"</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='st'>"STKaiti"</span>)</div><div class='img'><img src='frame-calendar-5.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>   </div><div class='input'>
+     <span class='fu'>prettify</span>(<span class='no'>p2</span>, <span class='kw'>locale</span> <span class='kw'>=</span> <span class='st'>"zh"</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='st'>"STKaiti"</span>)</div><div class='img'><img src='frame-calendar-3.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>   </div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
