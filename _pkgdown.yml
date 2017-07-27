@@ -18,7 +18,7 @@ reference:
   contents:
     - frame_calendar
 
-- title: Geoms and stats extension to temporal-context data
+- title: Geoms and stats extension for temporal-context data
   contents:
     - starts_with("geom_")
     - starts_with("stat_")
