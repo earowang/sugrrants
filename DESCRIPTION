@@ -6,9 +6,9 @@ Authors@R: c(
     person("Di", "Cook", role = c("aut", "ths")),
     person("Rob", "Hyndman", role = c("aut", "ths"))
     )
-Description: The goal of 'sugrrants' is to provide 'ggplot2' graphics for 
-    analysing time series data. It aims to fit into the 'tidyverse' and grammar 
-    of graphics framework for handling temporal data.
+Description: Provides 'ggplot2' graphics for analysing time series data. It aims 
+    to fit into the 'tidyverse' and grammar of graphics framework for handling 
+    temporal data.
 Depends:
     R (>= 3.1.3),
     ggplot2 (>= 2.2.0)
