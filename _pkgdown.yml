@@ -29,6 +29,10 @@ reference:
   contents:
     - au_holiday
 
+- title: Datasets
+	contents:
+		- pedestrian
+
 navbar:
   type: default
   left:

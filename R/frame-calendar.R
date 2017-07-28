@@ -89,8 +89,8 @@ globalVariables(c(
 #'    prettify(p2)
 #'    \dontrun{
 #'      # allow for different languages
-#'      # below gives the simplief chinese label along with STKaiti font family 
-#'      # if this font is installed in user's local system
+#'      # below gives simplied Chinese labels with STKaiti font family,
+#'      # assuming this font installed in user's local system
 #'      prettify(p2, locale = "zh", family = "STKaiti")
 #'    }
 #'
