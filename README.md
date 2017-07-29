@@ -67,7 +67,7 @@ p <- calendar_df %>%
   ggplot(aes(x = .Time, y = .Hourly_Counts, group = Date, colour = Weekend)) +
   geom_line() +
   theme(legend.position = "bottom")
-prettify(p)
+prettify(p, label.padding = unit(0.08, "lines"))
 ```
 
 ![](man/figure/calendar-plot-1.png)
