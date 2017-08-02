@@ -5,6 +5,7 @@
 #' @importFrom dplyr group_by is.grouped_df ungroup arrange group_size
 #' @importFrom dplyr if_else mutate select filter right_join summarise distinct
 #' @importFrom dplyr left_join mutate_at ends_with vars funs between bind_cols
+#' @importFrom dplyr %>%
 #' @importFrom tidyr nest unnest gather
 #' @importFrom purrr map map2 map_chr
 #' @importFrom ggplot2 resolution layer ggproto draw_key_rect draw_key_path 
@@ -13,6 +14,5 @@
 #' @importFrom ggplot2 GeomLabel GeomText
 #' @importFrom rlang eval_tidy quo enquo abort !! !!! := quo_name flatten_int
 #' @importFrom rlang syms sym get_expr is_quosure quos has_length warn inform
-#' @importFrom magrittr %>%
 #' @importFrom grid grobTree gList
 NULL

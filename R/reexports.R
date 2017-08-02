@@ -1,5 +1,5 @@
 #' @export
-magrittr::`%>%`
+dplyr::`%>%`
 
 #' @export
 dplyr::vars
