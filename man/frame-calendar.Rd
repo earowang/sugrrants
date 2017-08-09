@@ -93,14 +93,14 @@ to have their individual scales. For more details, see \code{vignette("frame-cal
    library(dplyr)
    # compute the calendar layout for the data frame
    calendar_df <- pedestrian \%>\%
-     filter(Sensor_ID == 13) \%>\% 
+     filter(Sensor_ID == 13, Year == 2016) \%>\% 
      frame_calendar(x = Time, y = Hourly_Counts, date = Date, nrow = 4)
 
    # ggplot
    p1 <- calendar_df \%>\% 
      ggplot(aes(x = .Time, y = .Hourly_Counts, group = Date)) +
      geom_line()
-   prettify(p1)
+   prettify(p1, size = 3, label.padding = unit(0.15, "lines"))
    
    # use in conjunction with group_by()
    grped_calendar <- pedestrian \%>\% 

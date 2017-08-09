@@ -9,7 +9,7 @@
 #'
 #' @author Earo Wang
 #' @references 
-#'    \url{http://www.business.vic.gov.au/victorian-public-holidays-and-daylight-saving/victorian-public-holidays}
+#'    [Victoria public holidays](http://www.business.vic.gov.au/victorian-public-holidays-and-daylight-saving/victorian-public-holidays)
 #' @export
 #'
 #' @examples

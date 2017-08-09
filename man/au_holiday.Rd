@@ -25,7 +25,7 @@ Australia public holidays
 
 }
 \references{
-\url{http://www.business.vic.gov.au/victorian-public-holidays-and-daylight-saving/victorian-public-holidays}
+\href{http://www.business.vic.gov.au/victorian-public-holidays-and-daylight-saving/victorian-public-holidays}{Victoria public holidays}
 }
 \author{
 Earo Wang
