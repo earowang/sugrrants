@@ -192,7 +192,7 @@ frame_calendar_ <- function(
 
   # as some variables have been created for the computation,
   # if `data` has those variables, they're likely to be overwritten.
-  # a warning of conflicts is thrown away.
+  # an error of conflicts is thrown away.
   int_vars <- c(".gx", ".gy", ".cx", ".cy", ".ymax", ".ymin")
   if (possibly_identity(x)) int_vars <- c(int_vars, ".x")
   if (possibly_identity(y)) int_vars <- c(int_vars, ".y")
@@ -202,11 +202,11 @@ frame_calendar_ <- function(
   check_vars <- int_vars %in% old_cn
   if (any(check_vars)) {
     str_vars <- int_vars[check_vars]
-    abort(paste(
+    abort(
       "The variables including",
       paste(str_vars, collapse = ", "),
       "must be renamed to proceed."
-    ))
+    )
   }
 
   date_eval <- sort(eval_tidy(date, data = data))
@@ -272,8 +272,8 @@ frame_calendar_ <- function(
 
   data <- data %>% 
     dplyr::mutate(
-      .ymax = max(!!!y, na.rm = TRUE),
-      .ymin = min(!!!y, na.rm = TRUE)
+      .ymax = max(as.numeric(!!!y), na.rm = TRUE),
+      .ymin = min(as.numeric(!!!y), na.rm = TRUE)
     )
   if (polar) { # polar only support one y
     if (length(y) > 1) {
@@ -282,8 +282,9 @@ frame_calendar_ <- function(
     .y <- paste0(".", y[[1]])
     data <- data %>% 
       dplyr::mutate(
-        theta = 2 * pi * normalise(!!x, xmax = max_na(!!x)),
-        radius = normalise(!!!y, xmax = max_na(!!!y)),
+        theta = 2 * pi * normalise(as.numeric(!!x), 
+          xmax = max_na(as.numeric(!!x))),
+        radius = normalise(as.numeric(!!!y), xmax = max_na(as.numeric(!!!y))),
         !!.x := .cx + width / 2 * radius * sin(theta),
         !!.y := .cy + height / 2 * radius * cos(theta)
       ) %>% 
@@ -297,7 +298,8 @@ frame_calendar_ <- function(
     } else {
       data <- data %>% 
         dplyr::mutate(
-          !!.x := .cx + normalise(!!x, xmax = max_na(!!x)) * width
+          !!.x := .cx + normalise(as.numeric(!!x), 
+            xmax = max_na(as.numeric(!!x))) * width
         )
     }
     if (possibly_identity(y)) {

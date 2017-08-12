@@ -1,3 +1,9 @@
+# sugrrants 0.1.0.9000
+
+## Improvement
+
+* `frame_calendar()`: arguments `x` and `y` support factor and hms class.
+
 # sugrrants 0.1.0
 
 * Initial release
