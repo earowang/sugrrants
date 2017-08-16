@@ -24,10 +24,13 @@ globalVariables(c(
 #'    one variable need putting to `vars()`. If integer 1 is specified, it returns
 #'    calendar grids on y without transformation.
 #' @param date A `Date` variable mapping to dates in the calendar.
-#' @param calendar Type of calendar. "monthly" calendar (the default) organises
+#' @param calendar Type of calendar. (1) "monthly" calendar (the default) organises
 #'    the `data` to a common format comprised of day of week in the column and
-#'    week of month in the row. "weekly" calendar consists of day of week and
-#'    week of year. "daily" calendar refers to day of month and month of year.
+#'    week of month in the row. A monthly calendar is set up as a 5 by 7 layout
+#'    matrix. Each month could extend over six weeks but in these months is to 
+#'    wrap the last few days up to the top row of the block. (2) "weekly" 
+#'    calendar consists of day of week and week of year. (3) "daily" calendar 
+#'    refers to day of month and month of year.
 #' @param dir Direction of calendar: "h" for horizontal (the default) or "v" for 
 #'    vertical.
 #' @param sunday FALSE (the default) indicating to starting with Monday in a
