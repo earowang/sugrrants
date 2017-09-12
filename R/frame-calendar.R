@@ -515,6 +515,7 @@ gen_reference.monthly <- function(
   mtext <- mtext[seq_along(unique_idx), , drop = FALSE]
   mtext$mon <- unique_labels
   mtext$year <- substring(unique_idx, first = 1, last = 4)
+  mtext$year[duplicated(mtext$year)] <- "" # make year appear in the first month
 
   # Weekday text
   if (dir == "h") {
