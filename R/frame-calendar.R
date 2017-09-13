@@ -596,7 +596,7 @@ prettify <- function(plot, label = c("label", "text"), locale, abbr = TRUE,
   if (cal == "monthly") {
     nyr <- unique.default(label$year)
     seq_label <- mtext[label$mon] 
-    if (!has_length(nyr, 1)) seq_label <- paste(seq_label, label$year)
+    if (length(nyr) > 2) seq_label <- paste(seq_label, label$year)
     label <- bind_cols(label, label = seq_label)
     text <- bind_cols(text, label = dtext[text$day])
   } else if (cal == "weekly") {
