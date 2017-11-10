@@ -2,19 +2,19 @@
 #'
 #' @param year A vector of integer(s) indicating year(s)
 #' @param state A state in Australia. The abbreviation of the states in the upper
-#'    letter cases is required. Currently supports "VIC" (i.e. Victoria) only.
+#' letter cases is required. Currently supports "VIC" (i.e. Victoria) only.
 #'
 #' @return A data frame consisting of `holiday` labels and their associated
-#'    dates in the year(s).
+#' dates in the year(s).
 #'
-#' @author Earo Wang
+#' @details AFL public holidays are not reported for the Victoria state.
 #' @references 
-#'    [Victoria public holidays](http://www.business.vic.gov.au/victorian-public-holidays-and-daylight-saving/victorian-public-holidays)
+#' [Victoria public holidays](http://www.business.vic.gov.au/victorian-public-holidays-and-daylight-saving/victorian-public-holidays)
 #' @export
 #'
 #' @examples
-#'    au_holiday(2016, state = "VIC")
-#'    au_holiday(2013:2016, state = "VIC")
+#' au_holiday(2016, state = "VIC")
+#' au_holiday(2013:2016, state = "VIC")
 #'
 au_holiday <- function(year, state = "VIC") {
   if (!is.numeric(year)) {

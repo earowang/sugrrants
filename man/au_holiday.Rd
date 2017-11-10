@@ -19,14 +19,14 @@ dates in the year(s).
 \description{
 Australia public holidays
 }
+\details{
+AFL public holidays are not reported for the Victoria state.
+}
 \examples{
-   au_holiday(2016, state = "VIC")
-   au_holiday(2013:2016, state = "VIC")
+au_holiday(2016, state = "VIC")
+au_holiday(2013:2016, state = "VIC")
 
 }
 \references{
 \href{http://www.business.vic.gov.au/victorian-public-holidays-and-daylight-saving/victorian-public-holidays}{Victoria public holidays}
-}
-\author{
-Earo Wang
 }

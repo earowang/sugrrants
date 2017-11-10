@@ -7,6 +7,7 @@
 ## Improvement
 
 * `frame_calendar()`: arguments `x` and `y` support factor and hms class.
+* Added a note on AFL holiday for the documentation of `au_holiday(state = "VIC").
 
 # sugrrants 0.1.0
 
