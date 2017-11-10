@@ -19,7 +19,7 @@ Imports:
     tidyr,
     purrr,
     timeDate,
-    lubridate,
+    lubridate (>= 1.7.1),
     dplyr (>= 0.7.0)
 Suggests:
     knitr,

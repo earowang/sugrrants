@@ -40,7 +40,7 @@ setup_calendar.weekly <- function(x, dir = "h", ...) {
   wk_x <- isoweek(x)
 
   # only starts with Monday for ISO week
-  col_idx <- wday2(x)
+  col_idx <- wday(x, week_start = 1)
   counter <- init_counter - 1 + x
   # if dir == "h"
   rle_x <- rle(wk_x)
@@ -74,7 +74,7 @@ setup_calendar.monthly <- function(x, dir = "h", sunday = FALSE,
   if (sunday) { # Weekday starts with Sunday
     first_wday <- wday(month_x) # k
   } else { # starts with Monday
-    first_wday <- wday2(month_x) # k
+    first_wday <- wday(month_x, week_start = 1) # k
   }
   counter_date <- map2(
     .x = month_x, .y = days_x, ~ .x + 0:(.y - 1) 
