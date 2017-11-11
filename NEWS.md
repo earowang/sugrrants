@@ -1,4 +1,4 @@
-# sugrrants 0.1.0.9000
+# sugrrants 0.1.1
 
 ## Dropped functions
 
@@ -7,7 +7,7 @@
 ## Improvement
 
 * `frame_calendar()`: arguments `x` and `y` support factor and hms class.
-* Added a note on AFL holiday for the documentation of `au_holiday(state = "VIC").
+* Added a note on AFL holiday for the documentation of `au_holiday(state = "VIC")`.
 
 # sugrrants 0.1.0
 

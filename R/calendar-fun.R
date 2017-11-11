@@ -72,7 +72,7 @@ setup_calendar.monthly <- function(x, dir = "h", sunday = FALSE,
   max_wks <- 5
   ncells <- max_wks * ndays
   if (sunday) { # Weekday starts with Sunday
-    first_wday <- wday(month_x) # k
+    first_wday <- wday(month_x, week_start = 7) # k
   } else { # starts with Monday
     first_wday <- wday(month_x, week_start = 1) # k
   }

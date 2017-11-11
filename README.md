@@ -5,9 +5,6 @@ sugrrants
 
 [![Travis-CI Build Status](https://travis-ci.org/earowang/sugrrants.svg?branch=master)](https://travis-ci.org/earowang/sugrrants) [![Coverage Status](https://img.shields.io/codecov/c/github/earowang/sugrrants/master.svg)](https://codecov.io/github/earowang/sugrrants?branch=master) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/sugrrants)](https://cran.r-project.org/package=sugrrants) [![Downloads](http://cranlogs.r-pkg.org/badges/sugrrants?color=brightgreen)](https://cran.r-project.org/package=sugrrants)
 
-Overview
---------
-
 The goal of *sugrrants* is to provide supporting graphs with R for analysing time series data. It aims to fit into the *tidyverse* and grammar of graphics framework for handling temporal data.
 
 Installation

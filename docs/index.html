@@ -47,7 +47,14 @@
   <a href="news/index.html">News</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/earowang/sugrrants">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -68,11 +75,7 @@
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#sugrrants" class="anchor"></a>sugrrants</h1></div>
 
-<div id="overview" class="section level2">
-<h2 class="hasAnchor">
-<a href="#overview" class="anchor"></a>Overview</h2>
 <p>The goal of <em>sugrrants</em> is to provide supporting graphs with R for analysing time series data. It aims to fit into the <em>tidyverse</em> and grammar of graphics framework for handling temporal data.</p>
-</div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
@@ -123,6 +126,14 @@ calendar_df
 <span class="kw"><a href="reference/frame-calendar.html">prettify</a></span>(p, <span class="dt">label.padding =</span> <span class="kw">unit</span>(<span class="fl">0.08</span>, <span class="st">"lines"</span>))</code></pre></div>
 <p><img src="man/figure/calendar-plot-1.png" width="672"></p>
 </div>
+</div>
+<div id="google-summer-of-code-2017" class="section level2">
+<h2 class="hasAnchor">
+<a href="#google-summer-of-code-2017" class="anchor"></a>Google Summer of Code 2017</h2>
+<p>This package is part of the project—<a href="https://summerofcode.withgoogle.com/projects/#4790455121215488">Tidy data structures and visual methods to support exploration of big temporal-context data</a>, which has been participated in Google Summer of Code 2017 (gsoc), for <a href="https://www.r-project.org">R project for statistical computing</a>.</p>
+<p>A new function <code><a href="reference/frame-calendar.html">frame_calendar()</a></code> [<a href="https://github.com/earowang/sugrrants/blob/master/R/frame-calendar.R">here</a> and <a href="https://github.com/earowang/sugrrants/blob/master/R/calendar-fun.R">here</a>] in the <strong>sugrrants</strong> package has been developed and documented for calendar-based graphics. I have also written a vignette [<a href="https://github.com/earowang/sugrrants/blob/master/vignettes/frame-calendar.Rmd">source</a> and <a href="http://pkg.earo.me/sugrrants/articles/frame-calendar.html">reader view</a>], which introduces and demonstrates the usage of the <code><a href="reference/frame-calendar.html">frame_calendar()</a></code> function. <a href="https://github.com/earowang/sugrrants/blob/master/tests/testthat/test-calendar.R">Many unit tests</a> have been carried out to ensure the expected performance of this function. The function implements non-standard evaluation and highlights the <a href="http://rlang.tidyverse.org/articles/tidy-evaluation.html">tidy evaluation</a> in action. The initial release (v0.1.0) of the package has been published on <a href="https://CRAN.R-project.org/package=sugrrants">CRAN</a> during the gsoc summer time.</p>
+<p>I have initialised a new R package <a href="https://github.com/earowang/tsibble"><strong>tsibble</strong></a> for tidy temporal data, as part of the project. The <code>tsibble()</code> function constructs a new <code>tbl_ts</code> class for temporal data, and the <code>as_tsibble()</code> helps to convert a few <code>ts</code> objects into the <code>tbl_ts</code> class. Some key verbs (generics) from the <strong>dplyr</strong> package, such as <code><a href="http://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code>, <code><a href="http://dplyr.tidyverse.org/reference/summarise.html">summarise()</a></code>, <code><a href="http://dplyr.tidyverse.org/reference/filter.html">filter()</a></code>, have been defined and developed for the <code>tbl_ts</code> data class. The <strong>tsibble</strong> package was highly experimental over the period of the gsoc [<a href="https://github.com/earowang/tsibble/commit/aba1cfc2eec88966c43232fe5d249522f88e1e27">commits</a>], and these functions are very likely to be changed or improved in the future.</p>
+<p>A new package <a href="https://github.com/earowang/rwalkr"><strong>rwalkr</strong></a> has been created and released on <a href="https://cran.r-project.org/package=rwalkr">CRAN</a> during the gsoc summer. This package provides API to Melbourne pedestrian sensor data and arrange the data in tidy temporal data form. Two functions including <a href="https://github.com/earowang/rwalkr/blob/master/R/scrape.R"><code>walk_melb()</code></a> and <a href="https://github.com/earowang/rwalkr/blob/master/R/shiny.R"><code>shine_melb()</code></a>, have been written and documented as the v0.1.0 and v0.2.0 releases on CRAN. The majority of the code for the function <a href="https://github.com/earowang/rwalkr/blob/master/R/soda.R"><code>run_melb()</code></a> has been done, but the interface needs improving after the gsoc.</p>
 </div>
 <div id="miscellaneous" class="section level2">
 <h2 class="hasAnchor">

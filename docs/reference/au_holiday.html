@@ -72,7 +72,12 @@
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/earowang/sugrrants">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -112,13 +117,17 @@ letter cases is required. Currently supports "VIC" (i.e. Victoria) only.</p></td
     <p>A data frame consisting of <code>holiday</code> labels and their associated
 dates in the year(s).</p>
     
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>AFL public holidays are not reported for the Victoria state.</p>
+    
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p><a href='http://www.business.vic.gov.au/victorian-public-holidays-and-daylight-saving/victorian-public-holidays'>Victoria public holidays</a></p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>   <span class='fu'>au_holiday</span>(<span class='fl'>2016</span>, <span class='kw'>state</span> <span class='kw'>=</span> <span class='st'>"VIC"</span>)</div><div class='output co'>#&gt;             holiday       date
+    <pre class="examples"><div class='input'><span class='fu'>au_holiday</span>(<span class='fl'>2016</span>, <span class='kw'>state</span> <span class='kw'>=</span> <span class='st'>"VIC"</span>)</div><div class='output co'>#&gt;             holiday       date
 #&gt; 1    New Year's Day 2016-01-01
 #&gt; 2     Australia Day 2016-01-26
 #&gt; 3        Labour Day 2016-03-14
@@ -129,7 +138,7 @@ dates in the year(s).</p>
 #&gt; 8  Queen's Birthday 2016-06-13
 #&gt; 9     Melbourne Cup 2016-11-01
 #&gt; 11       Boxing Day 2016-12-26
-#&gt; 10    Christmas Day 2016-12-27</div><div class='input'>   <span class='fu'>au_holiday</span>(<span class='fl'>2013</span>:<span class='fl'>2016</span>, <span class='kw'>state</span> <span class='kw'>=</span> <span class='st'>"VIC"</span>)</div><div class='output co'>#&gt;             holiday       date
+#&gt; 10    Christmas Day 2016-12-27</div><div class='input'><span class='fu'>au_holiday</span>(<span class='fl'>2013</span>:<span class='fl'>2016</span>, <span class='kw'>state</span> <span class='kw'>=</span> <span class='st'>"VIC"</span>)</div><div class='output co'>#&gt;             holiday       date
 #&gt; 1    New Year's Day 2013-01-01
 #&gt; 5     Australia Day 2013-01-28
 #&gt; 9        Labour Day 2013-03-11
@@ -183,14 +192,12 @@ dates in the year(s).</p>
       
       <li><a href="#value">Value</a></li>
 
+      <li><a href="#details">Details</a></li>
+
       <li><a href="#references">References</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>
-
-    <h2>Author</h2>
-    
-Earo Wang
 
   </div>
 </div>
