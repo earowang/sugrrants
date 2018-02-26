@@ -1,7 +1,7 @@
 globalVariables(c(
   ".group_id", ".gx", ".gy", ".xmajor_min", ".xminor_max", ".xminor_min", 
   ".ymajor_max", ".ymajor_min", ".yminor_max", ".yminor_min", "COL", "PANEL",
-  "MCOL", "MPANEL", "MROW", "ROW", "date_eval", "label", "margins", "radius", 
+  "MCOL", "MPANEL", "MROW", "ROW", "date_eval", "label", "margin", "radius", 
   "theta", "x", "y", ".day", ".calendar_tbl", ".x", ".y", ".", ".ymax", ".ymin",
   ".cx", ".cy"
 ))
@@ -43,6 +43,8 @@ globalVariables(c(
 #'    "free_mday" for scaling on day of month.
 #' @param width,height Numerics between 0 and 1 to specify the width/height for 
 #'    each glyph.
+#' @param margin A numeric between 0 and 1 to specify the gap between month
+#'    panels.
 #'
 #' @return A data frame or a tibble with newly added columns of `.x`, `.y`. `.x` 
 #'    and `.y` together give new coordinates computed for different types of 
@@ -101,7 +103,7 @@ globalVariables(c(
 frame_calendar <- function(
   data, x, y, date, calendar = "monthly", dir = "h", sunday = FALSE, 
   nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed",
-  width = 0.95, height = 0.95
+  width = 0.95, height = 0.95, margin = NULL
 ) {
   calendar <- match.arg(calendar, c("monthly", "weekly", "daily"))
   dir <- match.arg(dir, c("h", "v"))
@@ -114,7 +116,7 @@ frame_calendar <- function(
 frame_calendar.grouped_df <- function(
   data, x, y, date, calendar = "monthly", dir = "h", sunday = FALSE, 
   nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed",
-  width = 0.95, height = 0.95
+  width = 0.95, height = 0.95, margin = NULL
 ) {
   x <- deparse(substitute(x))
   if (!possibly_quosure(y)) y <- deparse(substitute(y)) else y <- dots2str(y)
@@ -135,7 +137,7 @@ frame_calendar.grouped_df <- function(
         data = data, x = x, y = y, date = date,
         calendar = calendar, dir = dir, sunday = sunday, 
         nrow = nrow, ncol = ncol, polar = polar, scale = scale,
-        width = width, height = height
+        width = width, height = height, margin = margin
       )
     )) 
   xattr <- data$.calendar_tbl[[idx_max]]
@@ -159,7 +161,7 @@ frame_calendar.grouped_df <- function(
 frame_calendar.default <- function(
   data, x, y, date, calendar = "monthly", dir = "h", sunday = FALSE, 
   nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed",
-  width = 0.95, height = 0.95
+  width = 0.95, height = 0.95, margin = NULL
 ) {
   x <- deparse(substitute(x))
   if (!possibly_quosure(y)) y <- deparse(substitute(y)) else y <- dots2str(y)
@@ -173,7 +175,7 @@ frame_calendar.default <- function(
     data, x = x, y = y, date = date,
     calendar = calendar, dir = dir, sunday = sunday, 
     nrow = nrow, ncol = ncol, polar = polar, scale = scale,
-    width = width, height = height
+    width = width, height = height, margin = margin
   )
 }
 
@@ -181,7 +183,7 @@ frame_calendar.default <- function(
 frame_calendar_ <- function(
   data, x, y, date, calendar = "monthly", dir = "h", sunday = FALSE, 
   nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed",
-  width = 0.95, height = 0.95
+  width = 0.95, height = 0.95, margin = NULL
 ) {
   if (identical(between(width, 0, 1) && between(height, 0, 1), FALSE)) {
     abort("width/height must be between 0 and 1.")
@@ -247,16 +249,18 @@ frame_calendar_ <- function(
   # Define a small multiple width and height
   width <- resolution(data$.gx, zero = FALSE) * width
   height <- resolution(data$.gy, zero = FALSE) * height
-  margins <- min(c(width, height)) # Month by month margin
+  if (is.null(margin)) {
+    margin <- min(c(width, height)) # Month by month margin
+  }
 
   if (calendar == "monthly") {
     data <- data %>% 
       dplyr::group_by(MPANEL) %>% 
       dplyr::mutate(
-        .gx = .gx + MCOL * margins,
-        .gy = .gy - MROW * margins,
-        .cx = .cx + MCOL * margins,
-        .cy = .cy - MROW * margins
+        .gx = .gx + MCOL * margin,
+        .gy = .gy - MROW * margin,
+        .cx = .cx + MCOL * margin,
+        .cy = .cy - MROW * margin
       ) 
   }
 
@@ -318,7 +322,7 @@ frame_calendar_ <- function(
   # generate breaks and labels for prettify()
   class(cal_grids) <- c(calendar, class(cal_grids))
   data_ref <- gen_reference(
-    cal_grids, margins, calendar = calendar, sunday = sunday, dir = dir
+    cal_grids, margin, calendar = calendar, sunday = sunday, dir = dir
   )
 
   data <- data %>% 
@@ -467,15 +471,15 @@ gen_reference.weekly <- function(grids, dir = "h", ...) {
 }
 
 gen_reference.monthly <- function(
-  grids, margins, dir = "h", sunday = FALSE, ...
+  grids, margin, dir = "h", sunday = FALSE, ...
 ) {
   # Month breaks
   grids <- arrange(grids, PANEL)
   grids <- grids %>% 
     group_by(MPANEL) %>% 
     mutate(
-      .gx = .gx + MCOL * margins,
-      .gy = .gy - MROW * margins
+      .gx = .gx + MCOL * margin,
+      .gy = .gy - MROW * margin
     ) 
   xbreaks_df <- grids %>% 
     group_by(MCOL) %>% 

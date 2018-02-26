@@ -8,7 +8,7 @@ linear algebra}
 \usage{
 frame_calendar(data, x, y, date, calendar = "monthly", dir = "h",
   sunday = FALSE, nrow = NULL, ncol = NULL, polar = FALSE,
-  scale = "fixed", width = 0.95, height = 0.95)
+  scale = "fixed", width = 0.95, height = 0.95, margin = NULL)
 
 prettify(plot, label = c("label", "text"), locale, abbr = TRUE, ...)
 }
@@ -50,6 +50,9 @@ conditional on each daily cell, "free_wday" for scaling on weekdays,
 
 \item{width, height}{Numerics between 0 and 1 to specify the width/height for
 each glyph.}
+
+\item{margin}{A numeric between 0 and 1 to specify the gap between month
+panels.}
 
 \item{plot}{ggplot object}
 
