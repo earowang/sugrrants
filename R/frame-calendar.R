@@ -179,6 +179,34 @@ frame_calendar.default <- function(
   )
 }
 
+#' @export
+frame_calendar.tbl_ts <- function(
+  data, x, y, date, calendar = "monthly", dir = "h", sunday = FALSE, 
+  nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed",
+  width = 0.95, height = 0.95, margin = NULL
+) {
+  x <- deparse(substitute(x))
+  if (!possibly_quosure(y)) y <- deparse(substitute(y)) else y <- dots2str(y)
+  date <- deparse(substitute(date))
+
+  if (!possibly_identity(x)) x <- sym(x)
+  if (!possibly_identity(y)) y <- syms(y)
+  date <- sym(date)
+
+  out <- frame_calendar_(
+      data, x = x, y = y, date = date,
+      calendar = calendar, dir = dir, sunday = sunday, 
+      nrow = nrow, ncol = ncol, polar = polar, scale = scale,
+      width = width, height = height, margin = margin
+    ) %>% 
+    build_tsibble(
+      out, key = key(data), index = !! index(data), 
+      interval = interval(data), validate = FALSE, ordered = is_ordered(data)
+    )
+  class(out) <- c("ggcalendar", class(out))
+  out
+}
+
 # frame_calendar_ takes strings as variable name
 frame_calendar_ <- function(
   data, x, y, date, calendar = "monthly", dir = "h", sunday = FALSE, 
@@ -337,17 +365,15 @@ frame_calendar_ <- function(
   y_idx <- ends_with("zzz", vars = colnames(data))
   colnames(data)[y_idx] <- paste0(".", y)
 
-  return(
-    structure(data,
-      breaks = data_ref$breaks,
-      minor_breaks = data_ref$minor_breaks,
-      label = data_ref$label,
-      text = data_ref$text,
-      text2 = data_ref$text2,
-      dir = dir,
-      calendar = calendar,
-      class = c("ggcalendar", cls)
-    )
+  structure(data,
+    breaks = data_ref$breaks,
+    minor_breaks = data_ref$minor_breaks,
+    label = data_ref$label,
+    text = data_ref$text,
+    text2 = data_ref$text2,
+    dir = dir,
+    calendar = calendar,
+    class = c("ggcalendar", cls)
   )
 }
 
