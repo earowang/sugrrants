@@ -199,8 +199,7 @@ frame_calendar.tbl_ts <- function(
       nrow = nrow, ncol = ncol, polar = polar, scale = scale,
       width = width, height = height, margin = margin
     ) %>% 
-    build_tsibble(
-      out, key = key(data), index = !! index(data), 
+    build_tsibble(key = key(data), index = !! index(data), 
       interval = interval(data), validate = FALSE, ordered = is_ordered(data)
     )
   class(out) <- c("ggcalendar", class(out))
