@@ -2,9 +2,9 @@ Package: sugrrants
 Title: Supporting Graphs for Analysing Time Series
 Version: 0.1.1.9000
 Authors@R: c(
-    person("Earo", "Wang", email = "earo.wang@gmail.com", role = c("aut", "cre")),
-    person("Di", "Cook", role = c("aut", "ths")),
-    person("Rob", "Hyndman", role = c("aut", "ths"))
+    person("Earo", "Wang", email = "earo.wang@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-6448-5260")),
+    person("Di", "Cook", role = c("aut", "ths"), comment = c(ORCID = "0000-0002-3813-7155")),
+    person("Rob", "Hyndman", role = c("aut", "ths"), comment = c(ORCID = "0000-0002-2140-5352"))
     )
 Description: Provides 'ggplot2' graphics for analysing time series data. It aims 
     to fit into the 'tidyverse' and grammar of graphics framework for handling 
