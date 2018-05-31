@@ -21,7 +21,7 @@ Imports:
     timeDate,
     lubridate (>= 1.7.1),
     dplyr (>= 0.7.0),
-    tsibble (>= 0.1.5)
+    tsibble (>= 0.3.0)
 Suggests:
     knitr,
     rmarkdown,

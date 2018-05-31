@@ -129,6 +129,7 @@ frame_calendar.grouped_df <- function(
 
   # other attributes obtained from the grouped var of largest group size
   idx_max <- which.max(group_size(data))
+  attr_data <- attributes(data)
   data <- data %>% 
     nest(.key = .calendar_tbl) %>% 
     mutate(.calendar_tbl = map(
@@ -142,6 +143,9 @@ frame_calendar.grouped_df <- function(
     )) 
   xattr <- data$.calendar_tbl[[idx_max]]
   data <- unnest(data)
+  cn <- names(data)
+  attributes(data) <- attr_data
+  attr(data, "names") <- cn
 
   return(
     structure(data,
