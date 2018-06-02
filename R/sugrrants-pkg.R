@@ -1,3 +1,10 @@
+#' sugrrants: supporting graphs for analysing time series
+#'
+#' Provides 'ggplot2' graphics for analysing time series data. It aims to fit 
+#' into the 'tidyverse' and grammar of graphics framework for handling temporal 
+#' data.
+#'
+#' @aliases NULL sugrrants-package
 #' @importFrom lubridate as_date wday year days weeks mday month days_in_month
 #' @importFrom lubridate isoweek month<-
 #' @importFrom timeDate GoodFriday Easter
@@ -15,4 +22,5 @@
 #' @importFrom grid grobTree gList
 #' @importFrom tsibble build_tsibble key index index2 interval is_ordered
 #' @import rlang
-NULL
+"_PACKAGE"
+

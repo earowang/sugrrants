@@ -13,9 +13,7 @@
 #' @param na.rm Logical. If `TRUE`, missing values are removed.
 #'    default is the "correlation" and other options are "covariance" and "partial".
 #'
-#' @author Earo Wang
 #' @rdname sugrrants-geom
-#'
 #' @examples
 #'    library(dplyr)
 #'    fstaff <- pedestrian %>%

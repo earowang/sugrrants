@@ -77,6 +77,3 @@ before using \code{stat_acf}.
      stat_acf(geom = "bar")
 
 }
-\author{
-Earo Wang
-}

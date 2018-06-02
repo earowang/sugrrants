@@ -1,6 +1,7 @@
 # sugrrants 0.1.1.9000
 
 * Added a new argument `margin = NULL` to allow users for margin adjustment between month panels.
+* Fixed variable scoping issues.
 
 # sugrrants 0.1.1
 

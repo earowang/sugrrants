@@ -13,8 +13,6 @@
 #'    line to be drawn.
 #' @param na.rm Logical. If `TRUE`, missing values are removed.
 #'
-#' @author Earo Wang
-#'
 #' @examples
 #'    library(dplyr)
 #'    fstaff <- pedestrian %>%

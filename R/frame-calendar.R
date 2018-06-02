@@ -223,15 +223,15 @@ frame_calendar.default <- function(
   check_vars <- int_vars %in% old_cn
   if (any(check_vars)) {
     str_vars <- int_vars[check_vars]
-    abort(
-      "Columns", paste(str_vars, collapse = ", "),
-      "must be renamed to proceed."
-    )
+    abort(sprintf(
+      "Columns %s must be renamed to proceed.", 
+      paste(str_vars, collapse = ", ")
+    ))
   }
 
   date_eval <- sort(eval_tidy(date, data = data))
   if (!("Date" %in% class(date_eval))) {
-    abort("`date` must be a `Date` class.")
+    abort(sprintf("`date` (`%s`) must be a `Date` class."), .date)
   }
 
   if (calendar != "monthly") {
@@ -351,6 +351,10 @@ frame_calendar.default <- function(
   # rename y's variables
   y_idx <- ends_with("zzz", vars = names(data))
   names(data)[y_idx] <- .y
+
+  # use original column ordering
+  data <- data %>% 
+    dplyr::select(old_cn, .x, .y)
 
   structure(data,
     breaks = data_ref$breaks,

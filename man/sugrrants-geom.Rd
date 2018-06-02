@@ -76,7 +76,4 @@ before using \code{geom_acf}.
      geom_acf()
 
 }
-\author{
-Earo Wang
-}
 \keyword{datasets}

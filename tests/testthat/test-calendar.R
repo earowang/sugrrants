@@ -25,22 +25,34 @@ test_that("The argument date is Date class", {
   )
 })
 
+test_that("Variable scoping", {
+  ped <- rename(pedestrian, n = Hourly_Counts)
+  expect_named(
+    frame_calendar(ped, x = Time, y = n, date = Date),
+    c(names(ped), ".Time", ".n")
+  )
+})
+
 test_that("Some column names of data are used in the function", {
   ped <- rename(pedestrian, .gx = Date_Time)
   expect_error(
-    frame_calendar(ped, x = Time, y = Hourly_Counts, date = Date)
+    frame_calendar(ped, x = Time, y = Hourly_Counts, date = Date),
+    "must be renamed"
   )
   ped <- rename(pedestrian, .cx = Date_Time)
   expect_error(
-    frame_calendar(ped, x = Time, y = Hourly_Counts, date = Date)
+    frame_calendar(ped, x = Time, y = Hourly_Counts, date = Date),
+    "must be renamed"
   )
   ped <- rename(pedestrian, .ymax = Date_Time)
   expect_error(
-    frame_calendar(ped, x = Time, y = Hourly_Counts, date = Date)
+    frame_calendar(ped, x = Time, y = Hourly_Counts, date = Date),
+    "must be renamed"
   )
   ped <- rename(pedestrian, theta = Date_Time)
   expect_error(
-    frame_calendar(ped, x = Time, y = Hourly_Counts, date = Date, polar = TRUE)
+    frame_calendar(ped, x = Time, y = Hourly_Counts, date = Date, polar = TRUE),
+    "must be renamed"
   )
   ped <- rename(pedestrian, theta = Date_Time)
   expect_is(
@@ -50,12 +62,14 @@ test_that("Some column names of data are used in the function", {
   expect_error(
     frame_calendar(
       ped, x = Time, y = Hourly_Counts, date = Date, scale = "free_wday"
-    )
+    ),
+    "must be renamed"
   )
   expect_error(
     frame_calendar(
       ped, x = Time, y = Hourly_Counts, date = Date, scale = "free_mday"
-    )
+    ),
+    "must be renamed"
   )
   expect_is(
     frame_calendar(
@@ -69,15 +83,15 @@ test_that("The argument calendar", {
   mcal <- frame_calendar(
     pedestrian, x = Time, y = Hourly_Counts, date = Date, calendar = "monthly"
   )
-  expect_match(sugrrants:::get_calendar(mcal), "monthly")
+  expect_match(get_calendar(mcal), "monthly")
   wcal <- frame_calendar(
     pedestrian, x = Time, y = Hourly_Counts, date = Date, calendar = "weekly"
   )
-  expect_match(sugrrants:::get_calendar(wcal), "weekly")
+  expect_match(get_calendar(wcal), "weekly")
   dcal <- frame_calendar(
     pedestrian, x = Time, y = Hourly_Counts, date = Date, calendar = "daily"
   )
-  expect_match(sugrrants:::get_calendar(dcal), "daily")
+  expect_match(get_calendar(dcal), "daily")
 })
 
 test_that("The arguments x, y, date are unquoted variables", {

@@ -10,7 +10,7 @@ Description: Provides 'ggplot2' graphics for analysing time series data. It aims
     to fit into the 'tidyverse' and grammar of graphics framework for handling 
     temporal data.
 License: GPL (>= 3)
-URL: http://pkg.earo.me/sugrrants
+URL: https://pkg.earo.me/sugrrants
 BugReports: https://github.com/earowang/sugrrants/issues
 Depends: 
     ggplot2 (>= 2.2.0),
