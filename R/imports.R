@@ -12,8 +12,7 @@
 #' @importFrom ggplot2 geom_label geom_text scale_x_continuous scale_y_continuous
 #' @importFrom ggplot2 theme element_blank aes last_plot is.ggplot wrap_dims
 #' @importFrom ggplot2 GeomLabel GeomText
-#' @importFrom rlang eval_tidy quo enquo abort !! !!! := quo_name flatten_int
-#' @importFrom rlang syms sym get_expr is_quosure quos has_length warn inform
 #' @importFrom grid grobTree gList
-#' @import tsibble
+#' @importFrom tsibble build_tsibble key index index2 interval is_ordered
+#' @import rlang
 NULL

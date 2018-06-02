@@ -3,8 +3,7 @@
 \name{frame_calendar}
 \alias{frame_calendar}
 \alias{prettify}
-\title{Rearrange a temporal data frame to a calendar-based data format using
-linear algebra}
+\title{Rearrange a temporal data frame to a calendar-based data format using linear algebra}
 \usage{
 frame_calendar(data, x, y, date, calendar = "monthly", dir = "h",
   sunday = FALSE, nrow = NULL, ncol = NULL, polar = FALSE,
@@ -79,12 +78,12 @@ useful for \code{geom_line} or \code{geom_path}. The basic use is \code{ggplot(a
 the actual \code{x} and \code{y} with a prefix \code{.}.
 }
 \description{
-Temporal data of daily intervals or higher frequency levels can
-be organised into a calendar-based format, which is useful for visually
-presenting calendar-related activities or multiple seasonality (such as
-time of day, day of week, day of month). The function only returns a
-rearranged data frame, and \code{ggplot2} takes care of the plotting afterwards.
-It allows more flexibility for users to visualise the data in various ways.
+Temporal data of daily intervals or higher frequency levels can be organised
+into a calendar-based format, which is useful for visually presenting
+calendar-related activities or multiple seasonality (such as time of day,
+day of week, day of month). The function only returns a rearranged data frame,
+and \code{ggplot2} takes care of the plotting afterwards. It allows more
+flexibility for users to visualise the data in various ways.
 }
 \details{
 The calendar-based graphic can be considered as small multiples
@@ -128,7 +127,4 @@ to have their individual scales. For more details, see \code{vignette("frame-cal
      prettify(p2, locale = "zh", family = "STKaiti")
    }
 
-}
-\author{
-Earo Wang
 }

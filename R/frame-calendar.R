@@ -6,15 +6,14 @@ globalVariables(c(
   ".cx", ".cy"
 ))
 
-#' @title Rearrange a temporal data frame to a calendar-based data format using 
-#'    linear algebra
+#' Rearrange a temporal data frame to a calendar-based data format using linear algebra
 #'
-#' @description Temporal data of daily intervals or higher frequency levels can 
-#'    be organised into a calendar-based format, which is useful for visually
-#'    presenting calendar-related activities or multiple seasonality (such as 
-#'    time of day, day of week, day of month). The function only returns a
-#'    rearranged data frame, and `ggplot2` takes care of the plotting afterwards. 
-#'    It allows more flexibility for users to visualise the data in various ways.
+#' Temporal data of daily intervals or higher frequency levels can be organised 
+#' into a calendar-based format, which is useful for visually presenting 
+#' calendar-related activities or multiple seasonality (such as time of day, 
+#' day of week, day of month). The function only returns a rearranged data frame, 
+#' and `ggplot2` takes care of the plotting afterwards. It allows more 
+#' flexibility for users to visualise the data in various ways.
 #'
 #' @param data A data frame or a grouped data frame including a `Date` variable.
 #' @param x A bare (or unquoted) variable mapping to x axis, for example time of 
@@ -62,10 +61,7 @@ globalVariables(c(
 #'    to have their individual scales. For more details, see `vignette("frame-calendar",
 #'    package = "sugrrants")`
 #'
-#' @author Earo Wang
-#'
 #' @rdname frame-calendar
-#' 
 #' @examples
 #'    library(dplyr)
 #'    # compute the calendar layout for the data frame
@@ -118,13 +114,9 @@ frame_calendar.grouped_df <- function(
   nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed",
   width = 0.95, height = 0.95, margin = NULL
 ) {
-  x <- deparse(substitute(x))
-  if (!possibly_quosure(y)) y <- deparse(substitute(y)) else y <- dots2str(y)
-  date <- deparse(substitute(date))
-
-  if (!possibly_identity(x)) x <- sym(x)
-  if (!possibly_identity(y)) y <- syms(y)
-  date <- sym(date)
+  x <- enquo(x)
+  y <- enquo(y)
+  date <- enquo(date)
   cls <- class(data)
 
   # other attributes obtained from the grouped var of largest group size
@@ -134,8 +126,8 @@ frame_calendar.grouped_df <- function(
     nest(.key = .calendar_tbl) %>% 
     mutate(.calendar_tbl = map(
       .calendar_tbl, 
-      function(data) frame_calendar_(
-        data = data, x = x, y = y, date = date,
+      function(data) frame_calendar.default(
+        data = data, x = !! x, y = !! y, date = !! date,
         calendar = calendar, dir = dir, sunday = sunday, 
         nrow = nrow, ncol = ncol, polar = polar, scale = scale,
         width = width, height = height, margin = margin
@@ -162,76 +154,69 @@ frame_calendar.grouped_df <- function(
 }
 
 #' @export
-frame_calendar.default <- function(
-  data, x, y, date, calendar = "monthly", dir = "h", sunday = FALSE, 
-  nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed",
-  width = 0.95, height = 0.95, margin = NULL
-) {
-  x <- deparse(substitute(x))
-  if (!possibly_quosure(y)) y <- deparse(substitute(y)) else y <- dots2str(y)
-  date <- deparse(substitute(date))
-
-  if (!possibly_identity(x)) x <- sym(x)
-  if (!possibly_identity(y)) y <- syms(y)
-  date <- sym(date)
-
-  frame_calendar_(
-    data, x = x, y = y, date = date,
-    calendar = calendar, dir = dir, sunday = sunday, 
-    nrow = nrow, ncol = ncol, polar = polar, scale = scale,
-    width = width, height = height, margin = margin
-  )
-}
-
-#' @export
 frame_calendar.tbl_ts <- function(
   data, x, y, date, calendar = "monthly", dir = "h", sunday = FALSE, 
   nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed",
   width = 0.95, height = 0.95, margin = NULL
 ) {
-  x <- deparse(substitute(x))
-  if (!possibly_quosure(y)) y <- deparse(substitute(y)) else y <- dots2str(y)
-  date <- deparse(substitute(date))
+  x <- enquo(x)
+  y <- enquo(y)
+  date <- enquo(date)
 
-  if (!possibly_identity(x)) x <- sym(x)
-  if (!possibly_identity(y)) y <- syms(y)
-  date <- sym(date)
-
-  out <- frame_calendar_(
-      data, x = x, y = y, date = date,
+  out <- frame_calendar.default(
+      data, x = !! x, y = !! y, date = !! date,
       calendar = calendar, dir = dir, sunday = sunday, 
       nrow = nrow, ncol = ncol, polar = polar, scale = scale,
       width = width, height = height, margin = margin
     ) %>% 
-    build_tsibble(key = key(data), index = !! index(data), 
+    build_tsibble(
+      key = key(data), index = !! index(data), index2 = !! index2(data),
       interval = interval(data), validate = FALSE, ordered = is_ordered(data)
     )
   class(out) <- c("ggcalendar", class(out))
   out
 }
 
-# frame_calendar_ takes strings as variable name
-frame_calendar_ <- function(
+#' @export
+frame_calendar.default <- function(
   data, x, y, date, calendar = "monthly", dir = "h", sunday = FALSE, 
   nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed",
   width = 0.95, height = 0.95, margin = NULL
 ) {
   if (identical(between(width, 0, 1) && between(height, 0, 1), FALSE)) {
-    abort("width/height must be between 0 and 1.")
+    abort("`width`/`height` must be between 0 and 1.")
   }
+
   # data <- arrange(data, !!date) # I don't think I need to change row order
+  x <- enquo(x)
+  y <- enquo(y)
+  date <- enquo(date)
+  if (any(!purrr::map_lgl(list(x, y, date), ~ quo_is_symbolic(.) || is_identity(.)))) {
+    abort("Arguments `x`, `y`, and `Date` must be unquoted variables not characters.")
+  }
+
   .x <- paste0(".", quo_name(x))
-  # .y <- paste0(".", quo_name(y))
+  y_expr <- quo_get_expr(y)
+  if (quo_is_call(y)) {
+    fn <- call_name(y)
+    if (fn != "vars") {
+      abort("Multiple variables must be used with `vars()` for `y`.")
+    }
+    y <- quos(!!! call_args(y))
+  } else {
+    y <- quos(!! y_expr)
+  }
+  .y <- paste0(".", purrr::map_chr(y, quo_name))
   .date <- quo_name(date)
   cls <- class(data)
-  old_cn <- colnames(data)
+  old_cn <- names(data)
 
   # as some variables have been created for the computation,
   # if `data` has those variables, they're likely to be overwritten.
   # an error of conflicts is thrown away.
   int_vars <- c(".gx", ".gy", ".cx", ".cy", ".ymax", ".ymin")
-  if (possibly_identity(x)) int_vars <- c(int_vars, ".x")
-  if (possibly_identity(y)) int_vars <- c(int_vars, ".y")
+  if (is_identity(x)) int_vars <- c(int_vars, ".x")
+  if (is_identity(y)) int_vars <- c(int_vars, ".y")
 
   if (polar) int_vars <- c(int_vars, "theta", "radius")
   if (scale %in% c("free_wday", "free_mday")) int_vars <- c(int_vars, ".day")
@@ -239,23 +224,22 @@ frame_calendar_ <- function(
   if (any(check_vars)) {
     str_vars <- int_vars[check_vars]
     abort(
-      "The variables including",
-      paste(str_vars, collapse = ", "),
+      "Columns", paste(str_vars, collapse = ", "),
       "must be renamed to proceed."
     )
   }
 
   date_eval <- sort(eval_tidy(date, data = data))
   if (!("Date" %in% class(date_eval))) {
-    abort("'date' must be a 'Date' class.")
+    abort("`date` must be a `Date` class.")
   }
 
   if (calendar != "monthly") {
     if (sunday) {
-      inform("The argument sunday only works for the monthly calendar.")
+      inform("Argument `sunday` only works for the monthly calendar.")
     }
     if (!is.null(nrow) || !is.null(ncol)) {
-      inform("The argument nrow/ncol only works for the monthly calendar.")
+      inform("Argument `nrow`/`ncol` only works for the monthly calendar.")
     }
   }
 
@@ -275,7 +259,7 @@ frame_calendar_ <- function(
   # but quo_name() doesn't support LHS
   data <- cal_grids %>% 
     right_join(data, by = c("PANEL" = quo_name(date))) %>%
-    dplyr::mutate(!!.date := PANEL)
+    dplyr::mutate(!! .date := PANEL)
 
   # Define a small multiple width and height
   width <- resolution(data$.gx, zero = FALSE) * width
@@ -300,52 +284,52 @@ frame_calendar_ <- function(
     data <- dplyr::group_by(data, ROW, COL)
   } else if (scale == "free_wday") {
     data <- data %>% 
-      dplyr::mutate(.day = wday(!!date)) %>% 
+      dplyr::mutate(.day = wday(!! date)) %>% 
       dplyr::group_by(.day)
   } else if (scale == "free_mday") {
     data <- data %>% 
-      dplyr::mutate(.day = mday(!!date)) %>% 
+      dplyr::mutate(.day = mday(!! date)) %>% 
       dplyr::group_by(.day)
   }
 
   data <- data %>% 
     dplyr::mutate(
-      .ymax = max(as.numeric(!!!y), na.rm = TRUE),
-      .ymin = min(as.numeric(!!!y), na.rm = TRUE)
+      .ymax = max_na(as.numeric(!!! y)),
+      .ymin = min_na(as.numeric(!!! y))
     )
   if (polar) { # polar only support one y
     if (length(y) > 1) {
-      message("Only the first 'y' variable is used.")
+      message("Only the first `y` variable is used.")
     }
-    .y <- paste0(".", y[[1]])
+    .y <- .y[[1]]
     data <- data %>% 
       dplyr::mutate(
-        theta = 2 * pi * normalise(as.numeric(!!x), 
-          xmax = max_na(as.numeric(!!x))),
-        radius = normalise(as.numeric(!!!y), xmax = max_na(as.numeric(!!!y))),
-        !!.x := .cx + width / 2 * radius * sin(theta),
-        !!.y := .cy + height / 2 * radius * cos(theta)
+        theta = 2 * pi * normalise(as.numeric(!! x), 
+          xmax = max_na(as.numeric(!! x))),
+        radius = normalise(as.numeric(!!! y), xmax = max_na(as.numeric(!!! y))),
+        !! .x := .cx + width / 2 * radius * sin(theta),
+        !! .y := .cy + height / 2 * radius * cos(theta)
       ) %>% 
       dplyr::select(-c(theta, radius))
   } else {
     fn <- function(x, ymax, ymin) { # temporal function for mutate at
       normalise(x, xmax = max_na(ymax), xmin = min_na(ymin)) * height
     }
-    if (possibly_identity(x)) {
+    if (is_identity(x)) {
       data <- dplyr::mutate(data, .x = .cx)
     } else {
       data <- data %>% 
         dplyr::mutate(
-          !!.x := .cx + normalise(as.numeric(!!x), 
-            xmax = max_na(as.numeric(!!x))) * width
+          !! .x := .cx + normalise(as.numeric(!! x), 
+            xmax = max_na(as.numeric(!! x))) * width
         )
     }
-    if (possibly_identity(y)) {
+    if (is_identity(y)) {
       data <- dplyr::mutate(data, .y = .cy)
     } else {
       data <- data %>% 
         dplyr::mutate_at(
-          .vars = vars(!!!y),
+          .vars = vars(!!! y),
           .funs = funs(zzz = .cy + fn(., .ymax, .ymin))
         )
     }
@@ -365,8 +349,8 @@ frame_calendar_ <- function(
   }
 
   # rename y's variables
-  y_idx <- ends_with("zzz", vars = colnames(data))
-  colnames(data)[y_idx] <- paste0(".", y)
+  y_idx <- ends_with("zzz", vars = names(data))
+  names(data)[y_idx] <- .y
 
   structure(data,
     breaks = data_ref$breaks,
