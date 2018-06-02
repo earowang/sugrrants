@@ -120,6 +120,22 @@ test_that("The grouped data", {
   expect_is(grp_cal, "grouped_df")
 })
 
+test_that("The tsibble data", {
+  ped_ts <- pedestrian %>% 
+    tsibble::as_tsibble(key = tsibble::id(Sensor_Name), index = Date_Time)
+  expect_equal(
+    pedestrian %>% 
+      frame_calendar(x = Time, y = Hourly_Counts, date = Date),
+    ped_ts %>% 
+      frame_calendar(x = Time, y = Hourly_Counts, date = Date)
+  )
+  expect_is(
+    ped_ts %>% 
+      frame_calendar(x = Time, y = Hourly_Counts, date = Date),
+    "tbl_ts"
+  )
+})
+
 test_that("The arguments width & heigth", {
   expect_error(
     frame_calendar(

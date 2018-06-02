@@ -1,7 +1,9 @@
 # sugrrants 0.1.1.9000
 
 * Added a new argument `margin = NULL` to allow users for margin adjustment between month panels.
-* Fixed variable scoping issues.
+* Fixed variable scoping issues in `frame_calendar()`.
+* `frame_calendar()` added support to tsibble or `tbl_ts`.
+* Added **tsibble** as Imports.
 
 # sugrrants 0.1.1
 

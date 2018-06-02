@@ -8,14 +8,19 @@
 <title>Supporting Graphs for Analysing Time Series • sugrrants</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/united/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
-<!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="jquery.sticky-kit.min.js"></script><script src="pkgdown.js"></script><!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
+<script src="jquery.sticky-kit.min.js"></script><script src="pkgdown.js"></script><meta property="og:title" content="Supporting Graphs for Analysing Time Series">
+<meta property="og:description" content="Provides 'ggplot2' graphics for analysing time series data. It aims 
+    to fit into the 'tidyverse' and grammar of graphics framework for handling 
+    temporal data.">
+<meta name="twitter:card" content="summary">
+<!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
 <body>
-    <div class="container template-vignette">
+    <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -24,8 +29,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">sugrrants</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="index.html">sugrrants</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.1.9000</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
@@ -64,12 +73,11 @@
 
       
       </header><div class="row">
-  <div class="col-md-9">
+  <div class="col-md-9 contents">
     
 
     
     
-<div class="contents">
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <div id="sugrrants" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
@@ -80,10 +88,10 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>You could install the stable version on CRAN:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"sugrrants"</span>)</code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">install.packages</span>(<span class="st">"sugrrants"</span>)</a></code></pre></div>
 <p>You could also install the development version from Github using:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("devtools")</span>
-devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"earowang/sugrrants"</span>, <span class="dt">build_vignettes =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># install.packages("devtools")</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"earowang/sugrrants"</span>, <span class="dt">build_vignettes =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 </div>
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
@@ -91,39 +99,38 @@ devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocument
 <div id="calendar-based-graphics" class="section level3">
 <h3 class="hasAnchor">
 <a href="#calendar-based-graphics" class="anchor"></a>Calendar-based graphics</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
-<span class="kw">library</span>(sugrrants)
-
-calendar_df &lt;-<span class="st"> </span>pedestrian <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(Sensor_ID <span class="op">==</span><span class="st"> </span><span class="dv">9</span>, Year <span class="op">==</span><span class="st"> </span><span class="dv">2016</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(
-    <span class="dt">Weekend =</span> <span class="kw"><a href="http://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span>(Day <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">"Saturday"</span>, <span class="st">"Sunday"</span>), <span class="st">"Weekend"</span>, <span class="st">"Weekday"</span>)
-  ) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw"><a href="reference/frame-calendar.html">frame_calendar</a></span>(
-    <span class="dt">x =</span> Time, <span class="dt">y =</span> Hourly_Counts, <span class="dt">date =</span> Date, <span class="dt">calendar =</span> <span class="st">"monthly"</span>
-  )
-calendar_df
-<span class="co">#&gt; # A tibble: 8,780 x 13</span>
-<span class="co">#&gt;              Date_Time  Year   Month Mdate    Day  Time Sensor_ID</span>
-<span class="co">#&gt;  *              &lt;dttm&gt; &lt;int&gt;   &lt;ord&gt; &lt;int&gt;  &lt;ord&gt; &lt;int&gt;     &lt;int&gt;</span>
-<span class="co">#&gt;  1 2016-01-01 00:00:00  2016 January     1 Friday     0         9</span>
-<span class="co">#&gt;  2 2016-01-01 01:00:00  2016 January     1 Friday     1         9</span>
-<span class="co">#&gt;  3 2016-01-01 02:00:00  2016 January     1 Friday     2         9</span>
-<span class="co">#&gt;  4 2016-01-01 03:00:00  2016 January     1 Friday     3         9</span>
-<span class="co">#&gt;  5 2016-01-01 04:00:00  2016 January     1 Friday     4         9</span>
-<span class="co">#&gt;  6 2016-01-01 05:00:00  2016 January     1 Friday     5         9</span>
-<span class="co">#&gt;  7 2016-01-01 06:00:00  2016 January     1 Friday     6         9</span>
-<span class="co">#&gt;  8 2016-01-01 07:00:00  2016 January     1 Friday     7         9</span>
-<span class="co">#&gt;  9 2016-01-01 08:00:00  2016 January     1 Friday     8         9</span>
-<span class="co">#&gt; 10 2016-01-01 09:00:00  2016 January     1 Friday     9         9</span>
-<span class="co">#&gt; # ... with 8,770 more rows, and 6 more variables: Sensor_Name &lt;chr&gt;,</span>
-<span class="co">#&gt; #   Hourly_Counts &lt;int&gt;, Weekend &lt;chr&gt;, Date &lt;date&gt;, .Time &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   .Hourly_Counts &lt;dbl&gt;</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p &lt;-<span class="st"> </span>calendar_df <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> .Time, <span class="dt">y =</span> .Hourly_Counts, <span class="dt">group =</span> Date, <span class="dt">colour =</span> Weekend)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">"bottom"</span>)
-<span class="kw"><a href="reference/frame-calendar.html">prettify</a></span>(p, <span class="dt">label.padding =</span> <span class="kw">unit</span>(<span class="fl">0.08</span>, <span class="st">"lines"</span>))</code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">library</span>(dplyr)</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw">library</span>(sugrrants)</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">calendar_df &lt;-<span class="st"> </span>pedestrian <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(Sensor_ID <span class="op">==</span><span class="st"> </span><span class="dv">9</span>, Year <span class="op">==</span><span class="st"> </span><span class="dv">2016</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="st">  </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(</a>
+<a class="sourceLine" id="cb3-7" data-line-number="7">    <span class="dt">Weekend =</span> <span class="kw"><a href="http://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span>(Day <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">"Saturday"</span>, <span class="st">"Sunday"</span>), <span class="st">"Weekend"</span>, <span class="st">"Weekday"</span>)</a>
+<a class="sourceLine" id="cb3-8" data-line-number="8">  ) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="st">  </span><span class="kw"><a href="reference/frame-calendar.html">frame_calendar</a></span>(</a>
+<a class="sourceLine" id="cb3-10" data-line-number="10">    <span class="dt">x =</span> Time, <span class="dt">y =</span> Hourly_Counts, <span class="dt">date =</span> Date, <span class="dt">calendar =</span> <span class="st">"monthly"</span></a>
+<a class="sourceLine" id="cb3-11" data-line-number="11">  )</a>
+<a class="sourceLine" id="cb3-12" data-line-number="12">calendar_df</a>
+<a class="sourceLine" id="cb3-13" data-line-number="13"><span class="co">#&gt; # A tibble: 8,780 x 13</span></a>
+<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="co">#&gt;    Date_Time           Date        Year Month  Mdate Day    Time Sensor_ID</span></a>
+<a class="sourceLine" id="cb3-15" data-line-number="15"><span class="co">#&gt;  * &lt;dttm&gt;              &lt;date&gt;     &lt;int&gt; &lt;ord&gt;  &lt;int&gt; &lt;ord&gt; &lt;int&gt;     &lt;int&gt;</span></a>
+<a class="sourceLine" id="cb3-16" data-line-number="16"><span class="co">#&gt;  1 2016-01-01 00:00:00 2016-01-01  2016 Janua…     1 Frid…     0         9</span></a>
+<a class="sourceLine" id="cb3-17" data-line-number="17"><span class="co">#&gt;  2 2016-01-01 01:00:00 2016-01-01  2016 Janua…     1 Frid…     1         9</span></a>
+<a class="sourceLine" id="cb3-18" data-line-number="18"><span class="co">#&gt;  3 2016-01-01 02:00:00 2016-01-01  2016 Janua…     1 Frid…     2         9</span></a>
+<a class="sourceLine" id="cb3-19" data-line-number="19"><span class="co">#&gt;  4 2016-01-01 03:00:00 2016-01-01  2016 Janua…     1 Frid…     3         9</span></a>
+<a class="sourceLine" id="cb3-20" data-line-number="20"><span class="co">#&gt;  5 2016-01-01 04:00:00 2016-01-01  2016 Janua…     1 Frid…     4         9</span></a>
+<a class="sourceLine" id="cb3-21" data-line-number="21"><span class="co">#&gt;  6 2016-01-01 05:00:00 2016-01-01  2016 Janua…     1 Frid…     5         9</span></a>
+<a class="sourceLine" id="cb3-22" data-line-number="22"><span class="co">#&gt;  7 2016-01-01 06:00:00 2016-01-01  2016 Janua…     1 Frid…     6         9</span></a>
+<a class="sourceLine" id="cb3-23" data-line-number="23"><span class="co">#&gt;  8 2016-01-01 07:00:00 2016-01-01  2016 Janua…     1 Frid…     7         9</span></a>
+<a class="sourceLine" id="cb3-24" data-line-number="24"><span class="co">#&gt;  9 2016-01-01 08:00:00 2016-01-01  2016 Janua…     1 Frid…     8         9</span></a>
+<a class="sourceLine" id="cb3-25" data-line-number="25"><span class="co">#&gt; 10 2016-01-01 09:00:00 2016-01-01  2016 Janua…     1 Frid…     9         9</span></a>
+<a class="sourceLine" id="cb3-26" data-line-number="26"><span class="co">#&gt; # ... with 8,770 more rows, and 5 more variables: Sensor_Name &lt;chr&gt;,</span></a>
+<a class="sourceLine" id="cb3-27" data-line-number="27"><span class="co">#&gt; #   Hourly_Counts &lt;int&gt;, Weekend &lt;chr&gt;, .Time &lt;dbl&gt;, .Hourly_Counts &lt;dbl&gt;</span></a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">p &lt;-<span class="st"> </span>calendar_df <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> .Time, <span class="dt">y =</span> .Hourly_Counts, <span class="dt">group =</span> Date, <span class="dt">colour =</span> Weekend)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">"bottom"</span>)</a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="kw"><a href="reference/frame-calendar.html">prettify</a></span>(p, <span class="dt">label.padding =</span> <span class="kw">unit</span>(<span class="fl">0.08</span>, <span class="st">"lines"</span>))</a></code></pre></div>
 <p><img src="man/figure/calendar-plot-1.png" width="672"></p>
 </div>
 </div>
@@ -141,29 +148,37 @@ calendar_df
 <p>The acronym of <em>sugrrants</em> is <strong>SU</strong>pporting <strong>GR</strong>aphs with <strong>R</strong> for <strong>AN</strong>alysing <strong>T</strong>ime <strong>S</strong>eries, pronounced as “sugar ants” that are a species of ant endemic to Australia.</p>
 </div>
 </div>
-</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2 class="hasAnchor">
-<a href="#sidebar" class="anchor"></a>Links</h2>
+    <div class="links">
+<h2>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cran.r-project.org/package=sugrrants">https://​cran.r-project.org/​package=sugrrants</a>
+<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=sugrrants">https://​cloud.r-project.org/​package=sugrrants</a>
 </li>
 <li>Report a bug at <br><a href="https://github.com/earowang/sugrrants/issues">https://​github.com/​earowang/​sugrrants/​issues</a>
 </li>
 </ul>
+</div>
+<div class="license">
 <h2>License</h2>
-<p>GPL (&gt;= 3)</p>
+<ul class="list-unstyled">
+<li>GPL (&gt;= 3)</li>
+</ul>
+</div>
+<div class="developers">
 <h2>Developers</h2>
 <ul class="list-unstyled">
 <li>
-<a href="http://earo.me">Earo Wang</a> <br><small class="roles"> Author, maintainer </small> </li>
+<a href="http://earo.me">Earo Wang</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-6448-5260" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" height="16"></a> </li>
 <li>
-<a href="http://dicook.org">Di Cook</a> <br><small class="roles"> Author, thesis advisor </small> </li>
+<a href="http://dicook.org">Di Cook</a> <br><small class="roles"> Author, thesis advisor </small> <a href="https://orcid.org/0000-0002-3813-7155" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" height="16"></a> </li>
 <li>
-<a href="http://robjhyndman.com">Rob Hyndman</a> <br><small class="roles"> Author, thesis advisor </small> </li>
+<a href="http://robjhyndman.com">Rob Hyndman</a> <br><small class="roles"> Author, thesis advisor </small> <a href="https://orcid.org/0000-0002-2140-5352" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" height="16"></a> </li>
 </ul>
+</div>
+
+      <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://travis-ci.org/earowang/sugrrants"><img src="https://travis-ci.org/earowang/sugrrants.svg?branch=master" alt="Travis-CI Build Status"></a></li>
@@ -171,6 +186,7 @@ calendar_df
 <li><a href="https://cran.r-project.org/package=sugrrants"><img src="http://www.r-pkg.org/badges/version/sugrrants" alt="CRAN_Status_Badge"></a></li>
 <li><a href="https://cran.r-project.org/package=sugrrants"><img src="http://cranlogs.r-pkg.org/badges/sugrrants?color=brightgreen" alt="Downloads"></a></li>
 </ul>
+</div>
 </div>
 
 </div>
@@ -181,11 +197,13 @@ calendar_df
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
 </div>
+
+  
 
   </body>
 </html>
