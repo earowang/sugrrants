@@ -109,51 +109,6 @@ frame_calendar <- function(
 }
 
 #' @export
-frame_calendar.grouped_df <- function(
-  data, x, y, date, calendar = "monthly", dir = "h", sunday = FALSE,
-  nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed",
-  width = 0.95, height = 0.95, margin = NULL
-) {
-  x <- enquo(x)
-  y <- enquo(y)
-  date <- enquo(date)
-  cls <- class(data)
-
-  # other attributes obtained from the grouped var of largest group size
-  idx_max <- which.max(group_size(data))
-  attr_data <- attributes(data)
-  data <- data %>%
-    nest(.key = .calendar_tbl) %>%
-    mutate(.calendar_tbl = map(
-      .calendar_tbl,
-      function(data) frame_calendar.default(
-        data = data, x = !! x, y = !! y, date = !! date,
-        calendar = calendar, dir = dir, sunday = sunday,
-        nrow = nrow, ncol = ncol, polar = polar, scale = scale,
-        width = width, height = height, margin = margin
-      )
-    ))
-  xattr <- data$.calendar_tbl[[idx_max]]
-  data <- unnest(data)
-  cn <- names(data)
-  attributes(data) <- attr_data
-  attr(data, "names") <- cn
-
-  return(
-    structure(data,
-      breaks = get_breaks(xattr),
-      minor_breaks = get_minor_breaks(xattr),
-      label = get_label(xattr),
-      text = get_text(xattr),
-      text2 = get_text2(xattr),
-      dir = get_dir(xattr),
-      calendar = calendar,
-      class = c("ggcalendar", cls)
-    )
-  )
-}
-
-#' @export
 frame_calendar.tbl_ts <- function(
   data, x, y, date, calendar = "monthly", dir = "h", sunday = FALSE,
   nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed",
@@ -171,7 +126,8 @@ frame_calendar.tbl_ts <- function(
     ) %>%
     build_tsibble(
       key = key(data), index = !! index(data), index2 = !! index2(data),
-      interval = interval(data), validate = FALSE, ordered = is_ordered(data)
+      groups = groups(data), interval = interval(data), validate = FALSE, 
+      ordered = is_ordered(data)
     )
   class(out) <- c("ggcalendar", class(out))
   out
@@ -210,6 +166,9 @@ frame_calendar.default <- function(
   .date <- quo_name(date)
   cls <- class(data)
   old_cn <- names(data)
+
+  is_grped <- dplyr::is_grouped_df(data) || tsibble::is_grouped_ts(data)
+  grp_vars <- dplyr::groups(data)
 
   # as some variables have been created for the computation,
   # if `data` has those variables, they're likely to be overwritten.
@@ -290,6 +249,11 @@ frame_calendar.default <- function(
     data <- data %>%
       dplyr::mutate(.day = mday(!! date)) %>%
       dplyr::group_by(.day)
+  }
+
+  if (is_grped) {
+    data <- data %>% 
+      group_by(!!! grp_vars)
   }
 
   data <- data %>%

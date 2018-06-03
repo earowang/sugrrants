@@ -9,7 +9,7 @@
 #' @importFrom lubridate isoweek month<-
 #' @importFrom timeDate GoodFriday Easter
 #' @importFrom readr locale
-#' @importFrom dplyr group_by is.grouped_df ungroup arrange group_size
+#' @importFrom dplyr group_by is.grouped_df ungroup arrange group_size groups
 #' @importFrom dplyr if_else mutate select filter right_join summarise distinct
 #' @importFrom dplyr left_join mutate_at ends_with vars funs between bind_cols
 #' @importFrom dplyr %>%

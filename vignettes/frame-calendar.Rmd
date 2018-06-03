@@ -17,7 +17,8 @@ vignette: >
 library(knitr)
 opts_chunk$set(
   warning = FALSE, message = FALSE, echo = TRUE,
-  fig.width = 7, fig.height = 6, fig.align = 'centre'
+  fig.width = 7, fig.height = 6, fig.align = 'centre',
+  comment = "#>"
 )
 options(tibble.print_min = 5)
 ```

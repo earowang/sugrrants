@@ -4,6 +4,7 @@
 * Fixed variable scoping issues in `frame_calendar()`.
 * `frame_calendar()` added support to tsibble or `tbl_ts`.
 * Added **tsibble** as Imports.
+* Improved `frame_calendar()` in conjunction with `group_by()` for incomplete time series. (#3)
 
 # sugrrants 0.1.1
 
