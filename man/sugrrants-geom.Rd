@@ -33,8 +33,8 @@ plot. You must supply \code{mapping} if there is no plot mapping.}
 \item{position}{Position adjustment, either as a string, or the result of
 a call to a position adjustment function.}
 
-\item{na.rm}{Logical. If \code{TRUE}, missing values are removed.
-default is the "correlation" and other options are "covariance" and "partial".}
+\item{na.rm}{Logical. If \code{TRUE}, missing values are removed.  default is the
+"correlation" and other options are "covariance" and "partial".}
 
 \item{show.legend}{logical. Should this layer be included in the legends?
 \code{NA}, the default, includes if any aesthetics are mapped.
@@ -59,19 +59,19 @@ often aesthetics, used to set an aesthetic to a fixed value, like
 to the paired geom/stat.}
 }
 \description{
-Since the data input is \code{data.frame}, it's better to sort
-the date-times from early to recent and make implicit missing values explicit
-before using \code{geom_acf}.
+Since the data input is \code{data.frame}, it's better to sort the date-times
+from early to recent and make implicit missing values explicit before using
+\code{geom_acf}.
 }
 \examples{
-   library(dplyr)
-   fstaff <- pedestrian \%>\%
-     filter(Sensor_ID == 13)
-   
-   # use ggplot2 
-   fstaff \%>\%
-     ggplot(aes(x = ..lag.., y = Hourly_Counts)) +
-     geom_acf()
+library(dplyr)
+fstaff <- pedestrian \%>\%
+  filter(Sensor_ID == 13)
+
+# use ggplot2 
+fstaff \%>\%
+  ggplot(aes(x = ..lag.., y = Hourly_Counts)) +
+  geom_acf()
 
 }
 \keyword{datasets}

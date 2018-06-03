@@ -1,10 +1,10 @@
 ## helper functions ------------------
-min_na <- function(x) {
-  min(x, na.rm = TRUE)
+min_na <- function(...) {
+  min(..., na.rm = TRUE)
 }
 
-max_na <- function(x) {
-  max(x, na.rm = TRUE)
+max_na <- function(...) {
+  max(..., na.rm = TRUE)
 }
 
 is_identity <- function(x) { # x is quosure

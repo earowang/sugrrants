@@ -45,8 +45,7 @@ rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link{borders}}.}
 
-\item{lag.max}{An integer indicating the maximum lag at which to calculate the
-acf.}
+\item{lag.max}{An integer indicating the maximum lag at which to calculate the acf.}
 
 \item{type}{A character string giving the type of the acf to be computed. The
 default is the "correlation" and other options are "covariance" and "partial".}
@@ -60,18 +59,18 @@ often aesthetics, used to set an aesthetic to a fixed value, like
 to the paired geom/stat.}
 }
 \description{
-Since the data input is \code{data.frame}, it's better to sort
-the date-times from early to recent and make implicit missing values explicit
-before using \code{stat_acf}.
+Since the data input is \code{data.frame}, it's better to sort the date-times
+from early to recent and make implicit missing values explicit before using
+\code{stat_acf}.
 }
 \examples{
-   library(dplyr)
-   fstaff <- pedestrian \%>\%
-     filter(Sensor_ID == 13)
-   
-   # use ggplot2 
-   fstaff \%>\%
-     ggplot(aes(x = ..lag.., y = Hourly_Counts)) +
-     stat_acf(geom = "bar")
+library(dplyr)
+fstaff <- pedestrian \%>\%
+  filter(Sensor_ID == 13)
+
+# use ggplot2 
+fstaff \%>\%
+  ggplot(aes(x = ..lag.., y = Hourly_Counts)) +
+  stat_acf(geom = "bar")
 
 }

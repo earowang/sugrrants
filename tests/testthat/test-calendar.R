@@ -134,6 +134,19 @@ test_that("The tsibble data", {
       frame_calendar(x = Time, y = Hourly_Counts, date = Date),
     "tbl_ts"
   )
+  expect_is(
+    ped_ts %>% 
+      group_by(Sensor_Name) %>% 
+      frame_calendar(x = Time, y = Hourly_Counts, date = Date),
+    "grouped_ts"
+  )
+  expect_equal(
+    ped_ts %>% 
+      group_by(Sensor_Name) %>% 
+      frame_calendar(x = Time, y = Hourly_Counts, date = Date) %>% 
+      group_vars(),
+    "Sensor_Name"
+  )
 })
 
 test_that("The arguments width & heigth", {

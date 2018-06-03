@@ -17,83 +17,82 @@ globalVariables(c(
 #'
 #' @param data A data frame or a grouped data frame including a `Date` variable.
 #' @param x A bare (or unquoted) variable mapping to x axis, for example time of
-#'    day. If integer 1 is specified, it simply returns calendar grids on x
-#'    without transformation.
+#' day. If integer 1 is specified, it simply returns calendar grids on x
+#' without transformation.
 #' @param y A bare (or unquoted) variable or more mapping to y axis. More than
-#'    one variable need putting to `vars()`. If integer 1 is specified, it returns
-#'    calendar grids on y without transformation.
+#' one variable need putting to `vars()`. If integer 1 is specified, it returns
+#' calendar grids on y without transformation.
 #' @param date A `Date` variable mapping to dates in the calendar.
 #' @param calendar Type of calendar. (1) "monthly" calendar (the default) organises
-#'    the `data` to a common format comprised of day of week in the column and
-#'    week of month in the row. A monthly calendar is set up as a 5 by 7 layout
-#'    matrix. Each month could extend over six weeks but in these months is to
-#'    wrap the last few days up to the top row of the block. (2) "weekly"
-#'    calendar consists of day of week and week of year. (3) "daily" calendar
-#'    refers to day of month and month of year.
+#' the `data` to a common format comprised of day of week in the column and
+#' week of month in the row. A monthly calendar is set up as a 5 by 7 layout
+#' matrix. Each month could extend over six weeks but in these months is to
+#' wrap the last few days up to the top row of the block. (2) "weekly"
+#' calendar consists of day of week and week of year. (3) "daily" calendar
+#' refers to day of month and month of year.
 #' @param dir Direction of calendar: "h" for horizontal (the default) or "v" for
-#'    vertical.
+#' vertical.
 #' @param sunday FALSE (the default) indicating to starting with Monday in a
-#'    week, or TRUE for Sunday, when `calendar = "monthly"`.
+#' week, or TRUE for Sunday, when `calendar = "monthly"`.
 #' @param nrow,ncol Number of rows and columns defined for "monthly" calendar
-#'    layout. If `NULL`, it computes a sensible layout.
+#' layout. If `NULL`, it computes a sensible layout.
 #' @param polar FALSE (the default) for Cartesian or TRUE for polar coordinates.
 #' @param scale "fixed" (the default) for fixed scale. "free" for scaling
-#'    conditional on each daily cell, "free_wday" for scaling on weekdays,
-#'    "free_mday" for scaling on day of month.
+#' conditional on each daily cell, "free_wday" for scaling on weekdays,
+#' "free_mday" for scaling on day of month.
 #' @param width,height Numerics between 0 and 1 to specify the width/height for
-#'    each glyph.
-#' @param margin A numeric between 0 and 1 to specify the gap between month
-#'    panels.
+#' each glyph.
+#' @param margin A numeric between 0 and 1 to specify the gap between month panels.
 #'
 #' @return A data frame or a tibble with newly added columns of `.x`, `.y`. `.x`
-#'    and `.y` together give new coordinates computed for different types of
-#'    calendars. `date` groups the same dates in a chronological order, which is
-#'    useful for `geom_line` or `geom_path`. The basic use is `ggplot(aes(x = .x,
-#'    y = .y, group = date)) + geom_*`. The variable names `.x` and `.y` reflect
-#'    the actual `x` and `y` with a prefix `.`.
+#' and `.y` together give new coordinates computed for different types of
+#' calendars. `date` groups the same dates in a chronological order, which is
+#' useful for `geom_line` or `geom_path`. The basic use is `ggplot(aes(x = .x,
+#' y = .y, group = date)) + geom_*`. The variable names `.x` and `.y` reflect
+#' the actual `x` and `y` with a prefix `.`.
 #'
 #' @details The calendar-based graphic can be considered as small multiples
-#'    of sub-series arranged into many daily cells. For every multiple (or
-#'    facet), it requires the `x` variable mapped to be time of day and `y` to
-#'    value. New `x` and `y` are computed and named with a `.` prefixed to variable
-#'    according to `x` and `y` respectively, and get ready for `ggplot2` aesthetic
-#'    mappings. In conjunction with `group_by()`, it allows the grouped variable
-#'    to have their individual scales. For more details, see `vignette("frame-calendar",
-#'    package = "sugrrants")`
+#' of sub-series arranged into many daily cells. For every multiple (or
+#' facet), it requires the `x` variable mapped to be time of day and `y` to
+#' value. New `x` and `y` are computed and named with a `.` prefixed to variable
+#' according to `x` and `y` respectively, and get ready for `ggplot2` aesthetic
+#' mappings. In conjunction with `group_by()`, it allows the grouped variable
+#' to have their individual scales. For more details, see `vignette("frame-calendar",
+#' package = "sugrrants")`
 #'
 #' @rdname frame-calendar
 #' @examples
-#'    library(dplyr)
-#'    # compute the calendar layout for the data frame
-#'    calendar_df <- pedestrian %>%
-#'      filter(Sensor_ID == 13, Year == 2016) %>%
-#'      frame_calendar(x = Time, y = Hourly_Counts, date = Date, nrow = 4)
+#' library(dplyr)
+#' # compute the calendar layout for the data frame
+#' calendar_df <- pedestrian %>%
+#'   filter(Sensor_ID == 13, Year == 2016) %>%
+#'   frame_calendar(x = Time, y = Hourly_Counts, date = Date, nrow = 4)
 #'
-#'    # ggplot
-#'    p1 <- calendar_df %>%
-#'      ggplot(aes(x = .Time, y = .Hourly_Counts, group = Date)) +
-#'      geom_line()
-#'    prettify(p1, size = 3, label.padding = unit(0.15, "lines"))
+#' # ggplot
+#' p1 <- calendar_df %>%
+#'   ggplot(aes(x = .Time, y = .Hourly_Counts, group = Date)) +
+#'   geom_line()
+#' prettify(p1, size = 3, label.padding = unit(0.15, "lines"))
 #'
-#'    # use in conjunction with group_by()
-#'    grped_calendar <- pedestrian %>%
-#'      filter(Year == "2017", Month == "March") %>%
-#'      group_by(Sensor_Name) %>%
-#'      frame_calendar(
-#'        x = Time, y = Hourly_Counts, date = Date, sunday = TRUE
-#'      )
+#' # use in conjunction with group_by()
+#' grped_calendar <- pedestrian %>%
+#'   filter(Year == "2017", Month == "March") %>%
+#'   group_by(Sensor_Name) %>%
+#'   frame_calendar(
+#'     x = Time, y = Hourly_Counts, date = Date, sunday = TRUE
+#'   )
 #'
-#'    p2 <- grped_calendar %>%
-#'      ggplot(aes(x = .Time, y = .Hourly_Counts, group = Date)) +
-#'      geom_line() +
-#'      facet_wrap(~ Sensor_Name, nrow = 2)
-#'    prettify(p2)
-#'    \dontrun{
-#'      # allow for different languages
-#'      # below gives simplied Chinese labels with STKaiti font family,
-#'      # assuming this font installed in user's local system
-#'      prettify(p2, locale = "zh", family = "STKaiti")
-#'    }
+#' p2 <- grped_calendar %>%
+#'   ggplot(aes(x = .Time, y = .Hourly_Counts, group = Date)) +
+#'   geom_line() +
+#'   facet_wrap(~ Sensor_Name, nrow = 2)
+#' prettify(p2)
+#' \dontrun{
+#'   # allow for different languages
+#'   # below gives simplied Chinese labels with STKaiti font family,
+#'   # assuming this font installed in user's local system
+#'   prettify(p2, locale = "zh", family = "STKaiti")
+#' }
 #'
 #' @export
 frame_calendar <- function(
@@ -258,8 +257,8 @@ frame_calendar.default <- function(
 
   data <- data %>%
     dplyr::mutate(
-      .ymax = max_na(as.numeric(!!! y)),
-      .ymin = min_na(as.numeric(!!! y))
+      .ymax = max_na(!!! y),
+      .ymin = min_na(!!! y)
     )
   if (polar) { # polar only support one y
     if (length(y) > 1) {

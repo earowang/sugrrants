@@ -50,8 +50,7 @@ conditional on each daily cell, "free_wday" for scaling on weekdays,
 \item{width, height}{Numerics between 0 and 1 to specify the width/height for
 each glyph.}
 
-\item{margin}{A numeric between 0 and 1 to specify the gap between month
-panels.}
+\item{margin}{A numeric between 0 and 1 to specify the gap between month panels.}
 
 \item{plot}{ggplot object}
 
@@ -95,36 +94,36 @@ mappings. In conjunction with \code{group_by()}, it allows the grouped variable
 to have their individual scales. For more details, see \code{vignette("frame-calendar", package = "sugrrants")}
 }
 \examples{
-   library(dplyr)
-   # compute the calendar layout for the data frame
-   calendar_df <- pedestrian \%>\%
-     filter(Sensor_ID == 13, Year == 2016) \%>\%
-     frame_calendar(x = Time, y = Hourly_Counts, date = Date, nrow = 4)
+library(dplyr)
+# compute the calendar layout for the data frame
+calendar_df <- pedestrian \%>\%
+  filter(Sensor_ID == 13, Year == 2016) \%>\%
+  frame_calendar(x = Time, y = Hourly_Counts, date = Date, nrow = 4)
 
-   # ggplot
-   p1 <- calendar_df \%>\%
-     ggplot(aes(x = .Time, y = .Hourly_Counts, group = Date)) +
-     geom_line()
-   prettify(p1, size = 3, label.padding = unit(0.15, "lines"))
+# ggplot
+p1 <- calendar_df \%>\%
+  ggplot(aes(x = .Time, y = .Hourly_Counts, group = Date)) +
+  geom_line()
+prettify(p1, size = 3, label.padding = unit(0.15, "lines"))
 
-   # use in conjunction with group_by()
-   grped_calendar <- pedestrian \%>\%
-     filter(Year == "2017", Month == "March") \%>\%
-     group_by(Sensor_Name) \%>\%
-     frame_calendar(
-       x = Time, y = Hourly_Counts, date = Date, sunday = TRUE
-     )
+# use in conjunction with group_by()
+grped_calendar <- pedestrian \%>\%
+  filter(Year == "2017", Month == "March") \%>\%
+  group_by(Sensor_Name) \%>\%
+  frame_calendar(
+    x = Time, y = Hourly_Counts, date = Date, sunday = TRUE
+  )
 
-   p2 <- grped_calendar \%>\%
-     ggplot(aes(x = .Time, y = .Hourly_Counts, group = Date)) +
-     geom_line() +
-     facet_wrap(~ Sensor_Name, nrow = 2)
-   prettify(p2)
-   \dontrun{
-     # allow for different languages
-     # below gives simplied Chinese labels with STKaiti font family,
-     # assuming this font installed in user's local system
-     prettify(p2, locale = "zh", family = "STKaiti")
-   }
+p2 <- grped_calendar \%>\%
+  ggplot(aes(x = .Time, y = .Hourly_Counts, group = Date)) +
+  geom_line() +
+  facet_wrap(~ Sensor_Name, nrow = 2)
+prettify(p2)
+\dontrun{
+  # allow for different languages
+  # below gives simplied Chinese labels with STKaiti font family,
+  # assuming this font installed in user's local system
+  prettify(p2, locale = "zh", family = "STKaiti")
+}
 
 }

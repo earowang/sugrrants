@@ -1,27 +1,26 @@
-#' @title Autocorrelation for temporal data
+#' Autocorrelation for temporal data
 #'
-#' @description Since the data input is `data.frame`, it's better to sort
-#'  the date-times from early to recent and make implicit missing values explicit
-#'  before using `stat_acf`.
+#' Since the data input is `data.frame`, it's better to sort the date-times 
+#' from early to recent and make implicit missing values explicit before using 
+#' `stat_acf`.
 #'  
 #' @inheritParams ggplot2::stat_identity
-#' @param lag.max An integer indicating the maximum lag at which to calculate the
-#'    acf.
+#' @param lag.max An integer indicating the maximum lag at which to calculate the acf.
 #' @param type A character string giving the type of the acf to be computed. The
-#'    default is the "correlation" and other options are "covariance" and "partial".
+#' default is the "correlation" and other options are "covariance" and "partial".
 #' @param level A numeric defining the confidence level. If `NULL`, no significant
-#'    line to be drawn.
+#' line to be drawn.
 #' @param na.rm Logical. If `TRUE`, missing values are removed.
 #'
 #' @examples
-#'    library(dplyr)
-#'    fstaff <- pedestrian %>%
-#'      filter(Sensor_ID == 13)
-#'    
-#'    # use ggplot2 
-#'    fstaff %>%
-#'      ggplot(aes(x = ..lag.., y = Hourly_Counts)) +
-#'      stat_acf(geom = "bar")
+#' library(dplyr)
+#' fstaff <- pedestrian %>%
+#'   filter(Sensor_ID == 13)
+#' 
+#' # use ggplot2 
+#' fstaff %>%
+#'   ggplot(aes(x = ..lag.., y = Hourly_Counts)) +
+#'   stat_acf(geom = "bar")
 #'
 #' @export
 stat_acf <- function(mapping = NULL, data = NULL, geom = "bar",
