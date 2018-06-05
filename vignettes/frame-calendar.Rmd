@@ -6,7 +6,7 @@ biblio-style: authoryear-comp
 link-citations: yes
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{frame-calendar}
+  %\VignetteIndexEntry{Calendar-based graphics}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

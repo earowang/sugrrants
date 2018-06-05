@@ -1,4 +1,4 @@
-# sugrrants 0.1.1.9000
+# sugrrants 0.1.2
 
 * Added a new argument `margin = NULL` to allow users for margin adjustment between month panels.
 * Fixed variable scoping issues in `frame_calendar()`.
