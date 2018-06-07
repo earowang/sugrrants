@@ -17,6 +17,9 @@
 #' au_holiday(2013:2016, state = "VIC")
 #'
 au_holiday <- function(year, state = "VIC") {
+  .Deprecated(new = "holiday_aus",
+    msg = "A complete `holiday_aus()` is available in the tsibble package."
+  )
   if (!is.numeric(year)) {
     abort("The argument year must be double/integer.")
   }

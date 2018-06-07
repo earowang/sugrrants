@@ -1,3 +1,7 @@
+# sugrrants 0.1.2.9000
+
+* Deprecated `au_holiday()`, as a complete function `holiday_aus()` is available in the **tsibble** package.
+
 # sugrrants 0.1.2
 
 * Added a new argument `margin = NULL` to allow users for margin adjustment between month panels.
