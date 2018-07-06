@@ -133,6 +133,29 @@ frame_calendar.tbl_ts <- function(
 }
 
 #' @export
+frame_calendar.grouped_df <- function(
+  data, x, y, date, calendar = "monthly", dir = "h", sunday = FALSE,
+  nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed",
+  width = 0.95, height = 0.95, margin = NULL
+) {
+  x <- enquo(x)
+  y <- enquo(y)
+  date <- enquo(date)
+  grps <- dplyr::groups(data)
+
+  out <- frame_calendar.default(
+      data, x = !! x, y = !! y, date = !! date,
+      calendar = calendar, dir = dir, sunday = sunday,
+      nrow = nrow, ncol = ncol, polar = polar, scale = scale,
+      width = width, height = height, margin = margin
+    ) %>%
+    group_by(!!! grps)
+  class(out) <- c("ggcalendar", class(out))
+  out
+  
+}
+
+#' @export
 frame_calendar.default <- function(
   data, x, y, date, calendar = "monthly", dir = "h", sunday = FALSE,
   nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed",
