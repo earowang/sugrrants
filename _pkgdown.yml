@@ -11,6 +11,10 @@ authors:
     href: http://robjhyndman.com
 
 reference:
+- title: Overview
+  contents:
+    - sugrrants-package
+
 - title: Calendar based graphics
   desc: >
     Rearrange `data.frame` or `tibble` into a calendar layout using linear

@@ -1,4 +1,4 @@
-# sugrrants 0.1.2.9000
+# sugrrants 0.1.3
 
 * Deprecated `au_holiday()`, as a complete function `holiday_aus()` is available in the **tsibble** package.
 * Fixed `grouped_df` issue to be compatible with ggplot2 v3.0.0.
