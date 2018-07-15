@@ -169,7 +169,7 @@ frame_calendar.default <- function(
   x <- enquo(x)
   y <- enquo(y)
   date <- enquo(date)
-  if (any(!purrr::map_lgl(list(x, y, date), ~ quo_is_symbolic(.) || is_identity(.)))) {
+  if (any(!map_lgl(list(x, y, date), function(x) quo_is_symbolic(x) || is_identity(x)))) {
     abort("Arguments `x`, `y`, and `Date` must be unquoted variables not characters.")
   }
 
@@ -184,7 +184,7 @@ frame_calendar.default <- function(
   } else {
     y <- quos(!! y_expr)
   }
-  .y <- paste0(".", purrr::map_chr(y, quo_name))
+  .y <- paste0(".", map_chr(y, quo_name))
   .date <- quo_name(date)
   cls <- class(data)
   old_cn <- names(data)

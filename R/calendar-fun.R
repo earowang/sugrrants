@@ -15,7 +15,7 @@ setup_calendar.daily <- function(x, dir = "h", ...) {
   seq_facets <- seq_len(nfacets)
   days_x <- unname(days_in_month(month_x)) # d # unname() get rid of rlang warning
   counter <- map2( # g
-    .x = month_x, .y = days_x, ~ .x + 0:(.y - 1)
+    .x = month_x, .y = days_x, function(.x, .y) .x + 0:(.y - 1)
   )
   # if dir == "h"
   row_idx <- list(rep.int(seq_facets, days_x))
@@ -77,10 +77,10 @@ setup_calendar.monthly <- function(x, dir = "h", sunday = FALSE,
     first_wday <- wday(month_x, week_start = 1) # k
   }
   counter_date <- map2(
-    .x = month_x, .y = days_x, ~ .x + 0:(.y - 1) 
+    .x = month_x, .y = days_x, function(.x, .y) .x + 0:(.y - 1) 
   )
   counter <- map2( # g
-    .x = first_wday, .y = days_x, ~ .x + 0:(.y - 1)
+    .x = first_wday, .y = days_x, function(.x, .y) .x + 0:(.y - 1)
   )
   row_idx <- lapply( # i
     counter, 
@@ -102,17 +102,17 @@ setup_calendar.monthly <- function(x, dir = "h", sunday = FALSE,
   n_idx <- rep.int(1:nrow, times = c(rep.int(ncol, nrow - 1), last_rep))
   if (dir == "h") {
     row_idx[] <- map2(
-      .x = row_idx, .y = n_idx, ~ .x + max_wks * (.y - 1)
+      .x = row_idx, .y = n_idx, function(.x, .y) .x + max_wks * (.y - 1)
     )
     col_idx[] <- map2(
-      .x = col_idx, .y = m_idx, ~ .x + ndays * (.y - 1)
+      .x = col_idx, .y = m_idx, function(.x, .y) .x + ndays * (.y - 1)
     )
   } else { # dir = "v"
     row_idx[] <- map2(
-      .x = row_idx, .y = n_idx, ~ .x + ndays * (.y - 1)
+      .x = row_idx, .y = n_idx, function(.x, .y) .x + ndays * (.y - 1)
     )
     col_idx[] <- map2(
-      .x = col_idx, .y = m_idx, ~ .x + max_wks * (.y - 1)
+      .x = col_idx, .y = m_idx, function(.x, .y) .x + max_wks * (.y - 1)
     )
   }
   cal_table <- data.frame(
@@ -126,3 +126,6 @@ setup_calendar.monthly <- function(x, dir = "h", sunday = FALSE,
   return(cal_table)
 }
 
+map2 <- function(.x, .y, .f, ...) {
+  Map(.f, .x, .y, ...)
+}

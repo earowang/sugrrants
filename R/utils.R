@@ -11,7 +11,7 @@ is_identity <- function(x) { # x is quosure
   if (is_quosure(x)) {
     return(quo_get_expr(x) == 1)
   }
-  "1" %in% as.character(purrr::map(x, quo_get_expr))
+  "1" %in% as.character(map(x, quo_get_expr))
 }
 
 expand.grid2 <- function(...) {

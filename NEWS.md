@@ -2,6 +2,7 @@
 
 * Retired `au_holiday()`, since tsibble offers a complete version in `holiday_aus()`.
 * Made `prettify()` S3 generic, and added support for plotly object. (#9)
+* Removed purrr dependency
 
 # sugrrants 0.1.3
 

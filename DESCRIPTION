@@ -20,7 +20,6 @@ Imports:
     dplyr (>= 0.7.0),
     grid,
     lubridate (>= 1.7.1),
-    purrr,
     readr,
     rlang (> 0.2.0),
     tidyr,
