@@ -10,6 +10,7 @@ output:
 knitr::opts_chunk$set(
   collapse = TRUE, comment = "#>", fig.path = "man/figure/"
 )
+options(tibble.print_min = 5)
 ```
 
 # sugrrants
@@ -76,3 +77,6 @@ A new package [**rwalkr**](https://github.com/earowang/rwalkr) has been created 
 ## Miscellaneous
 
 The acronym of *sugrrants* is **SU**pporting **GR**aphs with **R** for **AN**alysing **T**ime **S**eries, pronounced as "sugar ants" that are a species of ant endemic to Australia.
+
+---
+Please note that this project is released with a [Contributor Code of Conduct](.github/CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.

@@ -47,19 +47,14 @@ calendar_df <- pedestrian %>%
   )
 calendar_df
 #> # A tibble: 8,780 x 13
-#>    Date_Time           Date        Year Month  Mdate Day    Time Sensor_ID
-#>  * <dttm>              <date>     <int> <ord>  <int> <ord> <int>     <int>
-#>  1 2016-01-01 00:00:00 2016-01-01  2016 Janua…     1 Frid…     0         9
-#>  2 2016-01-01 01:00:00 2016-01-01  2016 Janua…     1 Frid…     1         9
-#>  3 2016-01-01 02:00:00 2016-01-01  2016 Janua…     1 Frid…     2         9
-#>  4 2016-01-01 03:00:00 2016-01-01  2016 Janua…     1 Frid…     3         9
-#>  5 2016-01-01 04:00:00 2016-01-01  2016 Janua…     1 Frid…     4         9
-#>  6 2016-01-01 05:00:00 2016-01-01  2016 Janua…     1 Frid…     5         9
-#>  7 2016-01-01 06:00:00 2016-01-01  2016 Janua…     1 Frid…     6         9
-#>  8 2016-01-01 07:00:00 2016-01-01  2016 Janua…     1 Frid…     7         9
-#>  9 2016-01-01 08:00:00 2016-01-01  2016 Janua…     1 Frid…     8         9
-#> 10 2016-01-01 09:00:00 2016-01-01  2016 Janua…     1 Frid…     9         9
-#> # ... with 8,770 more rows, and 5 more variables: Sensor_Name <chr>,
+#>   Date_Time           Date        Year Month Mdate Day    Time Sensor_ID
+#> * <dttm>              <date>     <int> <ord> <int> <ord> <int>     <int>
+#> 1 2016-01-01 00:00:00 2016-01-01  2016 Janu…     1 Frid…     0         9
+#> 2 2016-01-01 01:00:00 2016-01-01  2016 Janu…     1 Frid…     1         9
+#> 3 2016-01-01 02:00:00 2016-01-01  2016 Janu…     1 Frid…     2         9
+#> 4 2016-01-01 03:00:00 2016-01-01  2016 Janu…     1 Frid…     3         9
+#> 5 2016-01-01 04:00:00 2016-01-01  2016 Janu…     1 Frid…     4         9
+#> # ... with 8,775 more rows, and 5 more variables: Sensor_Name <chr>,
 #> #   Hourly_Counts <int>, Weekend <chr>, .Time <dbl>, .Hourly_Counts <dbl>
 ```
 
@@ -132,3 +127,9 @@ has been done, but the interface needs improving after the gsoc.
 The acronym of *sugrrants* is **SU**pporting **GR**aphs with **R** for
 **AN**alysing **T**ime **S**eries, pronounced as “sugar ants” that are a
 species of ant endemic to Australia.
+
+-----
+
+Please note that this project is released with a [Contributor Code of
+Conduct](.github/CODE_OF_CONDUCT.md). By participating in this project
+you agree to abide by its terms.
