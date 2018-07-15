@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Supporting Graphs for Analysing Time Series • sugrrants</title>
-<!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/united/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Supporting Graphs for Analysing Time Series">
@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">sugrrants</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.3</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.3.9000</span>
       </span>
     </div>
 
@@ -112,20 +112,15 @@
 <a class="sourceLine" id="cb3-11" data-line-number="11">  )</a>
 <a class="sourceLine" id="cb3-12" data-line-number="12">calendar_df</a>
 <a class="sourceLine" id="cb3-13" data-line-number="13"><span class="co">#&gt; # A tibble: 8,780 x 13</span></a>
-<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="co">#&gt;    Date_Time           Date        Year Month  Mdate Day    Time Sensor_ID</span></a>
-<a class="sourceLine" id="cb3-15" data-line-number="15"><span class="co">#&gt;  * &lt;dttm&gt;              &lt;date&gt;     &lt;int&gt; &lt;ord&gt;  &lt;int&gt; &lt;ord&gt; &lt;int&gt;     &lt;int&gt;</span></a>
-<a class="sourceLine" id="cb3-16" data-line-number="16"><span class="co">#&gt;  1 2016-01-01 00:00:00 2016-01-01  2016 Janua…     1 Frid…     0         9</span></a>
-<a class="sourceLine" id="cb3-17" data-line-number="17"><span class="co">#&gt;  2 2016-01-01 01:00:00 2016-01-01  2016 Janua…     1 Frid…     1         9</span></a>
-<a class="sourceLine" id="cb3-18" data-line-number="18"><span class="co">#&gt;  3 2016-01-01 02:00:00 2016-01-01  2016 Janua…     1 Frid…     2         9</span></a>
-<a class="sourceLine" id="cb3-19" data-line-number="19"><span class="co">#&gt;  4 2016-01-01 03:00:00 2016-01-01  2016 Janua…     1 Frid…     3         9</span></a>
-<a class="sourceLine" id="cb3-20" data-line-number="20"><span class="co">#&gt;  5 2016-01-01 04:00:00 2016-01-01  2016 Janua…     1 Frid…     4         9</span></a>
-<a class="sourceLine" id="cb3-21" data-line-number="21"><span class="co">#&gt;  6 2016-01-01 05:00:00 2016-01-01  2016 Janua…     1 Frid…     5         9</span></a>
-<a class="sourceLine" id="cb3-22" data-line-number="22"><span class="co">#&gt;  7 2016-01-01 06:00:00 2016-01-01  2016 Janua…     1 Frid…     6         9</span></a>
-<a class="sourceLine" id="cb3-23" data-line-number="23"><span class="co">#&gt;  8 2016-01-01 07:00:00 2016-01-01  2016 Janua…     1 Frid…     7         9</span></a>
-<a class="sourceLine" id="cb3-24" data-line-number="24"><span class="co">#&gt;  9 2016-01-01 08:00:00 2016-01-01  2016 Janua…     1 Frid…     8         9</span></a>
-<a class="sourceLine" id="cb3-25" data-line-number="25"><span class="co">#&gt; 10 2016-01-01 09:00:00 2016-01-01  2016 Janua…     1 Frid…     9         9</span></a>
-<a class="sourceLine" id="cb3-26" data-line-number="26"><span class="co">#&gt; # ... with 8,770 more rows, and 5 more variables: Sensor_Name &lt;chr&gt;,</span></a>
-<a class="sourceLine" id="cb3-27" data-line-number="27"><span class="co">#&gt; #   Hourly_Counts &lt;int&gt;, Weekend &lt;chr&gt;, .Time &lt;dbl&gt;, .Hourly_Counts &lt;dbl&gt;</span></a></code></pre></div>
+<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="co">#&gt;   Date_Time           Date        Year Month Mdate Day    Time Sensor_ID</span></a>
+<a class="sourceLine" id="cb3-15" data-line-number="15"><span class="co">#&gt; * &lt;dttm&gt;              &lt;date&gt;     &lt;int&gt; &lt;ord&gt; &lt;int&gt; &lt;ord&gt; &lt;int&gt;     &lt;int&gt;</span></a>
+<a class="sourceLine" id="cb3-16" data-line-number="16"><span class="co">#&gt; 1 2016-01-01 00:00:00 2016-01-01  2016 Janu…     1 Frid…     0         9</span></a>
+<a class="sourceLine" id="cb3-17" data-line-number="17"><span class="co">#&gt; 2 2016-01-01 01:00:00 2016-01-01  2016 Janu…     1 Frid…     1         9</span></a>
+<a class="sourceLine" id="cb3-18" data-line-number="18"><span class="co">#&gt; 3 2016-01-01 02:00:00 2016-01-01  2016 Janu…     1 Frid…     2         9</span></a>
+<a class="sourceLine" id="cb3-19" data-line-number="19"><span class="co">#&gt; 4 2016-01-01 03:00:00 2016-01-01  2016 Janu…     1 Frid…     3         9</span></a>
+<a class="sourceLine" id="cb3-20" data-line-number="20"><span class="co">#&gt; 5 2016-01-01 04:00:00 2016-01-01  2016 Janu…     1 Frid…     4         9</span></a>
+<a class="sourceLine" id="cb3-21" data-line-number="21"><span class="co">#&gt; # ... with 8,775 more rows, and 5 more variables: Sensor_Name &lt;chr&gt;,</span></a>
+<a class="sourceLine" id="cb3-22" data-line-number="22"><span class="co">#&gt; #   Hourly_Counts &lt;int&gt;, Weekend &lt;chr&gt;, .Time &lt;dbl&gt;, .Hourly_Counts &lt;dbl&gt;</span></a></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">p &lt;-<span class="st"> </span>calendar_df <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb4-2" data-line-number="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> .Time, <span class="dt">y =</span> .Hourly_Counts, <span class="dt">group =</span> Date, <span class="dt">colour =</span> Weekend)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb4-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></a>
@@ -146,6 +141,8 @@
 <h2 class="hasAnchor">
 <a href="#miscellaneous" class="anchor"></a>Miscellaneous</h2>
 <p>The acronym of <em>sugrrants</em> is <strong>SU</strong>pporting <strong>GR</strong>aphs with <strong>R</strong> for <strong>AN</strong>alysing <strong>T</strong>ime <strong>S</strong>eries, pronounced as “sugar ants” that are a species of ant endemic to Australia.</p>
+<hr>
+<p>Please note that this project is released with a <a href="CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By participating in this project you agree to abide by its terms.</p>
 </div>
 </div>
   </div>
@@ -154,6 +151,8 @@
     <div class="links">
 <h2>Links</h2>
 <ul class="list-unstyled">
+<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=sugrrants">https://​cloud.r-project.org/​package=sugrrants</a>
+</li>
 <li>Report a bug at <br><a href="https://github.com/earowang/sugrrants/issues">https://​github.com/​earowang/​sugrrants/​issues</a>
 </li>
 </ul>

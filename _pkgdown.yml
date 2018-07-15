@@ -1,6 +1,6 @@
 template:
   params:
-    bootswatch: united
+    bootswatch: cosmo
 
 authors:
   Earo Wang:
@@ -26,12 +26,6 @@ reference:
   contents:
     - starts_with("geom_")
     - starts_with("stat_")
-
-- title: Handle temporal components
-  desc: >
-    These functions provides tools to handle temporal components.
-  contents:
-    - au_holiday
 
 - title: Datasets
   contents:
