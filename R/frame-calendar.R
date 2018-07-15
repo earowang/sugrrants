@@ -3,7 +3,7 @@ globalVariables(c(
   ".ymajor_max", ".ymajor_min", ".yminor_max", ".yminor_min", "COL", "PANEL",
   "MCOL", "MPANEL", "MROW", "ROW", "date_eval", "label", "margin", "radius",
   "theta", "x", "y", ".day", ".calendar_tbl", ".x", ".y", ".", ".ymax", ".ymin",
-  ".cx", ".cy"
+  ".cx", ".cy", "label_arg"
 ))
 
 #' Rearrange a temporal data frame to a calendar-based data format using linear algebra
@@ -550,7 +550,7 @@ gen_reference.monthly <- function(
 }
 
 #' @rdname frame-calendar
-#' @param plot ggplot object
+#' @param plot A "ggplot" object or "plotly".
 #' @param label If "label" is specified, it will add month/week text on the
 #'    `ggplot` object, which is actually passed to `geom_label()`. If "text" is
 #'    specified, it will add weekday/day of month text on the `ggplot` object,
@@ -568,12 +568,6 @@ prettify <- function(plot, label = c("label", "text"), locale, abbr = TRUE,
   if (missing(plot)) {
     plot <- last_plot()
   }
-  if (!is.ggplot(plot)) {
-    abort("'plot' must be a ggplot object.")
-  }
-  if (!("ggcalendar" %in% class(plot$data))) {
-    abort("'prettify' does not know how to handle with this type of data.")
-  }
   if (is.null(label)) {
     label_arg <- NULL
   } else {
@@ -582,34 +576,53 @@ prettify <- function(plot, label = c("label", "text"), locale, abbr = TRUE,
       several.ok = TRUE
     )
   }
-  if (missing(locale)) {
-    locale <- "en"
+  UseMethod("prettify")
+}
+
+#' @export
+prettify.plotly <- function(plot, label = c("label", "text"), locale, abbr = TRUE,
+  ...) {
+  a <- list(
+    title = "",
+    zeroline = FALSE,
+    autotick = FALSE,
+    showticklabels = FALSE,
+    showline = FALSE,
+    showgrid = FALSE
+  )
+  ly_data <- plotly::plotly_data(plot)
+  label <- get_label(ly_data)
+  text <- get_text(ly_data)
+  cal <- get_calendar(ly_data)
+  lst <- pre_plot(cal, label, text, locale, abbr)
+  label <- lst$label
+  text <- lst$text
+  if ("label" %in% label_arg) {
+    plot <- plot %>% 
+      plotly::add_text(x = ~ x, y = ~ y, text = ~ label, data = label, ...)
   }
-  loc_dn <- locale(date_names = locale)$date_names
-  if (abbr) {
-    mtext <- loc_dn$mon_ab
-    dtext <- loc_dn$day_ab
-    # a single letter
-    if (locale == "en") dtext <- substring(dtext, first = 1, last = 1)
-  } else {
-    mtext <- loc_dn$mon
-    dtext <- loc_dn$day
+  if ("text" %in% label_arg) {
+    plot <- plot %>% 
+      plotly::add_text(x = ~ x, y = ~ y - 0.03, text = ~ label, data = text, ...)
+  }
+  if ("text2" %in% label_arg) {
+    warn("`label = 'text2'` is ignored for plotly.")
+  }
+  plotly::layout(plot, showlegend = FALSE, xaxis = a, yaxis = a)
+}
+
+#' @export
+prettify.ggplot <- function(plot, label = c("label", "text"), locale, abbr = TRUE,
+  ...) {
+  if (!("ggcalendar" %in% class(plot$data))) {
+    abort("`prettify` does not know how to handle with this type of data.")
   }
   label <- get_label(plot$data)
   text <- get_text(plot$data)
   cal <- get_calendar(plot$data)
-  if (cal == "monthly") {
-    nyr <- unique.default(label$year)
-    seq_label <- mtext[label$mon]
-    if (length(nyr) > 2) seq_label <- paste(seq_label, label$year)
-    label <- bind_cols(label, label = seq_label)
-    text <- bind_cols(text, label = dtext[text$day])
-  } else if (cal == "weekly") {
-    text <- bind_cols(text, label = dtext[text$day])
-  } else if (cal == "daily") {
-    seq_label <- mtext[label$mon]
-    label <- bind_cols(label, label = seq_label)
-  }
+  lst <- pre_plot(cal, label, text, locale, abbr)
+  label <- lst$label
+  text <- lst$text
   breaks <- get_breaks(plot$data)
   minor_breaks <- get_minor_breaks(plot$data)
   dir <- get_dir(plot$data)
@@ -727,4 +740,33 @@ gen_day_breaks <- function(grids) {
   minor_ybreaks <- minor_ybreaks_df$.yminor_min
   minor_breaks <- list(x = minor_xbreaks, y = minor_ybreaks)
   return(minor_breaks)
+}
+
+pre_plot <- function(calendar, label, text, locale, abbr = TRUE) {
+  if (missing(locale)) {
+    locale <- "en"
+  }
+  loc_dn <- locale(date_names = locale)$date_names
+  if (abbr) {
+    mtext <- loc_dn$mon_ab
+    dtext <- loc_dn$day_ab
+    # a single letter
+    if (locale == "en") dtext <- substring(dtext, first = 1, last = 1)
+  } else {
+    mtext <- loc_dn$mon
+    dtext <- loc_dn$day
+  }
+  if (calendar == "monthly") {
+    nyr <- unique.default(label$year)
+    seq_label <- mtext[label$mon]
+    if (length(nyr) > 2) seq_label <- paste(seq_label, label$year)
+    label <- bind_cols(label, label = seq_label)
+    text <- bind_cols(text, label = dtext[text$day])
+  } else if (calendar == "weekly") {
+    text <- bind_cols(text, label = dtext[text$day])
+  } else if (calendar == "daily") {
+    seq_label <- mtext[label$mon]
+    label <- bind_cols(label, label = seq_label)
+  }
+  list(label = label, text = text)
 }

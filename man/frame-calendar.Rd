@@ -52,7 +52,7 @@ each glyph.}
 
 \item{margin}{A numeric between 0 and 1 to specify the gap between month panels.}
 
-\item{plot}{ggplot object}
+\item{plot}{A "ggplot" object or "plotly".}
 
 \item{label}{If "label" is specified, it will add month/week text on the
 \code{ggplot} object, which is actually passed to \code{geom_label()}. If "text" is
