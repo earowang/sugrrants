@@ -88,10 +88,23 @@ globalVariables(c(
 #'   facet_wrap(~ Sensor_Name, nrow = 2)
 #' prettify(p2)
 #' \dontrun{
-#'   # allow for different languages
-#'   # below gives simplied Chinese labels with STKaiti font family,
-#'   # assuming this font installed in user's local system
-#'   prettify(p2, locale = "zh", family = "STKaiti")
+#' # allow for different languages
+#' # below gives simplied Chinese labels with STKaiti font family,
+#' # assuming this font installed in user's local system
+#' prettify(p2, locale = "zh", family = "STKaiti")
+#'
+#' # plotly example
+#' if (!requireNamespace("plotly", quietly = TRUE)) {
+#'   stop("Please install the 'plotly 'package to run these following examples.")
+#' }
+#' library(plotly)
+#' pp <- calendar_df %>% 
+#'   group_by(Date) %>%
+#'   plot_ly(
+#'     x = ~ .Time, y = ~ .Hourly_Counts
+#'   ) %>%
+#'   add_lines()
+#' prettify(pp)
 #' }
 #'
 #' @export
