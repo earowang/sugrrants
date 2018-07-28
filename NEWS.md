@@ -1,3 +1,7 @@
+# sugrrants 0.1.4.9000
+
+* Moved `tsibble` from Imports to Suggests
+
 # sugrrants 0.1.4
 
 * Retired `au_holiday()`, since tsibble offers a complete version in `holiday_aus()`.

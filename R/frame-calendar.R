@@ -136,10 +136,11 @@ frame_calendar.tbl_ts <- function(
       nrow = nrow, ncol = ncol, polar = polar, scale = scale,
       width = width, height = height, margin = margin
     ) %>%
-    build_tsibble(
-      key = key(data), index = !! index(data), index2 = !! index2(data),
-      groups = groups(data), interval = interval(data), validate = FALSE, 
-      ordered = is_ordered(data)
+    tsibble::build_tsibble(
+      key = tsibble::key(data), index = !! tsibble::index(data), 
+      index2 = !! tsibble::index2(data), groups = groups(data), 
+      interval = tsibble::interval(data), validate = FALSE, 
+      ordered = tsibble::is_ordered(data)
     )
   class(out) <- c("ggcalendar", class(out))
   out

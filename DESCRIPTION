@@ -1,6 +1,6 @@
 Package: sugrrants
 Title: Supporting Graphs for Analysing Time Series
-Version: 0.1.4
+Version: 0.1.4.9000
 Date: 2018-07-26
 Authors@R: c(
     person("Earo", "Wang", email = "earo.wang@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-6448-5260")),
@@ -22,14 +22,14 @@ Imports:
     lubridate (>= 1.7.1),
     readr,
     rlang (> 0.2.0),
-    tidyr,
-    tsibble (>= 0.3.0)
+    tidyr
 Suggests: 
     covr,
     knitr,
     plotly,
     rmarkdown,
     testthat,
+    tsibble (>= 0.3.0),
     viridis
 VignetteBuilder: knitr
 Encoding: UTF-8

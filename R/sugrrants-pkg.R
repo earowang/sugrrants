@@ -18,7 +18,6 @@
 #' @importFrom ggplot2 theme element_blank aes last_plot is.ggplot wrap_dims
 #' @importFrom ggplot2 GeomLabel GeomText
 #' @importFrom grid grobTree gList
-#' @importFrom tsibble build_tsibble key index index2 interval is_ordered
 #' @import rlang
 "_PACKAGE"
 
