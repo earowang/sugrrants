@@ -7,8 +7,8 @@
 \title{Autocorrelation for temporal data}
 \usage{
 geom_acf(mapping = NULL, data = NULL, position = "identity",
-  na.rm = FALSE, show.legend = NA, inherit.aes = TRUE, lag.max = NULL,
-  type = "correlation", level = 0.95, ...)
+  na.rm = FALSE, show.legend = NA, inherit.aes = TRUE,
+  lag.max = NULL, type = "correlation", level = 0.95, ...)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or

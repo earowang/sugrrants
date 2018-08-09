@@ -1,6 +1,6 @@
 # sugrrants 0.1.4.9000
 
-* Moved `tsibble` from Imports to Suggests
+* Avoid strong dependency on `tsibble` & `readr`.
 
 # sugrrants 0.1.4
 

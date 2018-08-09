@@ -20,19 +20,19 @@ Imports:
     dplyr (>= 0.7.0),
     grid,
     lubridate (>= 1.7.1),
-    readr,
     rlang (> 0.2.0),
     tidyr
 Suggests: 
     covr,
     knitr,
     plotly,
+    readr,
     rmarkdown,
     testthat,
-    tsibble (>= 0.3.0),
+    tsibble (>= 0.5.0),
     viridis
 VignetteBuilder: knitr
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0

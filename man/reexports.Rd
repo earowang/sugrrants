@@ -4,7 +4,6 @@
 \name{reexports}
 \alias{reexports}
 \alias{\%>\%}
-\alias{reexports}
 \alias{vars}
 \title{Objects exported from other packages}
 \keyword{internal}

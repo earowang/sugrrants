@@ -7,7 +7,6 @@
 #' @aliases NULL sugrrants-package
 #' @importFrom lubridate as_date wday year days weeks mday month days_in_month
 #' @importFrom lubridate isoweek month<-
-#' @importFrom readr locale
 #' @importFrom dplyr group_by is.grouped_df ungroup arrange group_size groups
 #' @importFrom dplyr if_else mutate select filter right_join summarise distinct
 #' @importFrom dplyr left_join mutate_at ends_with vars funs between bind_cols
