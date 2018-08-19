@@ -1,4 +1,4 @@
-# sugrrants 0.1.4.9000
+# sugrrants 0.1.5
 
 * Avoid strong dependency on `tsibble` & `readr`.
 

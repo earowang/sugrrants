@@ -1,5 +1,3 @@
-Fixed errors and warnings for ggplot2 new release.
-
 ## Test environments
 
 * local OS X install, R 3.5.1
