@@ -21,7 +21,8 @@ Imports:
     grid,
     lubridate (>= 1.7.1),
     rlang (>= 0.2.0),
-    tidyr
+    tidyr,
+    r2d3
 Suggests: 
     covr,
     knitr,
