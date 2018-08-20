@@ -1,3 +1,5 @@
+globalVariables("name")
+
 #' Rearrange data into parent-children pair data for d3-hierarchy
 #'
 #' @param data A tabular data.
