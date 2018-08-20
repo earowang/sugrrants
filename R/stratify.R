@@ -22,7 +22,7 @@ stratify <- function(data, ..., size = 1L, root, na.rm = FALSE) {
   lst_data <- vector("list", length = nc)
   if (nc > 1) { # nesting
     for (j in seq_len(nc - 1)) {
-      tmp <- tibble::tibble(
+      tmp <- dplyr::tibble(
         name = key_data[[j]],
         parent = key_data[[j + 1]]
       )
@@ -35,13 +35,13 @@ stratify <- function(data, ..., size = 1L, root, na.rm = FALSE) {
     uni_parent <- key_data[[1]]
   }
   if (has_length(uni_parent, 1)) {
-    lst_data[[1]] <- tibble::tibble(name = uni_parent, parent = "")
+    lst_data[[1]] <- dplyr::tibble(name = uni_parent, parent = "")
   } else {
     if (is_missing(root)) {
       root <- deparse(substitute(data))
     }
-    lst_data[[1]] <- tibble::tibble(name = root, parent = "") %>%
-      dplyr::bind_rows(tibble::tibble(name = uni_parent, parent = root))
+    lst_data[[1]] <- dplyr::tibble(name = root, parent = "") %>%
+      dplyr::bind_rows(dplyr::tibble(name = uni_parent, parent = root))
   }
   out <- dplyr::bind_rows(lst_data)
   if (na.rm) {
