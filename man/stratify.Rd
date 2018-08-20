@@ -4,18 +4,12 @@
 \alias{stratify}
 \title{Rearrange data into parent-children pair data for d3-hierarchy}
 \usage{
-stratify(data, ..., size = 1L, root, na.rm = FALSE)
+stratify(data, formula, root, na.rm = FALSE)
 }
 \arguments{
 \item{data}{A tabular data.}
 
-\item{...}{Nesting variables.}
-
-\item{size}{\itemize{
-\item \code{1} means identity
-\item Bare variable name
-\item A vector of the same length as the distinct key
-}}
+\item{formula}{Node size on the lhs, nesting variables on the rhs.}
 
 \item{root}{Character.}
 
