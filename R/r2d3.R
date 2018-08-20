@@ -1,7 +1,8 @@
 #' Plot D3 hierarchy
 #'
-#' @param data A parent-name paired data frame
+#' @param data A parent-name paired data frame.
 #' @inheritParams r2d3::r2d3
+#' @param polar TRUE for radial display.
 #' @rdname r2d3
 #' @export
 d3_sunburst <- function(data, width = NULL, height = NULL) {
@@ -65,4 +66,19 @@ d3_circle_pack <- function(data, width = NULL, height = NULL) {
     width = width,
     height = height
   )
+}
+
+#' @rdname r2d3
+#' @export
+d3_dendrogram <- function(data, polar = FALSE, width = NULL, height = NULL) {
+  if (polar) {
+    r2d3::r2d3(
+      data = data,
+      d3_version = 4,
+      script = system.file("d3/radial-dendrogram/radial-dendrogram.js", package = "sugrrants"),
+      css = system.file("d3/radial-dendrogram/radial-dendrogram.css", package = "sugrrants"),
+      width = width,
+      height = height
+    )
+  }
 }
