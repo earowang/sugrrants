@@ -14,7 +14,7 @@ var treemap = d3.treemap()
     .paddingInner(1);
 
 r2d3.onRender(function(root, svg, w, h, options) {
-  var root = d3.stratify()
+  root = d3.stratify()
     .id(function(d) { return d.name; })
     .parentId(function(d) { return d.parent; })
     (data)

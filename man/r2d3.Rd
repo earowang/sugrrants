@@ -4,6 +4,7 @@
 \alias{d3_sunburst}
 \alias{d3_indented_tree}
 \alias{d3_treemap}
+\alias{d3_circle_pack}
 \title{Plot D3 hierarchy}
 \usage{
 d3_sunburst(data, width = NULL, height = NULL)
@@ -13,6 +14,8 @@ d3_indented_tree(data, width = NULL, height = NULL)
 d3_treemap(data, width = NULL, height = NULL)
 
 d3_indented_tree(data, width = NULL, height = NULL)
+
+d3_circle_pack(data, width = NULL, height = NULL)
 }
 \arguments{
 \item{data}{A parent-name paired data frame}
