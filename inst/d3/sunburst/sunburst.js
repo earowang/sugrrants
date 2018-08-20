@@ -26,7 +26,7 @@ var group = svg.append("g")
       "translate(" + width / 2 + "," + height / 2 + ")"
     );
 
-r2d3.onRender(function(root, svg, w, h, options) {
+r2d3.onRender(function(data, svg, w, h, options) {
   root = d3.stratify()
     .id(function(d) { return d.name; })
     .parentId(function(d) { return d.parent; })

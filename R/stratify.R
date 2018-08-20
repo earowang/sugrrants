@@ -52,7 +52,7 @@ stratify <- function(data, formula, root, na.rm = FALSE) {
   }
   out <- dplyr::bind_rows(lst_data)
   if (na.rm) {
-    out <- tidyr::drop_na(out)
+    out <- tidyr::drop_na(out, name)
   }
   out
 }

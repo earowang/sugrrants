@@ -2,9 +2,12 @@
 % Please edit documentation in R/r2d3.R
 \name{d3_sunburst}
 \alias{d3_sunburst}
-\title{Plot D3 sunburst}
+\alias{d3_indented_tree}
+\title{Plot D3 hierarchy}
 \usage{
 d3_sunburst(data, width = NULL, height = NULL)
+
+d3_indented_tree(data, width = NULL, height = NULL)
 }
 \arguments{
 \item{data}{A parent-name paired data frame}
@@ -14,5 +17,5 @@ d3_sunburst(data, width = NULL, height = NULL)
 \item{height}{Desired height for output widget.}
 }
 \description{
-Plot D3 sunburst
+Plot D3 hierarchy
 }
