@@ -28,7 +28,7 @@ stratify <- function(data, ..., size = 1L, root, na.rm = FALSE) {
       )
       # ToDo: check if upper-level variable has fewer observations
       lst_data[[nc - j + 1]] <- dplyr::distinct(tmp) %>%
-        mutate(size = ifelse(j == 1, size, 0L))
+        mutate(size = ifelse(j == 1, size, NA))
     }
     uni_parent <- unique(tmp[["parent"]]) # last "tmp"
   } else { # crossing
@@ -40,8 +40,17 @@ stratify <- function(data, ..., size = 1L, root, na.rm = FALSE) {
     if (is_missing(root)) {
       root <- deparse(substitute(data))
     }
-    lst_data[[1]] <- dplyr::tibble(name = root, parent = "") %>%
-      dplyr::bind_rows(dplyr::tibble(name = uni_parent, parent = root))
+    header <- dplyr::tibble(name = root, parent = "")
+    if (nc > 1) {
+      lst_data[[1]] <- header %>%
+        dplyr::bind_rows(dplyr::tibble(name = uni_parent, parent = root))
+    } else { # crossing
+      lst_data[[1]] <- header %>%
+        dplyr::bind_rows(
+          dplyr::tibble(name = uni_parent, parent = root) %>% 
+            mutate(size = size)
+        )
+    }
   }
   out <- dplyr::bind_rows(lst_data)
   if (na.rm) {
