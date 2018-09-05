@@ -11,7 +11,6 @@
 #' @importFrom dplyr if_else mutate select filter right_join summarise distinct
 #' @importFrom dplyr left_join mutate_at ends_with vars funs between bind_cols
 #' @importFrom dplyr %>%
-#' @importFrom tidyr nest unnest gather
 #' @importFrom ggplot2 resolution layer ggproto draw_key_rect draw_key_path 
 #' @importFrom ggplot2 geom_label geom_text scale_x_continuous scale_y_continuous
 #' @importFrom ggplot2 theme element_blank aes last_plot is.ggplot wrap_dims
