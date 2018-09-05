@@ -1,3 +1,7 @@
+# sugrrants 0.1.6.9000
+
+* Removed dependency on `tidyr`.
+
 # sugrrants 0.1.5
 
 * Avoid strong dependency on `tsibble` & `readr`.
