@@ -50,7 +50,8 @@ conditional on each daily cell, "free_wday" for scaling on weekdays,
 \item{width, height}{Numerics between 0 and 1 to specify the width/height for
 each glyph.}
 
-\item{margin}{A numeric between 0 and 1 to specify the gap between month panels.}
+\item{margin}{Numerics of length two between 0 and 1 to specify the horizontal
+and vertical margins between month panels.}
 
 \item{plot}{A "ggplot" object or "plotly".}
 
@@ -111,9 +112,7 @@ prettify(p1, size = 3, label.padding = unit(0.15, "lines"))
 grped_calendar <- pedestrian \%>\%
   filter(Year == "2017", Month == "March") \%>\%
   group_by(Sensor_Name) \%>\%
-  frame_calendar(
-    x = Time, y = Hourly_Counts, date = Date, sunday = TRUE
-  )
+  frame_calendar(x = Time, y = Hourly_Counts, date = Date, sunday = TRUE)
 
 p2 <- grped_calendar \%>\%
   ggplot(aes(x = .Time, y = .Hourly_Counts, group = Date)) +
@@ -133,9 +132,7 @@ if (!requireNamespace("plotly", quietly = TRUE)) {
 library(plotly)
 pp <- calendar_df \%>\% 
   group_by(Date) \%>\%
-  plot_ly(
-    x = ~ .Time, y = ~ .Hourly_Counts
-  ) \%>\%
+  plot_ly(x = ~ .Time, y = ~ .Hourly_Counts) \%>\%
   add_lines()
 prettify(pp)
 }

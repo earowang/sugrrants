@@ -64,7 +64,7 @@ prettify.plotly <- function(plot, label = c("label", "text"), locale, abbr = TRU
 #' @export
 prettify.ggplot <- function(plot, label = c("label", "text"), locale, abbr = TRUE,
   ...) {
-  if (!("ggcalendar" %in% class(plot$data))) {
+  if (!("tbl_cal" %in% class(plot$data))) {
     abort("`prettify()` does not know how to handle with this type of data.")
   }
   label <- get_label(plot$data)
@@ -76,6 +76,7 @@ prettify.ggplot <- function(plot, label = c("label", "text"), locale, abbr = TRU
   breaks <- get_breaks(plot$data)
   minor_breaks <- get_minor_breaks(plot$data)
   dir <- get_dir(plot$data)
+  mar <- get_margin(plot$data)
 
   # separate params for geom_label and geom_text from ...
   param_list <- list(...)
@@ -97,17 +98,18 @@ prettify.ggplot <- function(plot, label = c("label", "text"), locale, abbr = TRU
     plot <- plot +
       do.call(geom_label, label_param)
   }
+  half_y <- (mar[2] / 2)
   if ("text" %in% label_arg) {
     text_param$data <- text
     text_param$mapping <- aes(x, y, label = label)
     text_param$inherit.aes <- FALSE
     if (dir == "h") {
-      text_param$nudge_y <- -0.01
+      text_param$nudge_y <- - half_y / 2
       text_param$vjust <- 1
       plot <- plot +
         do.call(geom_text, text_param)
     } else {
-      text_param$nudge_x <- -0.01
+      text_param$nudge_x <- - (mar[1] / 2)
       text_param$hjust <- 1
       plot <- plot +
         do.call(geom_text, text_param)
@@ -116,7 +118,7 @@ prettify.ggplot <- function(plot, label = c("label", "text"), locale, abbr = TRU
   if ("text2" %in% label_arg) {
     text2 <- get_text2(plot$data)
     if (is.null(text2)) {
-      warn("label = 'text2' is ignored for this type of calendar.")
+      warn("`label = 'text2'` is ignored for this type of calendar.")
     } else {
       text2_param$data <- text2
       text2_param$mapping <- aes(x, y, label = label)
@@ -133,6 +135,7 @@ prettify.ggplot <- function(plot, label = c("label", "text"), locale, abbr = TRU
   plot <- plot +
     scale_y_continuous(breaks = breaks$y, minor_breaks = minor_breaks$y)
   plot <- plot +
+    expand_limits(y = c(min_na(breaks$y) - half_y, max_na(breaks$y) + half_y)) +
     theme(
       axis.text = element_blank(),
       axis.ticks = element_blank(),
@@ -142,6 +145,10 @@ prettify.ggplot <- function(plot, label = c("label", "text"), locale, abbr = TRU
 }
 
 # helper functions for frame_calendar
+get_margin <- function(data) {
+  attr(data, "margin")
+}
+
 get_breaks <- function(data) {
   attr(data, "breaks")
 }
@@ -184,9 +191,7 @@ gen_day_breaks <- function(grids) {
   minor_xbreaks <- minor_xbreaks_df$.xminor_min
   minor_ybreaks_df <- grids %>%
     group_by(ROW) %>%
-    summarise(
-      .yminor_min = min(.gy)
-    )
+    summarise(.yminor_min = min(.gy))
   minor_ybreaks <- minor_ybreaks_df$.yminor_min
   list(x = minor_xbreaks, y = minor_ybreaks)
 }
@@ -198,7 +203,7 @@ pre_plot <- function(calendar, label, text, locale, abbr = TRUE) {
   if (locale != "en") {
     if (!requireNamespace("readr", quietly = TRUE)) {
       stop(
-        "Package `readr` required for other languages support", ".\n",
+        "Package 'readr' required for other languages support", ".\n",
         "Please install and try again.", call. = FALSE
       )
     }

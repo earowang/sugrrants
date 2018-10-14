@@ -72,7 +72,7 @@ centre_calendar_free <- centre %>%
 p2 <- ggplot(centre_calendar_free, 
         aes(x = .Time, y = .Hourly_Counts, group = Date)) +
   geom_line()
-prettify(p2, label = NULL)
+prettify(p2)
 ```
 
 The other two choices are `free_wday` and `free_mday`, scaled conditionally on each weekday and each day of month respectively. The code snippet below gives the scaling by weekdays so that it enables to compare the magnitudes across Mondays, Tuesdays, and so on.
@@ -84,7 +84,7 @@ centre_calendar_wday <- centre %>%
 p3 <- ggplot(centre_calendar_wday, 
         aes(x = .Time, y = .Hourly_Counts, group = Date)) +
   geom_line()
-prettify(p3, label = NULL)
+prettify(p3)
 ```
 
 ## Use in conjunction with `group_by`
@@ -106,10 +106,10 @@ p4 <- ggplot(two_sensors_calendar) +
     data = filter(two_sensors_calendar, Sensor_Name == two_sensors[2]),
     aes(.Time, .Hourly_Counts, group = Date), colour = "#d95f02"
   )
-prettify(p4, label = NULL)
+prettify(p4)
 ```
 
-The `frame_calendar()` function can be naturally combined with `group_by()`, and hence the grouped variable has its own scale.
+The `frame_calendar()` function can be naturally combined with `group_by()`. Each grouping variable will have its own scale, making their magnitudes incomparable across different sensors.
 
 ```{r ped-facet, fig.height = 6}
 grped_calendar <- two_sensors_df %>% 
@@ -121,7 +121,7 @@ p5 <- grped_calendar %>%
   facet_grid(Sensor_Name ~ .) +
   scale_color_brewer(palette = "Dark2") +
   theme(legend.position = "bottom")
-prettify(p5, label = NULL)
+prettify(p5)
 ```
 
 ## More geoms
@@ -188,7 +188,7 @@ p8 <- centre_max_calendar %>%
   ggplot(aes(x = .x, y = .y)) +
   geom_tile(aes(fill = Max_Counts), colour = "grey50") +
   scale_fill_viridis()
-prettify(p8, label = NULL)
+prettify(p8, label = "label", label.padding = unit(0.2, "lines"))
 ```
 
 ## Summary

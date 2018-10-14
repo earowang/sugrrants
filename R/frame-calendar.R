@@ -42,7 +42,8 @@ globalVariables(c(
 #' "free_mday" for scaling on day of month.
 #' @param width,height Numerics between 0 and 1 to specify the width/height for
 #' each glyph.
-#' @param margin A numeric between 0 and 1 to specify the gap between month panels.
+#' @param margin Numerics of length two between 0 and 1 to specify the horizontal
+#' and vertical margins between month panels.
 #'
 #' @return A data frame or a tibble with newly added columns of `.x`, `.y`. `.x`
 #' and `.y` together give new coordinates computed for different types of
@@ -78,9 +79,7 @@ globalVariables(c(
 #' grped_calendar <- pedestrian %>%
 #'   filter(Year == "2017", Month == "March") %>%
 #'   group_by(Sensor_Name) %>%
-#'   frame_calendar(
-#'     x = Time, y = Hourly_Counts, date = Date, sunday = TRUE
-#'   )
+#'   frame_calendar(x = Time, y = Hourly_Counts, date = Date, sunday = TRUE)
 #'
 #' p2 <- grped_calendar %>%
 #'   ggplot(aes(x = .Time, y = .Hourly_Counts, group = Date)) +
@@ -100,9 +99,7 @@ globalVariables(c(
 #' library(plotly)
 #' pp <- calendar_df %>% 
 #'   group_by(Date) %>%
-#'   plot_ly(
-#'     x = ~ .Time, y = ~ .Hourly_Counts
-#'   ) %>%
+#'   plot_ly(x = ~ .Time, y = ~ .Hourly_Counts) %>%
 #'   add_lines()
 #' prettify(pp)
 #' }
@@ -260,17 +257,19 @@ frame_calendar.default <- function(
   width <- resolution(data$.gx, zero = FALSE) * width
   height <- resolution(data$.gy, zero = FALSE) * height
   if (is.null(margin)) {
-    margin <- min(c(width, height)) # Month by month margin
+    margin <- c(width, height) # Month by month margin
+  } else if (has_length(margin, 1)) {
+    margin <- rep(margin, 2)
   }
 
   if (calendar == "monthly") {
     data <- data %>%
       dplyr::group_by(MPANEL) %>%
       dplyr::mutate(
-        .gx = .gx + MCOL * margin,
-        .gy = .gy - MROW * margin,
-        .cx = .cx + MCOL * margin,
-        .cy = .cy - MROW * margin
+        .gx = .gx + MCOL * margin[1],
+        .gy = .gy - MROW * margin[2],
+        .cx = .cx + MCOL * margin[1],
+        .cy = .cy - MROW * margin[2]
       )
   }
 
@@ -361,6 +360,7 @@ frame_calendar.default <- function(
     text = data_ref$text,
     text2 = data_ref$text2,
     dir = dir,
+    margin = margin,
     calendar = calendar,
     class = c("tbl_cal", cls)
   )
@@ -487,8 +487,8 @@ gen_reference.monthly <- function(
   grids <- grids %>%
     group_by(MPANEL) %>%
     mutate(
-      .gx = .gx + MCOL * margin,
-      .gy = .gy - MROW * margin
+      .gx = .gx + MCOL * margin[1],
+      .gy = .gy - MROW * margin[2]
     )
   xbreaks_df <- grids %>%
     group_by(MCOL) %>%

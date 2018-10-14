@@ -50,9 +50,7 @@ calendar_df <- pedestrian %>%
   mutate(
     Weekend = if_else(Day %in% c("Saturday", "Sunday"), "Weekend", "Weekday")
   ) %>%
-  frame_calendar(
-    x = Time, y = Hourly_Counts, date = Date, calendar = "monthly"
-  )
+  frame_calendar(x = Time, y = Hourly_Counts, date = Date)
 calendar_df
 ```
 
@@ -61,7 +59,7 @@ p <- calendar_df %>%
   ggplot(aes(x = .Time, y = .Hourly_Counts, group = Date, colour = Weekend)) +
   geom_line() +
   theme(legend.position = "bottom")
-prettify(p, label.padding = unit(0.08, "lines"))
+prettify(p)
 ```
 
 ## Google Summer of Code 2017
