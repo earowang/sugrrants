@@ -56,7 +56,7 @@ test_that("Some column names of data are used in the function", {
   )
   ped <- rename(pedestrian, theta = Date_Time)
   expect_is(
-    frame_calendar(ped, x = Time, y = Hourly_Counts, date = Date), "ggcalendar"
+    frame_calendar(ped, x = Time, y = Hourly_Counts, date = Date), "tbl_cal"
   )
   ped <- rename(pedestrian, .day = Date_Time)
   expect_error(
@@ -75,7 +75,7 @@ test_that("Some column names of data are used in the function", {
     frame_calendar(
       ped, x = Time, y = Hourly_Counts, date = Date, scale = "free"
     ),
-    "ggcalendar"
+    "tbl_cal"
   )
 })
 
@@ -116,7 +116,7 @@ test_that("The grouped data", {
   grp_cal <- pedestrian %>% 
     group_by(Sensor_ID) %>% 
     frame_calendar(x = Time, y = Hourly_Counts, date = Date)
-  expect_is(grp_cal, "ggcalendar")
+  expect_is(grp_cal, "tbl_cal")
   expect_is(grp_cal, "grouped_df")
 })
 
@@ -179,7 +179,7 @@ test_that("The argument sunday", {
     frame_calendar(
       pedestrian, x = Time, y = Hourly_Counts, date = Date, sunday = TRUE
     ),
-    "ggcalendar"
+    "tbl_cal"
   )
 })
 
@@ -237,7 +237,7 @@ test_that("The argument polar", {
 
 test_that("The output", {
   cal <- frame_calendar(pedestrian, x = Time, y = Hourly_Counts, date = Date)
-  expect_is(cal, c("ggcalendar", "tbl_df"))
+  expect_is(cal, c("tbl_cal", "tbl_df"))
   expect_equal(nrow(cal), nrow(pedestrian))
   expect_equal(ncol(cal), ncol(pedestrian) + 2)
 

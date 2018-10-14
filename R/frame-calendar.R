@@ -45,7 +45,7 @@ globalVariables(c(
 #' @param margin Numerics of length two between 0 and 1 to specify the horizontal
 #' and vertical margins between month panels.
 #'
-#' @return A data frame or a tibble with newly added columns of `.x`, `.y`. `.x`
+#' @return A data frame or a dplyr::tibble with newly added columns of `.x`, `.y`. `.x`
 #' and `.y` together give new coordinates computed for different types of
 #' calendars. `date` groups the same dates in a chronological order, which is
 #' useful for `geom_line` or `geom_path`. The basic use is `ggplot(aes(x = .x,
@@ -352,7 +352,8 @@ frame_calendar.default <- function(
   data <- data %>%
     dplyr::select(old_cn, .x, .y)
 
-  structure(data,
+  new_calendar(
+    data,
     breaks = data_ref$breaks,
     minor_breaks = data_ref$minor_breaks,
     label = data_ref$label,
@@ -360,8 +361,7 @@ frame_calendar.default <- function(
     text2 = data_ref$text2,
     dir = dir,
     margin = margin,
-    calendar = calendar,
-    class = c("tbl_cal", cls)
+    calendar = calendar
   )
 }
 
@@ -407,22 +407,22 @@ gen_reference.daily <- function(grids, dir = "h", ...) {
 
   if (dir == "h") {
     # Month text positioned at the right of each month panel (dir == "h")
-    mtext <- data.frame(
+    mtext <- dplyr::tibble(
       x = max(minor_breaks$x) + min_width,
       y = minor_breaks$y + min_height / 2
     )
     # Weekday text at the bottom
-    dtext <- data.frame(
+    dtext <- dplyr::tibble(
       x = minor_breaks$x + min_width / 2,
       y = min(minor_breaks$y)
     )
   } else {
     # Month text positioned at the top of each month panel (dir == "v")
-    mtext <- data.frame(
+    mtext <- dplyr::tibble(
       x = minor_breaks$x,
       y = max(minor_breaks$y) + min_height
     )
-    dtext <- data.frame(
+    dtext <- dplyr::tibble(
       x = min(minor_breaks$x),
       y = minor_breaks$y + min_height / 2
     )
@@ -452,22 +452,22 @@ gen_reference.weekly <- function(grids, dir = "h", ...) {
 
   if (dir == "h") {
     # Week index text positioned at the right of each week panel (dir == "h")
-    mtext <- data.frame(
+    mtext <- dplyr::tibble(
       x = max(minor_breaks$x) + min_width,
       y = minor_breaks$y
     )
     # Weekday text at the bottom
-    dtext <- data.frame(
+    dtext <- dplyr::tibble(
       x = minor_breaks$x + min_width / 2,
       y = min(minor_breaks$y)
     )
   } else {
     # Week index text positioned at the top of each week panel (dir == "v")
-    mtext <- data.frame(
+    mtext <- dplyr::tibble(
       x = minor_breaks$x,
       y = max(minor_breaks$y) + min_height
     )
-    dtext <- data.frame(
+    dtext <- dplyr::tibble(
       x = min(minor_breaks$x),
       y = minor_breaks$y + min_height / 2
     )
@@ -523,7 +523,7 @@ gen_reference.monthly <- function(
   # Month label positioned at the top left of each month panel
   xtext <- sort(xbreaks_df$.xmajor_min)
   ytext <- sort(ybreaks_df$.ymajor_max + min_height, decreasing = TRUE)
-  mtext <- expand.grid2(x = xtext, y = ytext)
+  mtext <- dplyr::as_tibble(expand.grid2(x = xtext, y = ytext))
   mtext <- mtext[seq_along(unique_idx), , drop = FALSE]
   mtext$mon <- unique_labels
   mtext$year <- substring(unique_idx, first = 1, last = 4)
@@ -531,12 +531,12 @@ gen_reference.monthly <- function(
 
   # Weekday text
   if (dir == "h") {
-    dtext <- data.frame(
+    dtext <- dplyr::tibble(
       x = minor_breaks$x + min_width / 2,
       y = min(minor_breaks$y)
     )
   } else {
-    dtext <- data.frame(
+    dtext <- dplyr::tibble(
       x = min(minor_breaks$x),
       y = minor_breaks$y + min_height / 2
     )
@@ -544,7 +544,7 @@ gen_reference.monthly <- function(
   dtext$day <- gen_wday_index(sunday = sunday)
 
   # Day of month text
-  mday_text <- data.frame(
+  mday_text <- dplyr::tibble(
     x = grids$.gx,
     y = grids$.gy + min_height,
     label = mday(grids$PANEL)
@@ -554,4 +554,32 @@ gen_reference.monthly <- function(
     breaks = breaks, minor_breaks = minor_breaks,
     label = mtext, text = dtext, text2 = mday_text
   )
+}
+
+new_calendar <- function(data, ...) {
+  data <- dplyr::as_tibble(data)
+  lst <- list2(...)
+  data <- map(lst, function(x) {attr(data, names(x)) <- x})
+  class(data) <- c("tbl_cal", class(data))
+  data
+}
+
+new_calendar <- function(x, ...) {
+  attribs <- list(...)
+  nested_attribs <- map2(
+    names(attribs), attribs, 
+    function(name, value) set_names(list(value), name)
+  )
+  x <- reduce(
+    .init = x,
+    nested_attribs,
+    function(x, attr) {
+      if (!is.null(attr[[1]])) {
+        attr(x, names(attr)) <- attr[[1]]
+      }
+      x
+    }
+  )
+  class(x) <- c("tbl_cal", class(x))
+  x
 }

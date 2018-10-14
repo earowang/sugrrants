@@ -46,7 +46,7 @@ calendar_df <- pedestrian %>%
 calendar_df
 #> # A tibble: 8,780 x 13
 #>   Date_Time           Date        Year Month Mdate Day    Time Sensor_ID
-#> * <dttm>              <date>     <int> <ord> <int> <ord> <int>     <int>
+#>   <dttm>              <date>     <int> <ord> <int> <ord> <int>     <int>
 #> 1 2016-01-01 00:00:00 2016-01-01  2016 Janu…     1 Frid…     0         9
 #> 2 2016-01-01 01:00:00 2016-01-01  2016 Janu…     1 Frid…     1         9
 #> 3 2016-01-01 02:00:00 2016-01-01  2016 Janu…     1 Frid…     2         9

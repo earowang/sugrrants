@@ -25,7 +25,7 @@ setup_calendar.daily <- function(x, dir = "h", ...) {
     row_idx <- col_idx
     col_idx <- col_tmp
   }
-  data.frame(
+  dplyr::tibble(
     ROW = rlang::flatten_int(row_idx),
     COL = rlang::flatten_int(col_idx),
     PANEL = do.call("c", counter)
@@ -49,7 +49,7 @@ setup_calendar.weekly <- function(x, dir = "h", ...) {
     row_idx <- col_idx
     col_idx <- col_tmp
   }
-  data.frame(ROW = row_idx, COL = col_idx, PANEL = counter)
+  dplyr::tibble(ROW = row_idx, COL = col_idx, PANEL = counter)
 }
 
 setup_calendar.monthly <- function(x, dir = "h", sunday = FALSE, 
@@ -109,7 +109,7 @@ setup_calendar.monthly <- function(x, dir = "h", sunday = FALSE,
       .x = col_idx, .y = m_idx, function(.x, .y) .x + max_wks * (.y - 1)
     )
   }
-  data.frame(
+  dplyr::tibble(
     ROW = rlang::flatten_int(row_idx),
     COL = rlang::flatten_int(col_idx),
     MROW = rep.int(n_idx, days_x),

@@ -51,4 +51,9 @@ map2_dbl <- function(.x, .y, .f, ...) {
 map2_chr <- function(.x, .y, .f, ...) {
   as.vector(map2(.x, .y, .f, ...), "character")
 }
+
+reduce <- function(.x, .f, ..., .init) {
+  f <- function(x, y) .f(x, y, ...)
+  Reduce(f, .x, init = .init)
+}
 # nocov end
