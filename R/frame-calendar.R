@@ -526,7 +526,7 @@ gen_reference.monthly <- function(
   mtext <- dplyr::as_tibble(expand.grid2(x = xtext, y = ytext))
   mtext <- mtext[seq_along(unique_idx), , drop = FALSE]
   mtext$mon <- unique_labels
-  mtext$year <- substring(unique_idx, first = 1, last = 4)
+  mtext$year <- paste(substring(unique_idx, first = 1, last = 4), "")
   mtext$year[duplicated(mtext$year)] <- "" # make year appear in the first month
 
   # Weekday text

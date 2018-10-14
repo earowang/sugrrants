@@ -228,7 +228,7 @@ pre_plot <- function(calendar, label, text, locale, abbr = TRUE) {
   if (calendar == "monthly") {
     nyr <- unique.default(label$year)
     seq_label <- mtext[label$mon]
-    if (length(nyr) > 2) seq_label <- paste(seq_label, label$year)
+    if (length(nyr) > 2) seq_label <- paste0(label$year, seq_label)
     label <- bind_cols(label, label = seq_label)
     text <- bind_cols(text, label = dtext[text$day])
   } else if (calendar == "weekly") {
