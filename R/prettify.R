@@ -171,7 +171,7 @@ get_calendar <- function(data) {
 }
 
 gen_wday_index <- function(sunday = FALSE) {
-  if (sunday) return(1:7) else return(c(2:7, 1))
+  if (sunday) 1:7 else c(2:7, 1)
 }
 
 gen_day_breaks <- function(grids) {
@@ -188,8 +188,7 @@ gen_day_breaks <- function(grids) {
       .yminor_min = min(.gy)
     )
   minor_ybreaks <- minor_ybreaks_df$.yminor_min
-  minor_breaks <- list(x = minor_xbreaks, y = minor_ybreaks)
-  return(minor_breaks)
+  list(x = minor_xbreaks, y = minor_ybreaks)
 }
 
 pre_plot <- function(calendar, label, text, locale, abbr = TRUE) {

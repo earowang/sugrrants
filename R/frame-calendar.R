@@ -142,7 +142,7 @@ frame_calendar.tbl_ts <- function(
       interval = tsibble::interval(data), validate = FALSE, 
       ordered = tsibble::is_ordered(data)
     )
-  class(out) <- c("ggcalendar", class(out))
+  class(out) <- c("tbl_cal", class(out))
   out
 }
 
@@ -164,7 +164,7 @@ frame_calendar.grouped_df <- function(
       width = width, height = height, margin = margin
     ) %>%
     group_by(!!! grps)
-  class(out) <- c("ggcalendar", class(out))
+  class(out) <- c("tbl_cal", class(out))
   out
   
 }
@@ -362,7 +362,7 @@ frame_calendar.default <- function(
     text2 = data_ref$text2,
     dir = dir,
     calendar = calendar,
-    class = c("ggcalendar", cls)
+    class = c("tbl_cal", cls)
   )
 }
 
@@ -383,7 +383,7 @@ assign_grids <- function(ROW, COL, width, height, polar = FALSE) {
     out$.cx <- out$.gx + (min_x - (width / (COL - 1))) / 2
     out$.cy <- out$.gy
   }
-  return(out)
+  out
 }
 
 # Compute grid lines and text labels for frame_calendar()
@@ -431,10 +431,7 @@ gen_reference.daily <- function(grids, dir = "h", ...) {
   mtext$mon <- unique_labels
   dtext$label <- seq_len(max(mday(date)))
 
-  return(list(
-    breaks = NULL, minor_breaks = minor_breaks,
-    label = mtext, text = dtext
-  ))
+  list(breaks = NULL, minor_breaks = minor_breaks, label = mtext, text = dtext)
 }
 
 gen_reference.weekly <- function(grids, dir = "h", ...) {
@@ -479,10 +476,7 @@ gen_reference.weekly <- function(grids, dir = "h", ...) {
   mtext$label <- unique_labels
   dtext$day <- gen_wday_index(sunday = FALSE)
 
-  return(list(
-    breaks = NULL, minor_breaks = minor_breaks,
-    label = mtext, text = dtext
-  ))
+  list(breaks = NULL, minor_breaks = minor_breaks, label = mtext, text = dtext)
 }
 
 gen_reference.monthly <- function(
@@ -557,8 +551,8 @@ gen_reference.monthly <- function(
     label = mday(grids$PANEL)
   )
 
-  return(list(
+  list(
     breaks = breaks, minor_breaks = minor_breaks,
     label = mtext, text = dtext, text2 = mday_text
-  ))
+  )
 }

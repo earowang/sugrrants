@@ -63,6 +63,6 @@ StatAcf <- ggproto("StatAcf", Stat,
       ci2 <- c(-ci, ci)
       acf_df <- transform(acf_df, yintercept = rep(ci2, c(n_upper, n_lower)))
     }
-    return(acf_df)
+    acf_df
   }
 )
