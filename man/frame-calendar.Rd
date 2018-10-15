@@ -72,7 +72,7 @@ used.}
 \item{...}{Extra arguments passed to \code{geom_label()} and \code{geom_text()}}
 }
 \value{
-A data frame or a tibble with newly added columns of \code{.x}, \code{.y}. \code{.x}
+A data frame or a dplyr::tibble with newly added columns of \code{.x}, \code{.y}. \code{.x}
 and \code{.y} together give new coordinates computed for different types of
 calendars. \code{date} groups the same dates in a chronological order, which is
 useful for \code{geom_line} or \code{geom_path}. The basic use is \code{ggplot(aes(x = .x, y = .y, group = date)) + geom_*}. The variable names \code{.x} and \code{.y} reflect
@@ -127,13 +127,13 @@ prettify(p2, locale = "zh", family = "STKaiti")
 
 # plotly example
 if (!requireNamespace("plotly", quietly = TRUE)) {
-  stop("Please install the 'plotly 'package to run these following examples.")
+  stop("Please install the 'plotly' package to run these following examples.")
 }
 library(plotly)
 pp <- calendar_df \%>\% 
   group_by(Date) \%>\%
   plot_ly(x = ~ .Time, y = ~ .Hourly_Counts) \%>\%
-  add_lines()
+  add_lines(text = ~ paste("Count: ", Hourly_Counts, "<br> Time: ", Time))
 prettify(pp)
 }
 

@@ -94,13 +94,13 @@ globalVariables(c(
 #'
 #' # plotly example
 #' if (!requireNamespace("plotly", quietly = TRUE)) {
-#'   stop("Please install the 'plotly 'package to run these following examples.")
+#'   stop("Please install the 'plotly' package to run these following examples.")
 #' }
 #' library(plotly)
 #' pp <- calendar_df %>% 
 #'   group_by(Date) %>%
 #'   plot_ly(x = ~ .Time, y = ~ .Hourly_Counts) %>%
-#'   add_lines()
+#'   add_lines(text = ~ paste("Count: ", Hourly_Counts, "<br> Time: ", Time))
 #' prettify(pp)
 #' }
 #'
