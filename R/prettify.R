@@ -131,16 +131,17 @@ prettify.ggplot <- function(plot, label = c("label", "text"), locale, abbr = TRU
     }
   }
   plot <- plot +
-    scale_x_continuous(breaks = breaks$x, minor_breaks = minor_breaks$x)
-  plot <- plot +
-    scale_y_continuous(breaks = breaks$y, minor_breaks = minor_breaks$y)
-  plot <- plot +
-    expand_limits(y = c(min_na(breaks$y) - half_y, max_na(breaks$y) + half_y)) +
+    scale_x_continuous(breaks = breaks$x, minor_breaks = minor_breaks$x) +
+    scale_y_continuous(breaks = breaks$y, minor_breaks = minor_breaks$y) +
     theme(
       axis.text = element_blank(),
       axis.ticks = element_blank(),
       axis.title = element_blank()
     )
+  if (!is_null(breaks)) {
+    plot +
+      expand_limits(y = c(min_na(breaks$y) - half_y, max_na(breaks$y) + half_y))
+  }
   plot
 }
 
