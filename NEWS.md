@@ -1,4 +1,4 @@
-# sugrrants 0.1.6.9000
+# sugrrants 0.1.6
 
 * Removed dependency on `tidyr`.
 * Improved default margin between monthly grids in `frame_calendar()`.

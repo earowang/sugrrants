@@ -48,7 +48,7 @@ centre_calendar
 
 Consequently, *.Time* and *.Hourly_Counts* are mapped to the x and y axes respectively, grouped by *Date* when using `geom_line()`. The transformed *.Time* and *.Hourly_Counts* variables no longer carry their initial meanings, and thereby their values are meaningless.
 
-```{r centre-plot}
+```{r centre-plot, fig.height = 7}
 p1 <- centre_calendar %>% 
   ggplot(aes(x = .Time, y = .Hourly_Counts, group = Date)) +
   geom_line()
@@ -57,7 +57,7 @@ p1
 
 To make the plot more accessible and informative, we provide another function `prettify()` to go hand in hand with `frame_calendar()`. It takes a `ggplot` object and gives sensible breaks and labels. It can be noted that the calendar-based graphic depicts time of day, day of week, and other calendar effects like public holiday in a clear manner.
 
-```{r centre-more}
+```{r centre-more, fig.height = 7}
 prettify(p1)
 ```
 
@@ -65,7 +65,7 @@ prettify(p1)
 
 Scaling is controlled by the `scale` argument: `fixed` is the default suggesting to be scaled globally. The figure above shows the global scale that enables overall comparison. Another option `free` means to be scaled for each daily block individually. It puts more emphasis on a single day shape instead of magnitude comparison.
 
-```{r centre-free, fig.height = 2.5}
+```{r centre-free, fig.height = 6, fig.width = 9}
 centre_calendar_free <- centre %>%
   frame_calendar(x = Time, y = Hourly_Counts, date = Date, calendar = "monthly",
     scale = "free", ncol = 4)
@@ -77,7 +77,7 @@ prettify(p2)
 
 The other two choices are `free_wday` and `free_mday`, scaled conditionally on each weekday and each day of month respectively. The code snippet below gives the scaling by weekdays so that it enables to compare the magnitudes across Mondays, Tuesdays, and so on.
 
-```{r centre-wday, fig.height = 2.5}
+```{r centre-wday, fig.height = 6, fig.width = 9}
 centre_calendar_wday <- centre %>%
   frame_calendar(x = Time, y = Hourly_Counts, date = Date, calendar = "monthly",
     scale = "free_wday", ncol = 4)
@@ -91,7 +91,7 @@ prettify(p3)
 
 We can also superimpose one sensor on top of the other. Without using `group_by()`, they will share the common scale on the overlaying graph.
 
-```{r overlay, fig.height = 3, fig.width = 8}
+```{r overlay, fig.height = 6, fig.width = 9}
 two_sensors <- c("Lonsdale St (South)", "Melbourne Convention Exhibition Centre")
 two_sensors_df <- pedestrian17 %>%
   filter(Sensor_Name %in% two_sensors)
@@ -111,7 +111,7 @@ prettify(p4)
 
 The `frame_calendar()` function can be naturally combined with `group_by()`. Each grouping variable will have its own scale, making their magnitudes incomparable across different sensors.
 
-```{r ped-facet, fig.height = 6}
+```{r ped-facet, fig.height = 11, fig.width = 9}
 grped_calendar <- two_sensors_df %>% 
   group_by(Sensor_Name) %>%
   frame_calendar(x = Time, y = Hourly_Counts, date = Date, ncol = 4)
