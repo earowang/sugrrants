@@ -556,14 +556,6 @@ gen_reference.monthly <- function(
   )
 }
 
-new_calendar <- function(data, ...) {
-  data <- dplyr::as_tibble(data)
-  lst <- list2(...)
-  data <- map(lst, function(x) {attr(data, names(x)) <- x})
-  class(data) <- c("tbl_cal", class(data))
-  data
-}
-
 new_calendar <- function(x, ...) {
   # Can't use structure() here because it breaks the row.names attribute
   attribs <- list(...)
