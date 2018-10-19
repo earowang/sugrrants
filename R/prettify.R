@@ -140,7 +140,7 @@ prettify.ggplot <- function(plot, label = c("label", "text"), locale, abbr = TRU
     )
   if (!is_null(breaks)) {
     plot +
-      expand_limits(y = c(min_na(breaks$y) - half_y, max_na(breaks$y) + half_y))
+      ggplot2::expand_limits(y = c(min_na(breaks$y) - half_y, max_na(breaks$y) + half_y))
   }
   plot
 }

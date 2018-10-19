@@ -2,14 +2,23 @@ Package: sugrrants
 Title: Supporting Graphs for Analysing Time Series
 Version: 0.1.6
 Date: 2018-10-19
-Authors@R: c(
-    person("Earo", "Wang", email = "earo.wang@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-6448-5260")),
-    person("Di", "Cook", role = c("aut", "ths"), comment = c(ORCID = "0000-0002-3813-7155")),
-    person("Rob", "Hyndman", role = c("aut", "ths"), comment = c(ORCID = "0000-0002-2140-5352"))
-    )
-Description: Provides 'ggplot2' graphics for analysing time series data. It aims 
-    to fit into the 'tidyverse' and grammar of graphics framework for handling 
-    temporal data.
+Authors@R: 
+    c(person(given = "Earo",
+             family = "Wang",
+             role = c("aut", "cre"),
+             email = "earo.wang@gmail.com",
+             comment = c(ORCID = "0000-0001-6448-5260")),
+      person(given = "Di",
+             family = "Cook",
+             role = c("aut", "ths"),
+             comment = c(ORCID = "0000-0002-3813-7155")),
+      person(given = "Rob",
+             family = "Hyndman",
+             role = c("aut", "ths"),
+             comment = c(ORCID = "0000-0002-2140-5352")))
+Description: Provides 'ggplot2' graphics for analysing time
+    series data. It aims to fit into the 'tidyverse' and grammar of
+    graphics framework for handling temporal data.
 License: GPL (>= 3)
 URL: https://pkg.earo.me/sugrrants
 BugReports: https://github.com/earowang/sugrrants/issues
@@ -28,9 +37,11 @@ Suggests:
     readr,
     rmarkdown,
     testthat,
+    tidyr,
     tsibble (>= 0.5.0),
     viridis
-VignetteBuilder: knitr
+VignetteBuilder: 
+    knitr
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
