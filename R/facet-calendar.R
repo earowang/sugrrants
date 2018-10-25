@@ -3,8 +3,8 @@ globalVariables("facet_wrap")
 #' Lay out panels in a calendar
 #'
 #' @param date A variable that contains "Date" class.
+#' @param format A character string. See `?strptime` for details.
 #' @inheritParams ggplot2::facet_wrap
-#' @param calendar_label Either "wday" or "mday".
 #'
 #' @rdname facet-calendar
 #' @export
@@ -16,10 +16,8 @@ globalVariables("facet_wrap")
 #'   ggplot(aes(x = Time, y = Hourly_Counts, group = Date)) +
 #'   geom_line() +
 #'   facet_calendar(date = Date, nrow = 2)
-facet_calendar <- function(date, nrow = NULL, ncol = NULL, 
-  calendar_label = "mday", scales = "fixed", shrink = TRUE, dir = "h", 
-  strip.position = "top") {
-  calendar_label <- match.arg(calendar_label, c("wday", "mday"))
+facet_calendar <- function(date, nrow = NULL, ncol = NULL, format = "%b %d", 
+  scales = "fixed", shrink = TRUE, dir = "h", strip.position = "top") {
 
   scales <- match.arg(scales, c("fixed", "free_x", "free_y", "free"))
   dir <- match.arg(dir, c("h", "v"))
@@ -28,17 +26,16 @@ facet_calendar <- function(date, nrow = NULL, ncol = NULL,
     y = any(scales %in% c("free_y", "free"))
   )
 
-  if (calendar_label == "mday") {
-    facet <- ggplot2::facet_wrap(~ .month + .mday, nrow = nrow, ncol = ncol,
-      scales = scales, shrink = shrink, strip.position = strip.position)
-    facet$params$date <- enexpr(date)
-    facet$params$free <- free
-    facet$params$dir <- dir
-    ggproto(NULL, FacetCalendarMday,
-      shrink = shrink,
-      params = facet$params
-    )
-  }
+  facet <- ggplot2::facet_wrap(~ .label, nrow = nrow, ncol = ncol,
+    scales = scales, shrink = shrink, strip.position = strip.position)
+  facet$params$date <- enexpr(date)
+  facet$params$format <- format
+  facet$params$free <- free
+  facet$params$dir <- dir
+  ggproto(NULL, FacetCalendarMday,
+    shrink = shrink,
+    params = facet$params
+  )
 }
 
 #' @rdname facet-calendar
@@ -57,8 +54,7 @@ FacetCalendarMday <- ggproto("FacetCalendarMday", FacetWrap,
     layout %>%
       dplyr::mutate(
         !! date_chr := PANEL,
-        .month = lubridate::month(PANEL, label = TRUE),
-        .mday = lubridate::mday(PANEL),
+        .label = format.Date(PANEL, format = params$format),
         PANEL = seq_len(n),
         SCALE_X = ifelse(params$free$x, seq_len(n), 1L),
         SCALE_Y = ifelse(params$free$y, seq_len(n), 1L)

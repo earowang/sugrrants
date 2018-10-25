@@ -6,9 +6,9 @@
 \alias{FacetCalendarMday}
 \title{Lay out panels in a calendar}
 \usage{
-facet_calendar(date, nrow = NULL, ncol = NULL,
-  calendar_label = "mday", scales = "fixed", shrink = TRUE,
-  dir = "h", strip.position = "top")
+facet_calendar(date, nrow = NULL, ncol = NULL, format = "\%b \%d",
+  scales = "fixed", shrink = TRUE, dir = "h",
+  strip.position = "top")
 }
 \arguments{
 \item{date}{A variable that contains "Date" class.}
@@ -17,7 +17,7 @@ facet_calendar(date, nrow = NULL, ncol = NULL,
 
 \item{ncol}{Number of rows and columns.}
 
-\item{calendar_label}{Either "wday" or "mday".}
+\item{format}{A character string. See \code{?strptime} for details.}
 
 \item{scales}{Should scales be fixed (\code{"fixed"}, the default),
 free (\code{"free"}), or free in one dimension (\code{"free_x"},
