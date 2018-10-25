@@ -17,7 +17,8 @@ facet_calendar(date, nrow = NULL, ncol = NULL, format = "\%b \%d",
 
 \item{ncol}{Number of rows and columns.}
 
-\item{format}{A character string. See \code{?strptime} for details.}
+\item{format}{A character string, such as \code{\%Y-\%b-\%d} and \code{\%a (\%d)}.
+See \code{?strptime} for details.}
 
 \item{week_start}{Day on which week starts following ISO conventions -
 1 means Monday, 7 means Sunday (default). You can set \code{lubridate.week.start}
@@ -44,11 +45,11 @@ Lay out panels in a calendar
 }
 \examples{
 fs <- pedestrian \%>\%
-  dplyr::filter(Sensor_Name == "Flagstaff Station", Date < as.Date("2016-05-01"))
+  dplyr::filter(Date < as.Date("2016-05-01"))
 
 fs \%>\%
-  ggplot(aes(x = Time, y = Hourly_Counts, group = Date)) +
-  geom_line() +
+  ggplot(aes(x = Time, y = Hourly_Counts)) +
+  geom_line(aes(colour = Sensor_Name)) +
   facet_calendar(date = Date, nrow = 2)
 }
 \keyword{datasets}

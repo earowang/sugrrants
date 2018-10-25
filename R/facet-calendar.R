@@ -3,7 +3,8 @@ globalVariables("facet_wrap")
 #' Lay out panels in a calendar
 #'
 #' @param date A variable that contains "Date" class.
-#' @param format A character string. See `?strptime` for details.
+#' @param format A character string, such as `%Y-%b-%d` and `%a (%d)`. 
+#' See `?strptime` for details.
 #' @param week_start Day on which week starts following ISO conventions -
 #' 1 means Monday, 7 means Sunday (default). You can set `lubridate.week.start` 
 #' option to control this parameter globally.
@@ -13,11 +14,11 @@ globalVariables("facet_wrap")
 #' @export
 #' @examples
 #' fs <- pedestrian %>%
-#'   dplyr::filter(Sensor_Name == "Flagstaff Station", Date < as.Date("2016-05-01"))
+#'   dplyr::filter(Date < as.Date("2016-05-01"))
 #'
 #' fs %>%
-#'   ggplot(aes(x = Time, y = Hourly_Counts, group = Date)) +
-#'   geom_line() +
+#'   ggplot(aes(x = Time, y = Hourly_Counts)) +
+#'   geom_line(aes(colour = Sensor_Name)) +
 #'   facet_calendar(date = Date, nrow = 2)
 facet_calendar <- function(date, nrow = NULL, ncol = NULL, format = "%b %d",
   week_start = getOption("lubridate.week.start", 1), scales = "fixed", 
@@ -67,6 +68,9 @@ FacetCalendar <- ggproto("FacetCalendar", FacetWrap,
   },
 
   map_data = function(data, layout, params) {
+    if (is_empty(data)) {
+      return(cbind(data, PANEL = integer(0)))
+    }
     date_chr <- as_string(params$date)
     dplyr::left_join(data, layout, by = date_chr)
   },
