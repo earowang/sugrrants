@@ -8,7 +8,7 @@
 \usage{
 facet_calendar(date, nrow = NULL, ncol = NULL,
   calendar.label = "mday", scales = "fixed", shrink = TRUE,
-  strip.position = "top")
+  dir = "h", strip.position = "top")
 }
 \arguments{
 \item{date}{A variable that contains "Date" class.}
@@ -26,6 +26,9 @@ free (\code{"free"}), or free in one dimension (\code{"free_x"},
 \item{shrink}{If \code{TRUE}, will shrink scales to fit output of
 statistics, not raw data. If \code{FALSE}, will be range of raw data
 before statistical summary.}
+
+\item{dir}{Direction: either \code{"h"} for horizontal, the default, or \code{"v"},
+for vertical.}
 
 \item{strip.position}{By default, the labels are displayed on the top of
 the plot. Using \code{strip.position} it is possible to place the labels on
