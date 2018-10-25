@@ -7,7 +7,7 @@
 \title{Lay out panels in a calendar}
 \usage{
 facet_calendar(date, nrow = NULL, ncol = NULL,
-  calendar.label = "mday", scales = "fixed", shrink = TRUE,
+  calendar_label = "mday", scales = "fixed", shrink = TRUE,
   dir = "h", strip.position = "top")
 }
 \arguments{
@@ -17,7 +17,7 @@ facet_calendar(date, nrow = NULL, ncol = NULL,
 
 \item{ncol}{Number of rows and columns.}
 
-\item{calendar.label}{Either "wday" or "mday".}
+\item{calendar_label}{Either "wday" or "mday".}
 
 \item{scales}{Should scales be fixed (\code{"fixed"}, the default),
 free (\code{"free"}), or free in one dimension (\code{"free_x"},

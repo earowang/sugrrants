@@ -4,7 +4,7 @@ globalVariables("facet_wrap")
 #'
 #' @param date A variable that contains "Date" class.
 #' @inheritParams ggplot2::facet_wrap
-#' @param calendar.label Either "wday" or "mday".
+#' @param calendar_label Either "wday" or "mday".
 #'
 #' @rdname facet-calendar
 #' @export
@@ -16,9 +16,10 @@ globalVariables("facet_wrap")
 #'   ggplot(aes(x = Time, y = Hourly_Counts, group = Date)) +
 #'   geom_line() +
 #'   facet_calendar(date = Date, nrow = 2)
-facet_calendar <- function(date, nrow = NULL, ncol = NULL, calendar.label = "mday",
-  scales = "fixed", shrink = TRUE, dir = "h", strip.position = "top") {
-  calendar.label <- match.arg(calendar.label, c("wday", "mday"))
+facet_calendar <- function(date, nrow = NULL, ncol = NULL, 
+  calendar_label = "mday", scales = "fixed", shrink = TRUE, dir = "h", 
+  strip.position = "top") {
+  calendar_label <- match.arg(calendar_label, c("wday", "mday"))
 
   scales <- match.arg(scales, c("fixed", "free_x", "free_y", "free"))
   dir <- match.arg(dir, c("h", "v"))
@@ -27,7 +28,7 @@ facet_calendar <- function(date, nrow = NULL, ncol = NULL, calendar.label = "mda
     y = any(scales %in% c("free_y", "free"))
   )
 
-  if (calendar.label == "mday") {
+  if (calendar_label == "mday") {
     facet <- ggplot2::facet_wrap(~ .month + .mday, nrow = nrow, ncol = ncol,
       scales = scales, shrink = shrink, strip.position = strip.position)
     facet$params$date <- enexpr(date)
