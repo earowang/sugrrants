@@ -3,12 +3,12 @@
 \docType{data}
 \name{facet_calendar}
 \alias{facet_calendar}
-\alias{FacetCalendarMday}
+\alias{FacetCalendar}
 \title{Lay out panels in a calendar}
 \usage{
 facet_calendar(date, nrow = NULL, ncol = NULL, format = "\%b \%d",
-  week_start = 1, scales = "fixed", shrink = TRUE, dir = "h",
-  strip.position = "top")
+  week_start = getOption("lubridate.week.start", 1), scales = "fixed",
+  shrink = TRUE, dir = "h", strip.position = "top")
 }
 \arguments{
 \item{date}{A variable that contains "Date" class.}
@@ -20,7 +20,8 @@ facet_calendar(date, nrow = NULL, ncol = NULL, format = "\%b \%d",
 \item{format}{A character string. See \code{?strptime} for details.}
 
 \item{week_start}{Day on which week starts following ISO conventions -
-1 means Monday, 7 means Sunday (default).}
+1 means Monday, 7 means Sunday (default). You can set \code{lubridate.week.start}
+option to control this parameter globally.}
 
 \item{scales}{Should scales be fixed (\code{"fixed"}, the default),
 free (\code{"free"}), or free in one dimension (\code{"free_x"},

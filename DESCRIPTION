@@ -29,7 +29,8 @@ Imports:
     dplyr (>= 0.7.0),
     grid,
     lubridate (>= 1.7.1),
-    rlang (>= 0.2.0)
+    rlang (>= 0.2.0),
+    gtable
 Suggests: 
     covr,
     knitr,
