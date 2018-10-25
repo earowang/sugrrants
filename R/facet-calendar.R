@@ -4,6 +4,8 @@ globalVariables("facet_wrap")
 #'
 #' @param date A variable that contains "Date" class.
 #' @param format A character string. See `?strptime` for details.
+#' @param week_start Day on which week starts following ISO conventions - 
+#' 1 means Monday, 7 means Sunday (default).
 #' @inheritParams ggplot2::facet_wrap
 #'
 #' @rdname facet-calendar
@@ -17,7 +19,8 @@ globalVariables("facet_wrap")
 #'   geom_line() +
 #'   facet_calendar(date = Date, nrow = 2)
 facet_calendar <- function(date, nrow = NULL, ncol = NULL, format = "%b %d", 
-  scales = "fixed", shrink = TRUE, dir = "h", strip.position = "top") {
+  week_start = 1, scales = "fixed", shrink = TRUE, dir = "h", 
+  strip.position = "top") {
 
   scales <- match.arg(scales, c("fixed", "free_x", "free_y", "free"))
   dir <- match.arg(dir, c("h", "v"))
@@ -30,6 +33,7 @@ facet_calendar <- function(date, nrow = NULL, ncol = NULL, format = "%b %d",
     scales = scales, shrink = shrink, strip.position = strip.position)
   facet$params$date <- enexpr(date)
   facet$params$format <- format
+  facet$params$week_start <- week_start
   facet$params$free <- free
   facet$params$dir <- dir
   ggproto(NULL, FacetCalendarMday,
@@ -48,7 +52,7 @@ FacetCalendarMday <- ggproto("FacetCalendarMday", FacetWrap,
     date_chr <- as_string(params$date)
 
     layout <- setup_calendar.monthly(eval_date, dir = params$dir,
-      nrow = params$nrow, ncol = params$ncol)
+      week_start = params$week_start, nrow = params$nrow, ncol = params$ncol)
     n <- NROW(layout)
 
     layout %>%

@@ -52,7 +52,7 @@ setup_calendar.weekly <- function(x, dir = "h", ...) {
   dplyr::tibble(ROW = row_idx, COL = col_idx, PANEL = counter)
 }
 
-setup_calendar.monthly <- function(x, dir = "h", sunday = FALSE, 
+setup_calendar.monthly <- function(x, dir = "h", week_start = 1, sunday = FALSE, 
   nrow = NULL, ncol = NULL, ...) {
   # x is a vector of unique dates
   x <- unique(x)
@@ -68,7 +68,7 @@ setup_calendar.monthly <- function(x, dir = "h", sunday = FALSE,
   if (sunday) { # Weekday starts with Sunday
     first_wday <- wday(month_x, week_start = 7) # k
   } else { # starts with Monday
-    first_wday <- wday(month_x, week_start = 1) # k
+    first_wday <- wday(month_x, week_start = week_start) # k
   }
   counter_date <- map2(
     .x = month_x, .y = days_x, function(.x, .y) .x + 0:(.y - 1) 

@@ -7,7 +7,7 @@
 \title{Lay out panels in a calendar}
 \usage{
 facet_calendar(date, nrow = NULL, ncol = NULL, format = "\%b \%d",
-  scales = "fixed", shrink = TRUE, dir = "h",
+  week_start = 1, scales = "fixed", shrink = TRUE, dir = "h",
   strip.position = "top")
 }
 \arguments{
@@ -18,6 +18,9 @@ facet_calendar(date, nrow = NULL, ncol = NULL, format = "\%b \%d",
 \item{ncol}{Number of rows and columns.}
 
 \item{format}{A character string. See \code{?strptime} for details.}
+
+\item{week_start}{Day on which week starts following ISO conventions -
+1 means Monday, 7 means Sunday (default).}
 
 \item{scales}{Should scales be fixed (\code{"fixed"}, the default),
 free (\code{"free"}), or free in one dimension (\code{"free_x"},
