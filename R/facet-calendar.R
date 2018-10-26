@@ -58,6 +58,9 @@ FacetCalendar <- ggproto("FacetCalendar", FacetWrap,
   compute_layout = function(data, params) {
     eval_date <- eval_tidy(params$date, data = data[[1]])
     date_chr <- as_string(params$date)
+    if (!(inherits(eval_date, "Date"))) {
+      abort(sprintf("Argument `date` must be class 'Date', not '%s'."), class(eval_date)[[1]])
+    }
 
     layout <- setup_calendar.monthly(eval_date, dir = params$dir,
       week_start = params$week_start, nrow = params$nrow, ncol = params$ncol)

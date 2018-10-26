@@ -33,6 +33,10 @@ devtools::install_github("earowang/sugrrants", build_vignettes = TRUE)
 
 ### Calendar-based graphics
 
+The `frame_calendar()` provides tools for re-structuring the data, and
+leaves the plotting to **ggplot2**. It is fast and light-weight,
+although it does not preserve the values.
+
 ``` r
 library(dplyr)
 library(sugrrants)
@@ -65,6 +69,9 @@ prettify(p)
 ```
 
 ![](man/figure/calendar-plot-1.png)<!-- -->
+
+Looking for a fully-fledged faceting method, with formal labels and
+axes? Check out `facet_calendar()`.
 
 ## Google Summer of Code 2017
 
