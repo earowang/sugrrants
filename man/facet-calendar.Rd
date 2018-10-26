@@ -4,7 +4,7 @@
 \name{facet_calendar}
 \alias{facet_calendar}
 \alias{FacetCalendar}
-\title{Lay out panels in a calendar}
+\title{Lay out panels in a calendar format}
 \usage{
 facet_calendar(date, format = "\%b \%d",
   week_start = getOption("lubridate.week.start", 1), nrow = NULL,
@@ -51,7 +51,7 @@ either of the four sides by setting \code{strip.position = c("top",
   "bottom", "left", "right")}}
 }
 \description{
-Lay out panels in a calendar
+Lay out panels in a calendar format
 }
 \examples{
 fs <- pedestrian \%>\%
@@ -60,6 +60,7 @@ fs <- pedestrian \%>\%
 fs \%>\%
   ggplot(aes(x = Time, y = Hourly_Counts)) +
   geom_line(aes(colour = Sensor_Name)) +
-  facet_calendar(date = Date, nrow = 2)
+  facet_calendar(date = Date, nrow = 2) +
+  theme(legend.position = "bottom")
 }
 \keyword{datasets}

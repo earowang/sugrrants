@@ -17,9 +17,9 @@ reference:
 
 - title: Calendar based graphics
   desc: >
-    Rearrange `data.frame` or `tibble` into a calendar layout using linear
-    algebra tools for plotting via `ggplot2`.
+    Lay out panels into a calendar format.
   contents:
+    - facet_calendar
     - frame_calendar
 
 - title: Geoms and stats extension for temporal-context data

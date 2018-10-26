@@ -195,4 +195,6 @@ prettify(p8, label = "label", label.padding = unit(0.2, "lines"))
 
 As its name suggests, `frame_calendar()` just gives a rearranged data frame and leaves the plotting to *ggplot2*. This lends itself to more flexibility in calendar-based visualisation. In addition, some of these plots shown above may be produced using facets on temporal units by *ggplot2*; however, `frame_calendar()` coupled with *ggplot2* is much faster than `facet_*` as it's lighter weight. Lastly, it can handle long historical temporal data easily on a limited screen space as a result of calendar-based glyphs.
 
+Looking for a fully-fledged faceting method, with formal labels and axes? Check out `facet_calendar()`.
+
 ## Reference
