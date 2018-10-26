@@ -17,6 +17,7 @@ globalVariables("facet_wrap")
 #' @rdname facet-calendar
 #' @export
 #' @examples
+#' \donttest{
 #' fs <- pedestrian %>%
 #'   dplyr::filter(Date < as.Date("2016-05-01"))
 #'
@@ -25,6 +26,7 @@ globalVariables("facet_wrap")
 #'   geom_line(aes(colour = Sensor_Name)) +
 #'   facet_calendar(date = Date, nrow = 2) +
 #'   theme(legend.position = "bottom")
+#' }
 facet_calendar <- function(date, format = "%b %d",
   week_start = getOption("lubridate.week.start", 1), 
   nrow = NULL, ncol = NULL, scales = "fixed", shrink = TRUE, dir = "h", 

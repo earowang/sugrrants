@@ -54,6 +54,7 @@ either of the four sides by setting \code{strip.position = c("top",
 Lay out panels in a calendar format
 }
 \examples{
+\donttest{
 fs <- pedestrian \%>\%
   dplyr::filter(Date < as.Date("2016-05-01"))
 
@@ -62,5 +63,6 @@ fs \%>\%
   geom_line(aes(colour = Sensor_Name)) +
   facet_calendar(date = Date, nrow = 2) +
   theme(legend.position = "bottom")
+}
 }
 \keyword{datasets}
