@@ -81,7 +81,7 @@ FacetCalendar <- ggproto("FacetCalendar", FacetWrap,
       return(cbind(data, PANEL = integer(0)))
     }
     date_chr <- as_string(params$date)
-    dplyr::right_join(data, layout, by = date_chr)
+    dplyr::left_join(data, layout, by = date_chr)
   },
 
   draw_panels = function(self, panels, layout, x_scales, y_scales, ranges, 

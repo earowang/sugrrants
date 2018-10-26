@@ -33,35 +33,28 @@ devtools::install_github("earowang/sugrrants", build_vignettes = TRUE)
 
 ### Calendar-based graphics
 
-The `frame_calendar()` provides tools for re-structuring the data, and
-leaves the plotting to **ggplot2**. It is fast and light-weight,
-although it does not preserve the values.
-
 ``` r
 library(dplyr)
 library(sugrrants)
-
-calendar_df <- pedestrian %>%
-  filter(Sensor_ID == 9, Year == 2016) %>%
-  mutate(
-    Weekend = if_else(Day %in% c("Saturday", "Sunday"), "Weekend", "Weekday")
-  ) %>%
-  frame_calendar(x = Time, y = Hourly_Counts, date = Date)
-calendar_df
-#> # A tibble: 8,780 x 13
-#>   Date_Time           Date        Year Month Mdate Day    Time Sensor_ID
-#>   <dttm>              <date>     <int> <ord> <int> <ord> <int>     <int>
-#> 1 2016-01-01 00:00:00 2016-01-01  2016 Janu…     1 Frid…     0         9
-#> 2 2016-01-01 01:00:00 2016-01-01  2016 Janu…     1 Frid…     1         9
-#> 3 2016-01-01 02:00:00 2016-01-01  2016 Janu…     1 Frid…     2         9
-#> 4 2016-01-01 03:00:00 2016-01-01  2016 Janu…     1 Frid…     3         9
-#> 5 2016-01-01 04:00:00 2016-01-01  2016 Janu…     1 Frid…     4         9
-#> # … with 8,775 more rows, and 5 more variables: Sensor_Name <chr>,
-#> #   Hourly_Counts <int>, Weekend <chr>, .Time <dbl>, .Hourly_Counts <dbl>
+pedestrian %>%
+  filter(Date < as.Date("2016-05-01")) %>% 
+  ggplot(aes(x = Time, y = Hourly_Counts, colour = Sensor_Name)) +
+  geom_line() +
+  facet_calendar(date = Date) +
+  theme(legend.position = "bottom")
 ```
 
+![](man/figure/facet-calendar-1.png)<!-- -->
+
+The `frame_calendar()` provides tools for re-structuring the data into a
+calendar layout, without using the faceting method. It is fast, compact
+and light-weight, although it does not preserve the values.
+
 ``` r
-p <- calendar_df %>%
+p <- pedestrian %>%
+  filter(Sensor_ID == 9, Year == 2016) %>%
+  mutate(Weekend = if_else(Day %in% c("Saturday", "Sunday"), "Weekend", "Weekday")) %>%
+  frame_calendar(x = Time, y = Hourly_Counts, date = Date) %>% 
   ggplot(aes(x = .Time, y = .Hourly_Counts, group = Date, colour = Weekend)) +
   geom_line() +
   theme(legend.position = "bottom")
@@ -69,9 +62,6 @@ prettify(p)
 ```
 
 ![](man/figure/calendar-plot-1.png)<!-- -->
-
-Looking for a fully-fledged faceting method, with formal labels and
-axes? Check out `facet_calendar()`.
 
 ## Google Summer of Code 2017
 

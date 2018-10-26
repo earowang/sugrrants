@@ -1,7 +1,5 @@
 ---
-output:
-  github_document:
-    html_preview: false
+output: github_document
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -41,31 +39,29 @@ devtools::install_github("earowang/sugrrants", build_vignettes = TRUE)
 
 ### Calendar-based graphics
 
-The `frame_calendar()` provides tools for re-structuring the data, and leaves the plotting to **ggplot2**. It is fast and light-weight, although it does not preserve the values.
-
-```{r calendar, echo = TRUE, message = FALSE}
+```{r facet-calendar, echo = TRUE, message = FALSE, fig.height = 9, fig.width = 9}
 library(dplyr)
 library(sugrrants)
-
-calendar_df <- pedestrian %>%
-  filter(Sensor_ID == 9, Year == 2016) %>%
-  mutate(
-    Weekend = if_else(Day %in% c("Saturday", "Sunday"), "Weekend", "Weekday")
-  ) %>%
-  frame_calendar(x = Time, y = Hourly_Counts, date = Date)
-calendar_df
+pedestrian %>%
+  filter(Date < as.Date("2016-05-01")) %>% 
+  ggplot(aes(x = Time, y = Hourly_Counts, colour = Sensor_Name)) +
+  geom_line() +
+  facet_calendar(date = Date) +
+  theme(legend.position = "bottom")
 ```
 
+The `frame_calendar()` provides tools for re-structuring the data into a calendar layout, without using the faceting method. It is fast, compact and light-weight, although it does not preserve the values.
+
 ```{r calendar-plot, echo = TRUE, fig.height = 7, fig.width = 7}
-p <- calendar_df %>%
+p <- pedestrian %>%
+  filter(Sensor_ID == 9, Year == 2016) %>%
+  mutate(Weekend = if_else(Day %in% c("Saturday", "Sunday"), "Weekend", "Weekday")) %>%
+  frame_calendar(x = Time, y = Hourly_Counts, date = Date) %>% 
   ggplot(aes(x = .Time, y = .Hourly_Counts, group = Date, colour = Weekend)) +
   geom_line() +
   theme(legend.position = "bottom")
 prettify(p)
 ```
-
-Looking for a fully-fledged faceting method, with formal labels and axes? Check out `facet_calendar()`.
-
 
 ## Google Summer of Code 2017
 
