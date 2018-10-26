@@ -12,10 +12,10 @@ facet_calendar(date, format = "\%b \%d",
   labeller = "label_value", strip.position = "top")
 }
 \arguments{
-\item{date}{A \code{Date} variable mapping to dates in the calendar.}
+\item{date}{A variable that contains dates will be mapped in the calendar.}
 
-\item{format}{A character string, such as \code{\%Y-\%b-\%d} and \code{\%a (\%d)}.
-See \code{?strptime} for details.}
+\item{format}{A character string, such as \code{\%Y-\%b-\%d} and \code{\%a (\%d)}, formatting
+the display of facet strips. See \code{?strptime} for details.}
 
 \item{week_start}{Day on which week starts following ISO conventions -
 1 means Monday, 7 means Sunday (default). You can set \code{lubridate.week.start}

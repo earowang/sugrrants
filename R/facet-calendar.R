@@ -2,9 +2,9 @@ globalVariables("facet_wrap")
 
 #' Lay out panels in a calendar format
 #'
-#' @param date A `Date` variable mapping to dates in the calendar.
-#' @param format A character string, such as `%Y-%b-%d` and `%a (%d)`. 
-#' See `?strptime` for details.
+#' @param date A variable that contains dates will be mapped in the calendar.
+#' @param format A character string, such as `%Y-%b-%d` and `%a (%d)`, formatting
+#' the display of facet strips. See `?strptime` for details.
 #' @param week_start Day on which week starts following ISO conventions -
 #' 1 means Monday, 7 means Sunday (default). You can set `lubridate.week.start` 
 #' option to control this parameter globally.
@@ -61,8 +61,12 @@ FacetCalendar <- ggproto("FacetCalendar", FacetWrap,
   compute_layout = function(data, params) {
     eval_date <- eval_tidy(params$date, data = data[[1]])
     date_chr <- as_string(params$date)
+
     if (!(inherits(eval_date, "Date"))) {
-      abort(sprintf("Argument `date` must be class 'Date', not '%s'."), class(eval_date)[[1]])
+      abort(sprintf(
+        "Argument `date` must be class 'Date', not '%s'.", 
+        class(eval_date)[[1]]
+      ))
     }
 
     if (NROW(data[[1]]) == 0L) {
@@ -83,9 +87,6 @@ FacetCalendar <- ggproto("FacetCalendar", FacetWrap,
   },
 
   map_data = function(data, layout, params) {
-    if (is_empty(data)) {
-      return(cbind(data, PANEL = integer(0)))
-    }
     date_chr <- as_string(params$date)
     dplyr::left_join(data, layout, by = date_chr)
   },
