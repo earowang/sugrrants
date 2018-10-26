@@ -1,0 +1,9 @@
+citHeader("To cite calendar-based graphics in publications, please use:")
+
+citEntry(entry = "misc",
+  author = "Earo Wang and Dianne Cook and Rob J Hyndman",
+  title = "Calendar-based graphics for visualizing people's daily schedules",
+  year = "2018",
+  eprint = "arXiv:1810.09624",
+  textVersion = "Wang, E, D Cook, and RJ Hyndman (2018). Calendar-based graphics for visualizing people’s daily schedules. eprint: arXiv:1810.09624."
+)
