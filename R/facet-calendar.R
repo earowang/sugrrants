@@ -2,12 +2,16 @@ globalVariables("facet_wrap")
 
 #' Lay out panels in a calendar
 #'
-#' @param date A variable that contains "Date" class.
+#' @param date A `Date` variable mapping to dates in the calendar.
 #' @param format A character string, such as `%Y-%b-%d` and `%a (%d)`. 
 #' See `?strptime` for details.
 #' @param week_start Day on which week starts following ISO conventions -
 #' 1 means Monday, 7 means Sunday (default). You can set `lubridate.week.start` 
 #' option to control this parameter globally.
+#' @param nrow,ncol Number of rows and columns defined for "monthly" calendar
+#' layout. If `NULL`, it computes a sensible layout.
+#' @param dir Direction of calendar: "h" for horizontal (the default) or "v" for
+#' vertical.
 #' @inheritParams ggplot2::facet_wrap
 #'
 #' @rdname facet-calendar
@@ -20,9 +24,10 @@ globalVariables("facet_wrap")
 #'   ggplot(aes(x = Time, y = Hourly_Counts)) +
 #'   geom_line(aes(colour = Sensor_Name)) +
 #'   facet_calendar(date = Date, nrow = 2)
-facet_calendar <- function(date, nrow = NULL, ncol = NULL, format = "%b %d",
-  week_start = getOption("lubridate.week.start", 1), scales = "fixed", 
-  shrink = TRUE, dir = "h", strip.position = "top") {
+facet_calendar <- function(date, format = "%b %d",
+  week_start = getOption("lubridate.week.start", 1), 
+  nrow = NULL, ncol = NULL, scales = "fixed", shrink = TRUE, dir = "h", 
+  labeller = "label_value", strip.position = "top") {
 
   scales <- match.arg(scales, c("fixed", "free_x", "free_y", "free"))
   dir <- match.arg(dir, c("h", "v"))
@@ -38,6 +43,7 @@ facet_calendar <- function(date, nrow = NULL, ncol = NULL, format = "%b %d",
   facet$params$week_start <- week_start
   facet$params$free <- free
   facet$params$dir <- dir
+  facet$params$labeller <- labeller
   ggproto(NULL, FacetCalendar,
     shrink = shrink,
     params = facet$params
@@ -61,7 +67,7 @@ FacetCalendar <- ggproto("FacetCalendar", FacetWrap,
       dplyr::mutate(
         !! date_chr := PANEL,
         .label = format.Date(PANEL, format = params$format),
-        PANEL = seq_len(n),
+        PANEL = factor(seq_len(n), levels = seq_len(n)),
         SCALE_X = ifelse(params$free$x, seq_len(n), 1L),
         SCALE_Y = ifelse(params$free$y, seq_len(n), 1L)
       )
@@ -72,7 +78,7 @@ FacetCalendar <- ggproto("FacetCalendar", FacetWrap,
       return(cbind(data, PANEL = integer(0)))
     }
     date_chr <- as_string(params$date)
-    dplyr::left_join(data, layout, by = date_chr)
+    dplyr::right_join(data, layout, by = date_chr)
   },
 
   draw_panels = function(self, panels, layout, x_scales, y_scales, ranges, 
@@ -89,11 +95,20 @@ FacetCalendar <- ggproto("FacetCalendar", FacetWrap,
     # No idea why 28 and 26 are position in gtable (perhaps magic numbers)
     ncol <- max(layout$MCOL)
     nrow <- max(layout$MROW)
-    for (i in seq(28, by = 28, length.out = ncol - 1)) {
-      canvas <- gtable::gtable_add_cols(canvas, width = col_spacer, pos = i)
-    }
-    for (j in seq(26, by = 26, length.out = nrow - 1)) {
-      canvas <- gtable::gtable_add_rows(canvas, heights = row_spacer, pos = j)
+    if (params$dir == "h") {
+      for (i in seq(28, by = 28, length.out = ncol - 1)) {
+        canvas <- gtable::gtable_add_cols(canvas, width = col_spacer, pos = i)
+      }
+      for (j in seq(26, by = 26, length.out = nrow - 1)) {
+        canvas <- gtable::gtable_add_rows(canvas, heights = row_spacer, pos = j)
+      }
+    } else {
+      for (i in seq(21, by = 21, length.out = ncol - 1)) {
+        canvas <- gtable::gtable_add_cols(canvas, width = col_spacer, pos = i)
+      }
+      for (j in seq(36, by = 36, length.out = nrow - 1)) {
+        canvas <- gtable::gtable_add_rows(canvas, heights = row_spacer, pos = j)
+      }
     }
     canvas
   }

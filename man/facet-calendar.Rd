@@ -6,16 +6,13 @@
 \alias{FacetCalendar}
 \title{Lay out panels in a calendar}
 \usage{
-facet_calendar(date, nrow = NULL, ncol = NULL, format = "\%b \%d",
-  week_start = getOption("lubridate.week.start", 1), scales = "fixed",
-  shrink = TRUE, dir = "h", strip.position = "top")
+facet_calendar(date, format = "\%b \%d",
+  week_start = getOption("lubridate.week.start", 1), nrow = NULL,
+  ncol = NULL, scales = "fixed", shrink = TRUE, dir = "h",
+  labeller = "label_value", strip.position = "top")
 }
 \arguments{
-\item{date}{A variable that contains "Date" class.}
-
-\item{nrow}{Number of rows and columns.}
-
-\item{ncol}{Number of rows and columns.}
+\item{date}{A \code{Date} variable mapping to dates in the calendar.}
 
 \item{format}{A character string, such as \code{\%Y-\%b-\%d} and \code{\%a (\%d)}.
 See \code{?strptime} for details.}
@@ -23,6 +20,9 @@ See \code{?strptime} for details.}
 \item{week_start}{Day on which week starts following ISO conventions -
 1 means Monday, 7 means Sunday (default). You can set \code{lubridate.week.start}
 option to control this parameter globally.}
+
+\item{nrow, ncol}{Number of rows and columns defined for "monthly" calendar
+layout. If \code{NULL}, it computes a sensible layout.}
 
 \item{scales}{Should scales be fixed (\code{"fixed"}, the default),
 free (\code{"free"}), or free in one dimension (\code{"free_x"},
@@ -32,8 +32,18 @@ free (\code{"free"}), or free in one dimension (\code{"free_x"},
 statistics, not raw data. If \code{FALSE}, will be range of raw data
 before statistical summary.}
 
-\item{dir}{Direction: either \code{"h"} for horizontal, the default, or \code{"v"},
-for vertical.}
+\item{dir}{Direction of calendar: "h" for horizontal (the default) or "v" for
+vertical.}
+
+\item{labeller}{A function that takes one data frame of labels and
+returns a list or data frame of character vectors. Each input
+column corresponds to one factor. Thus there will be more than
+one with formulae of the type \code{~cyl + am}. Each output
+column gets displayed as one separate line in the strip
+label. This function should inherit from the "labeller" S3 class
+for compatibility with \code{\link[=labeller]{labeller()}}. See
+\code{\link[=label_value]{label_value()}} for more details and pointers to other
+options.}
 
 \item{strip.position}{By default, the labels are displayed on the top of
 the plot. Using \code{strip.position} it is possible to place the labels on
