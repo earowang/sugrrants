@@ -179,6 +179,9 @@ frame_calendar.default <- function(
   nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed",
   width = 0.95, height = 0.95, margin = NULL, sunday = FALSE
 ) {
+  if (NROW(data) == 0L) {
+    abort("Facet calendar must contain observations.")
+  } 
   if (identical(between(width, 0, 1) && between(height, 0, 1), FALSE)) {
     abort("`width`/`height` must be between 0 and 1.")
   }

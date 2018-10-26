@@ -62,6 +62,9 @@ FacetCalendar <- ggproto("FacetCalendar", FacetWrap,
       abort(sprintf("Argument `date` must be class 'Date', not '%s'."), class(eval_date)[[1]])
     }
 
+    if (NROW(data[[1]]) == 0L) {
+      abort("Facet calendar must contain observations.")
+    } 
     layout <- setup_calendar.monthly(eval_date, dir = params$dir,
       week_start = params$week_start, nrow = params$nrow, ncol = params$ncol)
     n <- NROW(layout)
