@@ -32,8 +32,9 @@ globalVariables(c(
 #' refers to day of month and month of year.
 #' @param dir Direction of calendar: "h" for horizontal (the default) or "v" for
 #' vertical.
-#' @param sunday FALSE (the default) indicating to starting with Monday in a
-#' week, or TRUE for Sunday, when `calendar = "monthly"`.
+#' @param week_start Day on which week starts following ISO conventions -
+#' 1 means Monday, 7 means Sunday (default). You can set `lubridate.week.start` 
+#' option to control this parameter globally.
 #' @param nrow,ncol Number of rows and columns defined for "monthly" calendar
 #' layout. If `NULL`, it computes a sensible layout.
 #' @param polar FALSE (the default) for Cartesian or TRUE for polar coordinates.
@@ -44,6 +45,9 @@ globalVariables(c(
 #' each glyph.
 #' @param margin Numerics of length two between 0 and 1 to specify the horizontal
 #' and vertical margins between month panels.
+#' @param sunday Deprecated and use `week_start` instead. `FALSE` (the default) 
+#' indicating to starting with Monday in a week, or TRUE for Sunday, when 
+#' `calendar = "monthly"`.
 #'
 #' @return A data frame or a dplyr::tibble with newly added columns of `.x`, `.y`. `.x`
 #' and `.y` together give new coordinates computed for different types of
@@ -106,9 +110,10 @@ globalVariables(c(
 #'
 #' @export
 frame_calendar <- function(
-  data, x, y, date, calendar = "monthly", dir = "h", sunday = FALSE,
+  data, x, y, date, calendar = "monthly", dir = "h", 
+  week_start = getOption("lubridate.week.start", 1),
   nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed",
-  width = 0.95, height = 0.95, margin = NULL
+  width = 0.95, height = 0.95, margin = NULL, sunday = FALSE
 ) {
   calendar <- match.arg(calendar, c("monthly", "weekly", "daily"))
   dir <- match.arg(dir, c("h", "v"))
@@ -119,9 +124,10 @@ frame_calendar <- function(
 
 #' @export
 frame_calendar.tbl_ts <- function(
-  data, x, y, date, calendar = "monthly", dir = "h", sunday = FALSE,
+  data, x, y, date, calendar = "monthly", dir = "h", 
+  week_start = getOption("lubridate.week.start", 1),
   nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed",
-  width = 0.95, height = 0.95, margin = NULL
+  width = 0.95, height = 0.95, margin = NULL, sunday = FALSE
 ) {
   x <- enquo(x)
   y <- enquo(y)
@@ -144,9 +150,10 @@ frame_calendar.tbl_ts <- function(
 
 #' @export
 frame_calendar.grouped_df <- function(
-  data, x, y, date, calendar = "monthly", dir = "h", sunday = FALSE,
+  data, x, y, date, calendar = "monthly", dir = "h", 
+  week_start = getOption("lubridate.week.start", 1),
   nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed",
-  width = 0.95, height = 0.95, margin = NULL
+  width = 0.95, height = 0.95, margin = NULL, sunday = FALSE
 ) {
   x <- enquo(x)
   y <- enquo(y)
@@ -167,9 +174,10 @@ frame_calendar.grouped_df <- function(
 
 #' @export
 frame_calendar.default <- function(
-  data, x, y, date, calendar = "monthly", dir = "h", sunday = FALSE,
+  data, x, y, date, calendar = "monthly", dir = "h", 
+  week_start = getOption("lubridate.week.start", 1),
   nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed",
-  width = 0.95, height = 0.95, margin = NULL
+  width = 0.95, height = 0.95, margin = NULL, sunday = FALSE
 ) {
   if (identical(between(width, 0, 1) && between(height, 0, 1), FALSE)) {
     abort("`width`/`height` must be between 0 and 1.")
@@ -235,8 +243,8 @@ frame_calendar.default <- function(
   }
 
   class(date_eval) <- c(calendar, class(date_eval))
-  cal_layout <- setup_calendar(x = date_eval, dir = dir, sunday = sunday,
-    nrow = nrow, ncol = ncol)
+  cal_layout <- setup_calendar(x = date_eval, dir = dir, week_start = week_start,
+    sunday = sunday, nrow = nrow, ncol = ncol)
 
   # Assign grids to the panels
   grids <- assign_grids(

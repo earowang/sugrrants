@@ -6,8 +6,9 @@
 \title{Rearrange a temporal data frame to a calendar-based data format using linear algebra}
 \usage{
 frame_calendar(data, x, y, date, calendar = "monthly", dir = "h",
-  sunday = FALSE, nrow = NULL, ncol = NULL, polar = FALSE,
-  scale = "fixed", width = 0.95, height = 0.95, margin = NULL)
+  week_start = getOption("lubridate.week.start", 1), nrow = NULL,
+  ncol = NULL, polar = FALSE, scale = "fixed", width = 0.95,
+  height = 0.95, margin = NULL, sunday = FALSE)
 
 prettify(plot, label = c("label", "text"), locale, abbr = TRUE, ...)
 }
@@ -35,8 +36,9 @@ refers to day of month and month of year.}
 \item{dir}{Direction of calendar: "h" for horizontal (the default) or "v" for
 vertical.}
 
-\item{sunday}{FALSE (the default) indicating to starting with Monday in a
-week, or TRUE for Sunday, when \code{calendar = "monthly"}.}
+\item{week_start}{Day on which week starts following ISO conventions -
+1 means Monday, 7 means Sunday (default). You can set \code{lubridate.week.start}
+option to control this parameter globally.}
 
 \item{nrow, ncol}{Number of rows and columns defined for "monthly" calendar
 layout. If \code{NULL}, it computes a sensible layout.}
@@ -52,6 +54,10 @@ each glyph.}
 
 \item{margin}{Numerics of length two between 0 and 1 to specify the horizontal
 and vertical margins between month panels.}
+
+\item{sunday}{Deprecated and use \code{week_start} instead. \code{FALSE} (the default)
+indicating to starting with Monday in a week, or TRUE for Sunday, when
+\code{calendar = "monthly"}.}
 
 \item{plot}{A "ggplot" object or "plotly".}
 

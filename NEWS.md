@@ -1,3 +1,8 @@
+# sugrrants 0.1.9.9000 (released as 0.2.0)
+
+* Added a new faceting method `facet_calendar()`.
+* Added new argument `week_start` into `frame_calendar()` and deprecated `sunday` argument.
+
 # sugrrants 0.1.6
 
 * Removed dependency on `tidyr`.
