@@ -14,6 +14,10 @@ globalVariables("facet_wrap")
 #' vertical.
 #' @inheritParams ggplot2::facet_wrap
 #'
+#' @details A monthly calendar is set up as a 5 by 7 layout matrix. Each month could 
+#' extend over six weeks but in these months is to wrap the last few days up 
+#' to the top row of the block.
+#'
 #' @rdname facet-calendar
 #' @export
 #' @examples
