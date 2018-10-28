@@ -144,3 +144,7 @@ prettify(pp)
 }
 
 }
+\seealso{
+\link{facet_calendar} for a fully-fledged facetting calenar with formal
+labels and axes.
+}

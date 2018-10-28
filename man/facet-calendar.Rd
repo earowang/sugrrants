@@ -66,8 +66,12 @@ fs <- pedestrian \%>\%
 fs \%>\%
   ggplot(aes(x = Time, y = Hourly_Counts)) +
   geom_line(aes(colour = Sensor_Name)) +
-  facet_calendar(date = Date, nrow = 2) +
+  facet_calendar(~ Date, nrow = 2) +
   theme(legend.position = "bottom")
 }
+}
+\seealso{
+\link{frame_calendar} for a fast and compact calendar display, by transforming
+the data.
 }
 \keyword{datasets}

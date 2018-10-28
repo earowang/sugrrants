@@ -19,6 +19,8 @@ globalVariables("facet_wrap")
 #' to the top row of the block.
 #'
 #' @rdname facet-calendar
+#' @seealso [frame_calendar] for a fast and compact calendar display, by transforming
+#' the data.
 #' @export
 #' @examples
 #' \donttest{
@@ -28,7 +30,7 @@ globalVariables("facet_wrap")
 #' fs %>%
 #'   ggplot(aes(x = Time, y = Hourly_Counts)) +
 #'   geom_line(aes(colour = Sensor_Name)) +
-#'   facet_calendar(date = Date, nrow = 2) +
+#'   facet_calendar(~ Date, nrow = 2) +
 #'   theme(legend.position = "bottom")
 #' }
 facet_calendar <- function(date, format = "%b %d",
@@ -45,7 +47,7 @@ facet_calendar <- function(date, format = "%b %d",
 
   facet <- facet_wrap(~ .label, nrow = nrow, ncol = ncol, scales = scales, 
     shrink = shrink, strip.position = strip.position)
-  facet$params$date <- enexpr(date)
+  facet$params$date <- as_facet_date(enexpr(date))
   facet$params$format <- format
   facet$params$week_start <- week_start
   facet$params$free <- free
@@ -74,7 +76,7 @@ FacetCalendar <- ggproto("FacetCalendar", FacetWrap,
     }
 
     if (NROW(data[[1]]) == 0L) {
-      abort("Facet calendar must contain observations.")
+      abort("Facet calendar must have at least one date.")
     } 
     layout <- setup_calendar.monthly(eval_date, dir = params$dir,
       week_start = params$week_start, nrow = params$nrow, ncol = params$ncol)
@@ -127,3 +129,16 @@ FacetCalendar <- ggproto("FacetCalendar", FacetWrap,
     canvas
   }
 )
+
+as_facet_date <- function(x) {
+  if (is_string(x)) {
+    x <- parse_expr(x)
+  } 
+  if (is_formula(x)) {
+    x <- f_rhs(x)
+  }
+  if (is_call(x)) {
+    abort("Facet calendar only accepts (un)quoted variable and RHS formula.")
+  }
+  x
+}
