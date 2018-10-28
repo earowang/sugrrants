@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sugrrants</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9.9000</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -105,7 +105,7 @@
 #&gt; 3 2017-01-01 00:00:00 2017-01-01  2017 Janu…     1 Sund…     0         9
 #&gt; 4 2017-01-01 00:00:00 2017-01-01  2017 Janu…     1 Sund…     0         6
 #&gt; 5 2017-01-01 00:00:00 2017-01-01  2017 Janu…     1 Sund…     0        25
-#&gt; # … with 1.948e+04 more rows, and 2 more variables: Sensor_Name &lt;chr&gt;,
+#&gt; # ... with 1.948e+04 more rows, and 2 more variables: Sensor_Name &lt;chr&gt;,
 #&gt; #   Hourly_Counts &lt;int&gt;</code></pre>
 <p>We’ll start with one sensor only–Melbourne Convention Exhibition Centre–to explain the basic use of the <code><a href="../reference/frame-calendar.html">frame_calendar()</a></code>. As it attempts to fit into the <em>tidyverse</em> framework, the interface should be straightforward to those who use <em>tidyverse</em> on a daily basis. The first argument is the <code>data</code> so that the data frame can directly be piped into the function using <code>%&gt;%</code>. A variable indicating time of day could be mapped to <code>x</code>, a value variable of interest mapped to <code>y</code>. <code>date</code> requires a <code>Date</code> variable to organise the data into a correct chronological order . See <code>?frame_calendar()</code> for more options. In this case, <em>Time</em> as hour of day is used for <code>x</code> and <em>Hourly_Counts</em> as value for <code>y</code>. It returns a data frame including newly added columns <em>.Time</em> and <em>.Hourly_Counts</em> with a “.” prefixed to the variable names. These new columns contain the rearranged coordinates for the calendar plots later.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">centre &lt;-<span class="st"> </span>pedestrian17 <span class="op">%&gt;%</span><span class="st"> </span></a>
@@ -121,7 +121,7 @@
 #&gt; 3 2017-01-01 02:00:00 2017-01-01  2017 Janu…     1 Sund…     2        25
 #&gt; 4 2017-01-01 03:00:00 2017-01-01  2017 Janu…     1 Sund…     3        25
 #&gt; 5 2017-01-01 04:00:00 2017-01-01  2017 Janu…     1 Sund…     4        25
-#&gt; # … with 2,875 more rows, and 4 more variables: Sensor_Name &lt;chr&gt;,
+#&gt; # ... with 2,875 more rows, and 4 more variables: Sensor_Name &lt;chr&gt;,
 #&gt; #   Hourly_Counts &lt;int&gt;, .Time &lt;dbl&gt;, .Hourly_Counts &lt;dbl&gt;</code></pre>
 <p>Consequently, <em>.Time</em> and <em>.Hourly_Counts</em> are mapped to the x and y axes respectively, grouped by <em>Date</em> when using <code>geom_line()</code>. The transformed <em>.Time</em> and <em>.Hourly_Counts</em> variables no longer carry their initial meanings, and thereby their values are meaningless.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">p1 &lt;-<span class="st"> </span>centre_calendar <span class="op">%&gt;%</span><span class="st"> </span></a>
@@ -204,10 +204,10 @@
 <a class="sourceLine" id="cb11-9" data-line-number="9"><span class="kw"><a href="../reference/frame-calendar.html">prettify</a></span>(p6, <span class="dt">size =</span> <span class="dv">3</span>)</a></code></pre></div>
 <pre><code>#&gt; Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
 <p><img src="frame-calendar_files/figure-html/ped-lag-1.png" width="768"></p>
-<p>Furthermore, the argument <code>y</code> can take multiple variable names in combination with <code><a href="http://dplyr.tidyverse.org/reference/vars.html">vars()</a></code>. The rectangular glyphs arranged on a “weekly” calendar are plotted to illustrate the usage of the multiple <code>y</code>s and the differences between sensors. The long data format is firstly converted to the wide format using <code><a href="http://www.rdocumentation.org/packages/tidyr/topics/spread">tidyr::spread()</a></code> <span class="citation">(Wickham <a href="#ref-wickham2014tidy">2014</a>)</span>. These two sensors are variables rather than values now, and hence can be passed to <code>y</code>.</p>
+<p>Furthermore, the argument <code>y</code> can take multiple variable names in combination with <code><a href="http://dplyr.tidyverse.org/reference/vars.html">vars()</a></code>. The rectangular glyphs arranged on a “weekly” calendar are plotted to illustrate the usage of the multiple <code>y</code>s and the differences between sensors. The long data format is firstly converted to the wide format using <code><a href="https://tidyr.tidyverse.org/reference/spread.html">tidyr::spread()</a></code> <span class="citation">(Wickham <a href="#ref-wickham2014tidy">2014</a>)</span>. These two sensors are variables rather than values now, and hence can be passed to <code>y</code>.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">two_sensors_wide &lt;-<span class="st"> </span>two_sensors_df <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb13-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="op">-</span>Sensor_ID) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb13-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/tidyr/topics/spread">spread</a></span>(<span class="dt">key =</span> Sensor_Name, <span class="dt">value =</span> Hourly_Counts) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb13-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="https://tidyr.tidyverse.org/reference/spread.html">spread</a></span>(<span class="dt">key =</span> Sensor_Name, <span class="dt">value =</span> Hourly_Counts) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb13-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">rename</a></span>(</a>
 <a class="sourceLine" id="cb13-5" data-line-number="5">    <span class="dt">Lonsdale =</span> <span class="st">`</span><span class="dt">Lonsdale St (South)</span><span class="st">`</span>,</a>
 <a class="sourceLine" id="cb13-6" data-line-number="6">    <span class="dt">Centre =</span> <span class="st">`</span><span class="dt">Melbourne Convention Exhibition Centre</span><span class="st">`</span></a>
@@ -228,8 +228,8 @@
 #&gt; 3 2017-01-01 02:00:00 2017-01-01  2017 Janu…     1 Sund…     2      600
 #&gt; 4 2017-01-01 03:00:00 2017-01-01  2017 Janu…     1 Sund…     3      495
 #&gt; 5 2017-01-01 04:00:00 2017-01-01  2017 Janu…     1 Sund…     4      270
-#&gt; # … with 2,875 more rows, and 6 more variables: Centre &lt;int&gt;, Diff &lt;int&gt;,
-#&gt; #   More &lt;chr&gt;, .Time &lt;dbl&gt;, .Centre &lt;dbl&gt;, .Lonsdale &lt;dbl&gt;</code></pre>
+#&gt; # ... with 2,875 more rows, and 6 more variables: Centre &lt;int&gt;,
+#&gt; #   Diff &lt;int&gt;, More &lt;chr&gt;, .Time &lt;dbl&gt;, .Centre &lt;dbl&gt;, .Lonsdale &lt;dbl&gt;</code></pre>
 <p>Having multiple <code>y</code>s makes it a little easier when mapping to some geoms that contain the <code>ymin</code> and <code>ymax</code> arguments, such as <code>geom_rect</code> and <code>geom_ribbon</code>. Interestingly, Lonsdale Street is busier than the Convention Centre in the evening, vice versa in the day time.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">p7 &lt;-<span class="st"> </span>sensors_wide_calendar <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb15-2" data-line-number="2"><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></a>

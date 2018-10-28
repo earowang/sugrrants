@@ -1,6 +1,6 @@
 Package: sugrrants
 Title: Supporting Graphs for Analysing Time Series
-Version: 0.1.9.9000
+Version: 0.2.0
 Authors@R: 
     c(person(given = "Earo",
              family = "Wang",
@@ -27,9 +27,9 @@ Depends:
 Imports: 
     dplyr (>= 0.7.0),
     grid,
+    gtable,
     lubridate (>= 1.7.1),
-    rlang (>= 0.2.0),
-    gtable
+    rlang (>= 0.2.0)
 Suggests: 
     covr,
     knitr,

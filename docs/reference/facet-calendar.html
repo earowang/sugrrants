@@ -64,7 +64,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sugrrants</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9.9000</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -130,12 +130,12 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>date</th>
-      <td><p>A <code>Date</code> variable mapping to dates in the calendar.</p></td>
+      <td><p>A variable that contains dates will be mapped in the calendar.</p></td>
     </tr>
     <tr>
       <th>format</th>
-      <td><p>A character string, such as <code>%Y-%b-%d</code> and <code>%a (%d)</code>.
-See <code>?strptime</code> for details.</p></td>
+      <td><p>A character string, such as <code>%Y-%b-%d</code> and <code>%a (%d)</code>, formatting
+the display of facet strips. See <code>?strptime</code> for details.</p></td>
     </tr>
     <tr>
       <th>week_start</th>
@@ -186,6 +186,17 @@ either of the four sides by setting <code>strip.position = c("top",
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>A monthly calendar is set up as a 5 by 7 layout matrix. Each month could
+extend over six weeks but in these months is to wrap the last few days up
+to the top row of the block.</p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><a href='frame-calendar.html'>frame_calendar</a> for a compact calendar display, by quickly transforming
+the data.</p></div>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>fs</span> <span class='kw'>&lt;-</span> <span class='no'>pedestrian</span> <span class='kw'>%&gt;%</span>
@@ -194,14 +205,18 @@ either of the four sides by setting <code>strip.position = c("top",
 <span class='no'>fs</span> <span class='kw'>%&gt;%</span>
   <span class='fu'>ggplot</span>(<span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>Time</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>Hourly_Counts</span>)) +
   <span class='fu'>geom_line</span>(<span class='fu'>aes</span>(<span class='kw'>colour</span> <span class='kw'>=</span> <span class='no'>Sensor_Name</span>)) +
-  <span class='fu'>facet_calendar</span>(<span class='kw'>date</span> <span class='kw'>=</span> <span class='no'>Date</span>, <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>2</span>) +
+  <span class='fu'>facet_calendar</span>(~ <span class='no'>Date</span>, <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>2</span>) +
   <span class='fu'>theme</span>(<span class='kw'>legend.position</span> <span class='kw'>=</span> <span class='st'>"bottom"</span>)</div><div class='img'><img src='facet-calendar-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-            
+      
+      <li><a href="#details">Details</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+      
       <li><a href="#examples">Examples</a></li>
     </ul>
 
