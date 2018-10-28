@@ -19,7 +19,7 @@ globalVariables("facet_wrap")
 #' to the top row of the block.
 #'
 #' @rdname facet-calendar
-#' @seealso [frame_calendar] for a fast and compact calendar display, by transforming
+#' @seealso [frame_calendar] for a compact calendar display, by quickly transforming
 #' the data.
 #' @export
 #' @examples

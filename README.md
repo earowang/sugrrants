@@ -33,6 +33,8 @@ devtools::install_github("earowang/sugrrants", build_vignettes = TRUE)
 
 ### Calendar-based graphics
 
+The fully-fledged facetting calendar unlocks day-to-day stories.
+
 ``` r
 library(dplyr)
 library(sugrrants)
@@ -40,15 +42,16 @@ pedestrian %>%
   filter(Date < as.Date("2016-05-01")) %>% 
   ggplot(aes(x = Time, y = Hourly_Counts, colour = Sensor_Name)) +
   geom_line() +
-  facet_calendar(date = Date) +
+  facet_calendar(~ Date) + # a variable contains dates
   theme(legend.position = "bottom")
 ```
 
 ![](man/figure/facet-calendar-1.png)<!-- -->
 
-The `frame_calendar()` provides tools for re-structuring the data into a
-calendar layout, without using the faceting method. It is fast, compact
-and light-weight, although it does not preserve the values.
+On the other hand, the `frame_calendar()` provides tools for
+re-structuring the data into a compact calendar layout, without using
+the faceting method. It is fast and light-weight, although it does not
+preserve the values.
 
 ``` r
 p <- pedestrian %>%

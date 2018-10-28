@@ -71,7 +71,7 @@ fs \%>\%
 }
 }
 \seealso{
-\link{frame_calendar} for a fast and compact calendar display, by transforming
+\link{frame_calendar} for a compact calendar display, by quickly transforming
 the data.
 }
 \keyword{datasets}

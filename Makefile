@@ -11,7 +11,7 @@ check:
 	Rscript -e "devtools::check()"
 
 install:
-	Rscript -e "devtools::install(build_vignettes = TRUE, upgrade_dependencies = FALSE)"
+	Rscript -e "devtools::install(build_vignettes = TRUE, dependencies = FALSE)"
 
 winbuild:
 	Rscript -e "devtools::build_win(version = 'R-devel', quiet = TRUE)"
