@@ -140,9 +140,13 @@ frame_calendar.tbl_ts <- function(
       calendar = calendar, dir = dir, sunday = sunday,
       nrow = nrow, ncol = ncol, polar = polar, scale = scale,
       width = width, height = height, margin = margin
-    ) %>%
-    tsibble::build_tsibble_meta(
-      key = tsibble::key(data), index = !! tsibble::index(data), 
+    )
+  if (tsibble::is_grouped_ts(data)) {
+    out <- out %>% 
+      group_by(!!! groups(data))
+  }
+  out <- tsibble::build_tsibble_meta(
+      out, key = tsibble::key(data), index = !! tsibble::index(data), 
       index2 = !! tsibble::index2(data), interval = tsibble::interval(data), 
       ordered = tsibble::is_ordered(data)
     )

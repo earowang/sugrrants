@@ -1,3 +1,7 @@
+# sugrrants 0.2.0.9000
+
+* Patch release due to **tsibble** updates.
+
 # sugrrants 0.2.0
 
 * Added a new faceting method `facet_calendar()`.
