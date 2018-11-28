@@ -38,7 +38,7 @@ Suggests:
     rmarkdown,
     testthat,
     tidyr,
-    tsibble (>= 0.5.0),
+    tsibble (>= 0.6.0),
     viridis
 VignetteBuilder: 
     knitr
