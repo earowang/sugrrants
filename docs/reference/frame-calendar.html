@@ -8,20 +8,18 @@
 
 <title>Rearrange a temporal data frame to a calendar-based data format using linear algebra — frame_calendar • sugrrants</title>
 
-<link rel="shortcut icon" type="image/x-icon" href="../favicon.ico">
-
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.1/clipboard.min.js" integrity="sha256-hIvIxeqhGZF+VVeM55k0mJvWpQ6gTkWk3Emc+NmowYA=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
 <!-- sticky kit -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
@@ -45,7 +43,8 @@ flexibility for users to visualise the data in various ways." />
 
 
 <!-- mathjax -->
-<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -69,7 +68,7 @@ flexibility for users to visualise the data in various ways." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sugrrants</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
     </div>
 
@@ -131,11 +130,11 @@ flexibility for users to visualise the data in various ways.</p>
     </div>
 
     <pre class="usage"><span class='fu'>frame_calendar</span>(<span class='no'>data</span>, <span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>date</span>, <span class='kw'>calendar</span> <span class='kw'>=</span> <span class='st'>"monthly"</span>, <span class='kw'>dir</span> <span class='kw'>=</span> <span class='st'>"h"</span>,
-  <span class='kw'>week_start</span> <span class='kw'>=</span> <span class='fu'>getOption</span>(<span class='st'>"lubridate.week.start"</span>, <span class='fl'>1</span>), <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>week_start</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/options'>getOption</a></span>(<span class='st'>"lubridate.week.start"</span>, <span class='fl'>1</span>), <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>polar</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='st'>"fixed"</span>, <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>0.95</span>,
   <span class='kw'>height</span> <span class='kw'>=</span> <span class='fl'>0.95</span>, <span class='kw'>margin</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>sunday</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
-<span class='fu'>prettify</span>(<span class='no'>plot</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"label"</span>, <span class='st'>"text"</span>), <span class='no'>locale</span>, <span class='kw'>abbr</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>prettify</span>(<span class='no'>plot</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"label"</span>, <span class='st'>"text"</span>), <span class='no'>locale</span>, <span class='kw'>abbr</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -229,7 +228,7 @@ it will add day of month to the <code>ggplot</code> object.</p></td>
       <th>locale</th>
       <td><p>ISO 639 language code. The default is "en" (i.e. US English).
 For other languages support, package <strong>readr</strong> needs to be installed.
-See <a href='http://www.rdocumentation.org/packages/readr/topics/locale'>readr::locale</a> for more details.</p></td>
+See <a href='https://readr.tidyverse.org/reference/locale.html'>readr::locale</a> for more details.</p></td>
     </tr>
     <tr>
       <th>abbr</th>
@@ -257,17 +256,17 @@ of sub-series arranged into many daily cells. For every multiple (or
 facet), it requires the <code>x</code> variable mapped to be time of day and <code>y</code> to
 value. New <code>x</code> and <code>y</code> are computed and named with a <code>.</code> prefixed to variable
 according to <code>x</code> and <code>y</code> respectively, and get ready for <code>ggplot2</code> aesthetic
-mappings. In conjunction with <code><a href='http://www.rdocumentation.org/packages/plotly/topics/reexports'>group_by()</a></code>, it allows the grouped variable
+mappings. In conjunction with <code><a href='https://www.rdocumentation.org/packages/plotly/topics/reexports'>group_by()</a></code>, it allows the grouped variable
 to have their individual scales. For more details, see <code><a href='../articles/frame-calendar.html'>vignette("frame-calendar", package = "sugrrants")</a></code></p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><a href='facet-calendar.html'>facet_calendar</a> for a fully-fledged facetting calenar with formal
+    <div class='dont-index'><p><a href='facet-calendar.html'>facet_calendar</a> for a fully-fledged faceting calendar with formal
 labels and axes.</p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>dplyr</span>)</div><div class='output co'>#&gt; <span class='message'></span>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>dplyr</span>)</div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>Attaching package: ‘dplyr’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:testthat’:</span>
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>    matches</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:stats’:</span>
@@ -301,14 +300,14 @@ labels and axes.</p></div>
 <span class='fu'>prettify</span>(<span class='no'>p2</span>, <span class='kw'>locale</span> <span class='kw'>=</span> <span class='st'>"zh"</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='st'>"STKaiti"</span>)
 
 <span class='co'># plotly example</span>
-<span class='kw'>if</span> (!<span class='fu'>requireNamespace</span>(<span class='st'>"plotly"</span>, <span class='kw'>quietly</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)) {
-  <span class='fu'>stop</span>(<span class='st'>"Please install the 'plotly' package to run these following examples."</span>)
+<span class='kw'>if</span> (!<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/ns-load'>requireNamespace</a></span>(<span class='st'>"plotly"</span>, <span class='kw'>quietly</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)) {
+  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/stop'>stop</a></span>(<span class='st'>"Please install the 'plotly' package to run these following examples."</span>)
 }
-<span class='fu'>library</span>(<span class='no'>plotly</span>)
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>plotly</span>)
 <span class='no'>pp</span> <span class='kw'>&lt;-</span> <span class='no'>calendar_df</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='http://www.rdocumentation.org/packages/plotly/topics/reexports'>group_by</a></span>(<span class='no'>Date</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='http://www.rdocumentation.org/packages/plotly/topics/plot_ly'>plot_ly</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> ~ <span class='no'>.Time</span>, <span class='kw'>y</span> <span class='kw'>=</span> ~ <span class='no'>.Hourly_Counts</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='http://www.rdocumentation.org/packages/plotly/topics/add_trace'>add_lines</a></span>(<span class='kw'>text</span> <span class='kw'>=</span> ~ <span class='fu'>paste</span>(<span class='st'>"Count: "</span>, <span class='no'>Hourly_Counts</span>, <span class='st'>"&lt;br&gt; Time: "</span>, <span class='no'>Time</span>))
+  <span class='fu'><a href='https://www.rdocumentation.org/packages/plotly/topics/reexports'>group_by</a></span>(<span class='no'>Date</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='https://www.rdocumentation.org/packages/plotly/topics/plot_ly'>plot_ly</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> ~ <span class='no'>.Time</span>, <span class='kw'>y</span> <span class='kw'>=</span> ~ <span class='no'>.Hourly_Counts</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='https://www.rdocumentation.org/packages/plotly/topics/add_trace'>add_lines</a></span>(<span class='kw'>text</span> <span class='kw'>=</span> ~ <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste</a></span>(<span class='st'>"Count: "</span>, <span class='no'>Hourly_Counts</span>, <span class='st'>"&lt;br&gt; Time: "</span>, <span class='no'>Time</span>))
 <span class='fu'>prettify</span>(<span class='no'>pp</span>)
 <span class='co'># }</span><div class='input'>
 </div></pre>
@@ -336,9 +335,8 @@ labels and axes.</p></div>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.2.0.</p>
 </div>
-
       </footer>
    </div>
 

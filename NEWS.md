@@ -1,6 +1,6 @@
-# sugrrants 0.2.0.9000
+# sugrrants 0.2.1
 
-* Patch release due to **tsibble** updates.
+This is a patch release for the changes in **tsibble**.
 
 # sugrrants 0.2.0
 

@@ -1,6 +1,6 @@
 Package: sugrrants
 Title: Supporting Graphs for Analysing Time Series
-Version: 0.2.0.9000
+Version: 0.2.1
 Authors@R: 
     c(person(given = "Earo",
              family = "Wang",
@@ -43,6 +43,7 @@ Suggests:
 VignetteBuilder: 
     knitr
 Encoding: UTF-8
+Language: en-GB
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.1.1
