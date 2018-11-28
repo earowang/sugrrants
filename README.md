@@ -33,7 +33,8 @@ devtools::install_github("earowang/sugrrants", build_vignettes = TRUE)
 
 ### Calendar-based graphics
 
-The fully-fledged facetting calendar unlocks day-to-day stories.
+The fully-fledged faceting calendar `facet_calendar()` unlocks
+day-to-day stories.
 
 ``` r
 library(dplyr)

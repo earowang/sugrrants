@@ -66,7 +66,7 @@ globalVariables(c(
 #' package = "sugrrants")`
 #'
 #' @rdname frame-calendar
-#' @seealso [facet_calendar] for a fully-fledged facetting calenar with formal
+#' @seealso [facet_calendar] for a fully-fledged faceting calendar with formal
 #' labels and axes.
 #' @examples
 #' library(dplyr)
