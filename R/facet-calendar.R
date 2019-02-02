@@ -2,7 +2,8 @@ globalVariables("facet_wrap")
 
 #' Lay out panels in a calendar format
 #'
-#' @param date A variable that contains dates will be mapped in the calendar.
+#' @param date A variable that contains dates or an expression that generates 
+#' dates will be mapped in the calendar.
 #' @param format A character string, such as `%Y-%b-%d` and `%a (%d)`, formatting
 #' the display of facet strips. See `?strptime` for details.
 #' @param week_start Day on which week starts following ISO conventions -
@@ -31,7 +32,7 @@ globalVariables("facet_wrap")
 #' fs %>%
 #'   ggplot(aes(x = Time, y = Hourly_Counts)) +
 #'   geom_line(aes(colour = Sensor_Name)) +
-#'   facet_calendar(~ Date, nrow = 2) +
+#'   facet_calendar(~ Date, nrow = 2) + # or ~ as.Date(Date_Time)
 #'   theme(legend.position = "bottom")
 #' }
 facet_calendar <- function(date, format = "%b %d",

@@ -12,7 +12,8 @@ facet_calendar(date, format = "\%b \%d",
   labeller = "label_value", strip.position = "top")
 }
 \arguments{
-\item{date}{A variable that contains dates will be mapped in the calendar.}
+\item{date}{A variable that contains dates or an expression that generates
+dates will be mapped in the calendar.}
 
 \item{format}{A character string, such as \code{\%Y-\%b-\%d} and \code{\%a (\%d)}, formatting
 the display of facet strips. See \code{?strptime} for details.}
@@ -66,7 +67,7 @@ fs <- pedestrian \%>\%
 fs \%>\%
   ggplot(aes(x = Time, y = Hourly_Counts)) +
   geom_line(aes(colour = Sensor_Name)) +
-  facet_calendar(~ Date, nrow = 2) +
+  facet_calendar(~ Date, nrow = 2) + # or ~ as.Date(Date_Time)
   theme(legend.position = "bottom")
 }
 }
