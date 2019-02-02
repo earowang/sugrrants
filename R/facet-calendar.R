@@ -66,7 +66,7 @@ facet_calendar <- function(date, format = "%b %d",
 FacetCalendar <- ggproto("FacetCalendar", FacetWrap,
   compute_layout = function(data, params) {
     eval_date <- eval_tidy(params$date, data = data[[1]])
-    date_chr <- as_string(params$date)
+    date_chr <- expr_text(params$date)
 
     if (!(inherits(eval_date, "Date"))) {
       abort(sprintf(
@@ -93,7 +93,10 @@ FacetCalendar <- ggproto("FacetCalendar", FacetWrap,
   },
 
   map_data = function(data, layout, params) {
-    date_chr <- as_string(params$date)
+    date_chr <- expr_text(params$date)
+    if (is_call(params$date)) {
+      data <- mutate(data, !! date_chr := !! params$date)
+    }
     dplyr::left_join(data, layout, by = date_chr)
   },
 
@@ -136,9 +139,6 @@ as_facet_date <- function(x) {
   } 
   if (is_formula(x)) {
     x <- f_rhs(x)
-  }
-  if (is_call(x)) {
-    abort("Facet calendar only accepts (un)quoted variable and RHS formula.")
   }
   x
 }
