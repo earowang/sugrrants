@@ -145,10 +145,10 @@ frame_calendar.tbl_ts <- function(
     out <- out %>% 
       group_by(!!! groups(data))
   }
-  out <- tsibble::build_tsibble_meta(
+  out <- tsibble::build_tsibble(
       out, key = tsibble::key(data), index = !! tsibble::index(data), 
       index2 = !! tsibble::index2(data), interval = tsibble::interval(data), 
-      ordered = tsibble::is_ordered(data)
+      ordered = tsibble::is_ordered(data), validate = FALSE
     )
   class(out) <- c("tbl_cal", class(out))
   out
