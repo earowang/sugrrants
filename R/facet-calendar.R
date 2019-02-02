@@ -13,6 +13,7 @@ globalVariables("facet_wrap")
 #' @param dir Direction of calendar: "h" for horizontal (the default) or "v" for
 #' vertical.
 #' @inheritParams ggplot2::facet_wrap
+#' @importFrom gtable gtable_add_cols gtable_add_rows
 #'
 #' @details A monthly calendar is set up as a 5 by 7 layout matrix. Each month could 
 #' extend over six weeks but in these months is to wrap the last few days up 
@@ -95,7 +96,7 @@ FacetCalendar <- ggproto("FacetCalendar", FacetWrap,
   map_data = function(data, layout, params) {
     date_chr <- expr_text(params$date)
     if (is_call(params$date)) {
-      data <- mutate(data, !! date_chr := !! params$date)
+      data <- dplyr::mutate(data, !! date_chr := !! params$date)
     }
     dplyr::left_join(data, layout, by = date_chr)
   },
@@ -116,17 +117,17 @@ FacetCalendar <- ggproto("FacetCalendar", FacetWrap,
     nrow <- max(layout$MROW)
     if (params$dir == "h") {
       for (i in seq(28, by = 28, length.out = ncol - 1)) {
-        canvas <- gtable::gtable_add_cols(canvas, width = col_spacer, pos = i)
+        canvas <- gtable_add_cols(canvas, width = col_spacer, pos = i)
       }
       for (j in seq(26, by = 26, length.out = nrow - 1)) {
-        canvas <- gtable::gtable_add_rows(canvas, heights = row_spacer, pos = j)
+        canvas <- gtable_add_rows(canvas, heights = row_spacer, pos = j)
       }
     } else {
       for (i in seq(21, by = 21, length.out = ncol - 1)) {
-        canvas <- gtable::gtable_add_cols(canvas, width = col_spacer, pos = i)
+        canvas <- gtable_add_cols(canvas, width = col_spacer, pos = i)
       }
       for (j in seq(36, by = 36, length.out = nrow - 1)) {
-        canvas <- gtable::gtable_add_rows(canvas, heights = row_spacer, pos = j)
+        canvas <- gtable_add_rows(canvas, heights = row_spacer, pos = j)
       }
     }
     canvas
