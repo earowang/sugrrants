@@ -129,7 +129,8 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>date</th>
-      <td><p>A variable that contains dates will be mapped in the calendar.</p></td>
+      <td><p>A variable that contains dates or an expression that generates
+dates will be mapped in the calendar.</p></td>
     </tr>
     <tr>
       <th>format</th>
@@ -204,7 +205,7 @@ the data.</p></div>
 <span class='no'>fs</span> <span class='kw'>%&gt;%</span>
   <span class='fu'>ggplot</span>(<span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>Time</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>Hourly_Counts</span>)) +
   <span class='fu'>geom_line</span>(<span class='fu'>aes</span>(<span class='kw'>colour</span> <span class='kw'>=</span> <span class='no'>Sensor_Name</span>)) +
-  <span class='fu'>facet_calendar</span>(~ <span class='no'>Date</span>, <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>2</span>) +
+  <span class='fu'>facet_calendar</span>(~ <span class='no'>Date</span>, <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>2</span>) + <span class='co'># or ~ as.Date(Date_Time)</span>
   <span class='fu'>theme</span>(<span class='kw'>legend.position</span> <span class='kw'>=</span> <span class='st'>"bottom"</span>)</div><div class='img'><img src='facet-calendar-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
