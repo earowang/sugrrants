@@ -1,3 +1,9 @@
+# sugrrants 0.2.2
+
+This is a maintenance release.
+
+* `facet_calendar()` now accepts calls in the argument `date`. (#14)
+
 # sugrrants 0.2.1
 
 This is a patch release for the changes in **tsibble**.

@@ -20,7 +20,7 @@
 <![endif]-->
 </head>
 <body>
-    <div class="container template-home">
+    <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">sugrrants</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
       </span>
     </div>
 
@@ -74,7 +74,11 @@
 
       
       </header><div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
+    
+
+    
+    
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <div id="sugrrants" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
@@ -100,7 +104,7 @@
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dplyr)</a>
 <a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(sugrrants)</a>
 <a class="sourceLine" id="cb3-3" data-line-number="3">pedestrian <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(Date <span class="op">&lt;</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.Date">as.Date</a></span>(<span class="st">"2016-05-01"</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(Date <span class="op">&lt;</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.Date">as.Date</a></span>(<span class="st">"2016-05-01"</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb3-5" data-line-number="5"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Time, <span class="dt">y =</span> Hourly_Counts, <span class="dt">colour =</span> Sensor_Name)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb3-6" data-line-number="6"><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb3-7" data-line-number="7"><span class="st">  </span><span class="kw"><a href="reference/facet-calendar.html">facet_calendar</a></span>(<span class="op">~</span><span class="st"> </span>Date) <span class="op">+</span><span class="st"> </span><span class="co"># a variable contains dates</span></a>
@@ -108,8 +112,8 @@
 <p><img src="man/figure/facet-calendar-1.png" width="864"></p>
 <p>On the other hand, the <code><a href="reference/frame-calendar.html">frame_calendar()</a></code> provides tools for re-structuring the data into a compact calendar layout, without using the faceting method. It is fast and light-weight, although it does not preserve the values.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">p &lt;-<span class="st"> </span>pedestrian <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(Sensor_ID <span class="op">==</span><span class="st"> </span><span class="dv">9</span>, Year <span class="op">==</span><span class="st"> </span><span class="dv">2016</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">Weekend =</span> <span class="kw"><a href="http://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span>(Day <span class="op">%in%</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"Saturday"</span>, <span class="st">"Sunday"</span>), <span class="st">"Weekend"</span>, <span class="st">"Weekday"</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(Sensor_ID <span class="op">==</span><span class="st"> </span><span class="dv">9</span>, Year <span class="op">==</span><span class="st"> </span><span class="dv">2016</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">Weekend =</span> <span class="kw"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span>(Day <span class="op">%in%</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"Saturday"</span>, <span class="st">"Sunday"</span>), <span class="st">"Weekend"</span>, <span class="st">"Weekday"</span>)) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb4-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="reference/frame-calendar.html">frame_calendar</a></span>(<span class="dt">x =</span> Time, <span class="dt">y =</span> Hourly_Counts, <span class="dt">date =</span> Date) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb4-5" data-line-number="5"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> .Time, <span class="dt">y =</span> .Hourly_Counts, <span class="dt">group =</span> Date, <span class="dt">colour =</span> Weekend)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb4-6" data-line-number="6"><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></a>
@@ -123,7 +127,7 @@
 <a href="#google-summer-of-code-2017" class="anchor"></a>Google Summer of Code 2017</h2>
 <p>This package is part of the project—<a href="https://summerofcode.withgoogle.com/projects/#4790455121215488">Tidy data structures and visual methods to support exploration of big temporal-context data</a>, which has been participated in Google Summer of Code 2017 (gsoc), for <a href="https://www.r-project.org">R project for statistical computing</a>.</p>
 <p>A new function <code><a href="reference/frame-calendar.html">frame_calendar()</a></code> [<a href="https://github.com/earowang/sugrrants/blob/master/R/frame-calendar.R">here</a> and <a href="https://github.com/earowang/sugrrants/blob/master/R/calendar-fun.R">here</a>] in the <strong>sugrrants</strong> package has been developed and documented for calendar-based graphics. I have also written a vignette [<a href="https://github.com/earowang/sugrrants/blob/master/vignettes/frame-calendar.Rmd">source</a> and <a href="http://pkg.earo.me/sugrrants/articles/frame-calendar.html">reader view</a>], which introduces and demonstrates the usage of the <code><a href="reference/frame-calendar.html">frame_calendar()</a></code> function. <a href="https://github.com/earowang/sugrrants/blob/master/tests/testthat/test-calendar.R">Many unit tests</a> have been carried out to ensure the expected performance of this function. The function implements non-standard evaluation and highlights the <a href="http://rlang.tidyverse.org/articles/tidy-evaluation.html">tidy evaluation</a> in action. The initial release (v0.1.0) of the package has been published on <a href="https://CRAN.R-project.org/package=sugrrants">CRAN</a> during the gsoc summer time.</p>
-<p>I have initialised a new R package <a href="https://github.com/earowang/tsibble"><strong>tsibble</strong></a> for tidy temporal data, as part of the project. The <code>tsibble()</code> function constructs a new <code>tbl_ts</code> class for temporal data, and the <code>as_tsibble()</code> helps to convert a few <code>ts</code> objects into the <code>tbl_ts</code> class. Some key verbs (generics) from the <strong>dplyr</strong> package, such as <code><a href="http://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code>, <code><a href="http://dplyr.tidyverse.org/reference/summarise.html">summarise()</a></code>, <code><a href="http://dplyr.tidyverse.org/reference/filter.html">filter()</a></code>, have been defined and developed for the <code>tbl_ts</code> data class. The <strong>tsibble</strong> package was highly experimental over the period of the gsoc [<a href="https://github.com/earowang/tsibble/commit/aba1cfc2eec88966c43232fe5d249522f88e1e27">commits</a>], and these functions are very likely to be changed or improved in the future.</p>
+<p>I have initialised a new R package <a href="https://github.com/earowang/tsibble"><strong>tsibble</strong></a> for tidy temporal data, as part of the project. The <code>tsibble()</code> function constructs a new <code>tbl_ts</code> class for temporal data, and the <code>as_tsibble()</code> helps to convert a few <code>ts</code> objects into the <code>tbl_ts</code> class. Some key verbs (generics) from the <strong>dplyr</strong> package, such as <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code>, <code><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise()</a></code>, <code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code>, have been defined and developed for the <code>tbl_ts</code> data class. The <strong>tsibble</strong> package was highly experimental over the period of the gsoc [<a href="https://github.com/earowang/tsibble/commit/aba1cfc2eec88966c43232fe5d249522f88e1e27">commits</a>], and these functions are very likely to be changed or improved in the future.</p>
 <p>A new package <a href="https://github.com/earowang/rwalkr"><strong>rwalkr</strong></a> has been created and released on <a href="https://cran.r-project.org/package=rwalkr">CRAN</a> during the gsoc summer. This package provides API to Melbourne pedestrian sensor data and arrange the data in tidy temporal data form. Two functions including <a href="https://github.com/earowang/rwalkr/blob/master/R/scrape.R"><code>walk_melb()</code></a> and <a href="https://github.com/earowang/rwalkr/blob/master/R/shiny.R"><code>shine_melb()</code></a>, have been written and documented as the v0.1.0 and v0.2.0 releases on CRAN. The majority of the code for the function <a href="https://github.com/earowang/rwalkr/blob/master/R/soda.R"><code>run_melb()</code></a> has been done, but the interface needs improving after the gsoc.</p>
 </div>
 <div id="miscellaneous" class="section level2">
@@ -136,7 +140,7 @@
 </div>
   </div>
 
-  <div class="col-md-3" id="sidebar">
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <div class="links">
 <h2>Links</h2>
 <ul class="list-unstyled">
@@ -170,7 +174,7 @@
 </ul>
 </div>
 
-  <div class="dev-status">
+      <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://travis-ci.org/earowang/sugrrants"><img src="https://travis-ci.org/earowang/sugrrants.svg?branch=master" alt="Travis-CI Build Status"></a></li>
@@ -180,6 +184,7 @@
 </ul>
 </div>
 </div>
+
 </div>
 
 
@@ -188,7 +193,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
 </div>
       </footer>
 </div>
