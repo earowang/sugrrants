@@ -2,6 +2,7 @@
 
 S3method(frame_calendar,default)
 S3method(frame_calendar,grouped_df)
+S3method(frame_calendar,grouped_ts)
 S3method(frame_calendar,tbl_ts)
 S3method(prettify,ggplot)
 S3method(prettify,plotly)

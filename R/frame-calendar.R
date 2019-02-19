@@ -155,6 +155,9 @@ frame_calendar.tbl_ts <- function(
 }
 
 #' @export
+frame_calendar.grouped_ts <- frame_calendar.tbl_ts
+
+#' @export
 frame_calendar.grouped_df <- function(
   data, x, y, date, calendar = "monthly", dir = "h", 
   week_start = getOption("lubridate.week.start", 1),
