@@ -47,7 +47,7 @@ pedestrian %>%
   theme(legend.position = "bottom")
 ```
 
-![](man/figure/facet-calendar-1.png)<!-- -->
+![](man/figures/facet-calendar-1.png)<!-- -->
 
 On the other hand, the `frame_calendar()` provides tools for
 re-structuring the data into a compact calendar layout, without using
@@ -65,7 +65,7 @@ p <- pedestrian %>%
 prettify(p)
 ```
 
-![](man/figure/calendar-plot-1.png)<!-- -->
+![](man/figures/calendar-plot-1.png)<!-- -->
 
 ## Google Summer of Code 2017
 
