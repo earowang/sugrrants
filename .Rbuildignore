@@ -1,3 +1,5 @@
+^tic\.R$
+^appveyor\.yml$
 ^CRAN-RELEASE$
 ^.*\.Rproj$
 ^\.Rproj\.user$
