@@ -1,3 +1,7 @@
+# sugrrants 0.2.3
+
+This is a patch release for the changes in **tsibble**.
+
 # sugrrants 0.2.2
 
 This is a maintenance release.
