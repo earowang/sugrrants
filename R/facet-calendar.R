@@ -7,7 +7,7 @@ globalVariables("facet_wrap")
 #' @param format A character string, such as `%Y-%b-%d` and `%a (%d)`, formatting
 #' the display of facet strips. See `?strptime` for details.
 #' @param week_start Day on which week starts following ISO conventions -
-#' 1 means Monday, 7 means Sunday (default). You can set `lubridate.week.start` 
+#' 1 means Monday (default), 7 means Sunday. You can set `lubridate.week.start` 
 #' option to control this parameter globally.
 #' @param nrow,ncol Number of rows and columns defined for "monthly" calendar
 #' layout. If `NULL`, it computes a sensible layout.

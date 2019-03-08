@@ -19,7 +19,7 @@ dates will be mapped in the calendar.}
 the display of facet strips. See \code{?strptime} for details.}
 
 \item{week_start}{Day on which week starts following ISO conventions -
-1 means Monday, 7 means Sunday (default). You can set \code{lubridate.week.start}
+1 means Monday (default), 7 means Sunday. You can set \code{lubridate.week.start}
 option to control this parameter globally.}
 
 \item{nrow, ncol}{Number of rows and columns defined for "monthly" calendar
