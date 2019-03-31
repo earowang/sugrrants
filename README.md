@@ -69,6 +69,8 @@ prettify(p)
 
 ## Google Summer of Code 2017
 
+<details>
+
 This package is part of the project—[Tidy data structures and visual
 methods to support exploration of big temporal-context
 data](https://summerofcode.withgoogle.com/projects/#4790455121215488),
@@ -120,6 +122,8 @@ have been written and documented as the v0.1.0 and v0.2.0 releases on
 CRAN. The majority of the code for the function
 [`run_melb()`](https://github.com/earowang/rwalkr/blob/master/R/soda.R)
 has been done, but the interface needs improving after the gsoc.
+
+</details>
 
 ## Miscellaneous
 

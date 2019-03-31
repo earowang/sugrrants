@@ -122,7 +122,7 @@ test_that("The grouped data", {
 
 test_that("The tsibble data", {
   ped_ts <- pedestrian %>% 
-    tsibble::as_tsibble(key = tsibble::id(Sensor_Name), index = Date_Time)
+    tsibble::as_tsibble(key = Sensor_Name, index = Date_Time)
   expect_equal(
     pedestrian %>% 
       frame_calendar(x = Time, y = Hourly_Counts, date = Date),

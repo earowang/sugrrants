@@ -38,8 +38,10 @@ Suggests:
     rmarkdown,
     testthat,
     tidyr,
-    tsibble (>= 0.6.0),
+    tsibble (>= 0.7.0.0001),
     viridis
+Remotes:
+    tidyverts/tsibble
 VignetteBuilder: 
     knitr
 Encoding: UTF-8
