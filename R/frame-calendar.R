@@ -146,7 +146,7 @@ frame_calendar.tbl_ts <- function(
       group_by(!!! groups(data))
   }
   out <- tsibble::build_tsibble(
-      out, key = !! tsibble::key(data), index = !! tsibble::index(data), 
+      out, key = !! tsibble::key_vars(data), index = !! tsibble::index(data), 
       index2 = !! tsibble::index2(data), interval = tsibble::interval(data), 
       ordered = tsibble::is_ordered(data), validate = FALSE
     )
