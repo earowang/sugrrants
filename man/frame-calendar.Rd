@@ -55,7 +55,7 @@ each glyph.}
 \item{margin}{Numerics of length two between 0 and 1 to specify the horizontal
 and vertical margins between month panels.}
 
-\item{...}{Passed to individual methods.}
+\item{...}{Extra arguments passed to \code{geom_label()} and \code{geom_text()}}
 
 \item{plot}{A "ggplot" object or "plotly".}
 
@@ -72,12 +72,6 @@ See \link[readr:locale]{readr::locale} for more details.}
 
 \item{abbr}{Logical to specify if the abbreviated version of label should be
 used.}
-
-\item{sunday}{Deprecated and use \code{week_start} instead. \code{FALSE} (the default)
-indicating to starting with Monday in a week, or TRUE for Sunday, when
-\code{calendar = "monthly"}.}
-
-\item{...}{Extra arguments passed to \code{geom_label()} and \code{geom_text()}}
 }
 \value{
 A data frame or a dplyr::tibble with newly added columns of \code{.x}, \code{.y}. \code{.x}

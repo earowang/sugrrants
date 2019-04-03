@@ -45,10 +45,6 @@ globalVariables(c(
 #' each glyph.
 #' @param margin Numerics of length two between 0 and 1 to specify the horizontal
 #' and vertical margins between month panels.
-#' @param sunday Deprecated and use `week_start` instead. `FALSE` (the default) 
-#' indicating to starting with Monday in a week, or TRUE for Sunday, when 
-#' `calendar = "monthly"`.
-#' @param ... Passed to individual methods.
 #'
 #' @return A data frame or a dplyr::tibble with newly added columns of `.x`, `.y`. `.x`
 #' and `.y` together give new coordinates computed for different types of
@@ -136,7 +132,7 @@ frame_calendar.tbl_ts <- function(data, x, y, date, ...) {
     out <- out %>% 
       group_by(!!! groups(data))
   }
-  if (packageVersion("tsibble") > "0.7.0.1") {
+  if (utils::packageVersion("tsibble") > "0.7.0.1") {
     out <- tsibble::build_tsibble(
         out, key = !! tsibble::key_vars(data), index = !! tsibble::index(data), 
         index2 = !! tsibble::index2(data), interval = tsibble::interval(data), 
