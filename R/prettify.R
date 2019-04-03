@@ -215,7 +215,7 @@ pre_plot <- function(calendar, label, text, locale, abbr = TRUE) {
     loc_dn <- readr::locale(date_names = locale)$date_names
   } else {
     loc_dn <- list(
-      mon_ab = month.abb[c(7, 1:6)],
+      mon_ab = month.abb,
       day_ab = c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"),
       mon = month.name,
       day = c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")

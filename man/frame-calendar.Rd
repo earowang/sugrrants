@@ -98,7 +98,7 @@ mappings. In conjunction with \code{group_by()}, it allows the grouped variable
 to have their individual scales. For more details, see \code{vignette("frame-calendar", package = "sugrrants")}
 }
 \examples{
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 # compute the calendar layout for the data frame
 calendar_df <- pedestrian \%>\%
   filter(Sensor_ID == 13, Year == 2016) \%>\%

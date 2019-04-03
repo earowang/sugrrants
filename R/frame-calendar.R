@@ -66,7 +66,7 @@ globalVariables(c(
 #' @seealso [facet_calendar] for a fully-fledged faceting calendar with formal
 #' labels and axes.
 #' @examples
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' # compute the calendar layout for the data frame
 #' calendar_df <- pedestrian %>%
 #'   filter(Sensor_ID == 13, Year == 2016) %>%
