@@ -33,7 +33,7 @@ globalVariables(c(
 #' @param dir Direction of calendar: "h" for horizontal (the default) or "v" for
 #' vertical.
 #' @param week_start Day on which week starts following ISO conventions -
-#' 1 means Monday, 7 means Sunday (default). You can set `lubridate.week.start` 
+#' 1 means Monday (default), 7 means Sunday. You can set `lubridate.week.start` 
 #' option to control this parameter globally.
 #' @param nrow,ncol Number of rows and columns defined for "monthly" calendar
 #' layout. If `NULL`, it computes a sensible layout.
@@ -48,6 +48,7 @@ globalVariables(c(
 #' @param sunday Deprecated and use `week_start` instead. `FALSE` (the default) 
 #' indicating to starting with Monday in a week, or TRUE for Sunday, when 
 #' `calendar = "monthly"`.
+#' @param ... Passed to individual methods.
 #'
 #' @return A data frame or a dplyr::tibble with newly added columns of `.x`, `.y`. `.x`
 #' and `.y` together give new coordinates computed for different types of
@@ -85,7 +86,7 @@ globalVariables(c(
 #' grped_calendar <- pedestrian %>%
 #'   filter(Year == "2017", Month == "March") %>%
 #'   group_by(Sensor_Name) %>%
-#'   frame_calendar(x = Time, y = Hourly_Counts, date = Date, sunday = TRUE)
+#'   frame_calendar(x = Time, y = Hourly_Counts, date = Date, week_start = 7)
 #'
 #' p2 <- grped_calendar %>%
 #'   ggplot(aes(x = .Time, y = .Hourly_Counts, group = Date)) +
@@ -115,7 +116,7 @@ frame_calendar <- function(
   data, x, y, date, calendar = "monthly", dir = "h", 
   week_start = getOption("lubridate.week.start", 1),
   nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed",
-  width = 0.95, height = 0.95, margin = NULL, sunday = FALSE
+  width = 0.95, height = 0.95, margin = NULL, ...
 ) {
   calendar <- match.arg(calendar, c("monthly", "weekly", "daily"))
   dir <- match.arg(dir, c("h", "v"))
@@ -125,22 +126,12 @@ frame_calendar <- function(
 }
 
 #' @export
-frame_calendar.tbl_ts <- function(
-  data, x, y, date, calendar = "monthly", dir = "h", 
-  week_start = getOption("lubridate.week.start", 1),
-  nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed",
-  width = 0.95, height = 0.95, margin = NULL, sunday = FALSE
-) {
+frame_calendar.tbl_ts <- function(data, x, y, date, ...) {
   x <- enquo(x)
   y <- enquo(y)
   date <- enquo(date)
 
-  out <- frame_calendar.default(
-      data, x = !! x, y = !! y, date = !! date,
-      calendar = calendar, dir = dir, sunday = sunday,
-      nrow = nrow, ncol = ncol, polar = polar, scale = scale,
-      width = width, height = height, margin = margin
-    )
+  out <- frame_calendar.default(data, x = !! x, y = !! y, date = !! date, ...)
   if (tsibble::is_grouped_ts(data)) {
     out <- out %>% 
       group_by(!!! groups(data))
@@ -166,24 +157,14 @@ frame_calendar.tbl_ts <- function(
 frame_calendar.grouped_ts <- frame_calendar.tbl_ts
 
 #' @export
-frame_calendar.grouped_df <- function(
-  data, x, y, date, calendar = "monthly", dir = "h", 
-  week_start = getOption("lubridate.week.start", 1),
-  nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed",
-  width = 0.95, height = 0.95, margin = NULL, sunday = FALSE
-) {
+frame_calendar.grouped_df <- function(data, x, y, date, ...) {
   x <- enquo(x)
   y <- enquo(y)
   date <- enquo(date)
   grps <- dplyr::groups(data)
 
-  out <- frame_calendar.default(
-      data, x = !! x, y = !! y, date = !! date,
-      calendar = calendar, dir = dir, sunday = sunday,
-      nrow = nrow, ncol = ncol, polar = polar, scale = scale,
-      width = width, height = height, margin = margin
-    ) %>%
-    group_by(!!! grps)
+  out <- frame_calendar.default(data, x = !! x, y = !! y, date = !! date, ...)
+  out <- group_by(out, !!! grps)
   class(out) <- c("tbl_cal", class(out))
   out
   
@@ -194,7 +175,7 @@ frame_calendar.default <- function(
   data, x, y, date, calendar = "monthly", dir = "h", 
   week_start = getOption("lubridate.week.start", 1),
   nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed",
-  width = 0.95, height = 0.95, margin = NULL, sunday = FALSE
+  width = 0.95, height = 0.95, margin = NULL, ...
 ) {
   if (NROW(data) == 0L) {
     abort("Facet calendar must contain observations.")
@@ -254,8 +235,8 @@ frame_calendar.default <- function(
   }
 
   if (calendar != "monthly") {
-    if (sunday) {
-      inform("Argument `sunday` only works for the monthly calendar.")
+    if (week_start) {
+      inform("Argument `week_start` only works for the monthly calendar.")
     }
     if (!is.null(nrow) || !is.null(ncol)) {
       inform("Argument `nrow`/`ncol` only works for the monthly calendar.")
@@ -264,7 +245,7 @@ frame_calendar.default <- function(
 
   class(date_eval) <- c(calendar, class(date_eval))
   cal_layout <- setup_calendar(x = date_eval, dir = dir, week_start = week_start,
-    sunday = sunday, nrow = nrow, ncol = ncol)
+    nrow = nrow, ncol = ncol, ...)
 
   # Assign grids to the panels
   grids <- assign_grids(
@@ -363,7 +344,7 @@ frame_calendar.default <- function(
   # generate breaks and labels for prettify()
   class(cal_grids) <- c(calendar, class(cal_grids))
   data_ref <- gen_reference(
-    cal_grids, margin, calendar = calendar, sunday = sunday, dir = dir
+    cal_grids, margin, calendar = calendar, week_start = week_start, dir = dir
   )
 
   data <- ungroup(data) %>%
@@ -501,13 +482,13 @@ gen_reference.weekly <- function(grids, dir = "h", ...) {
     )
   }
   mtext$label <- unique_labels
-  dtext$day <- gen_wday_index(sunday = FALSE)
+  dtext$day <- gen_wday_index(week_start = 1)
 
   list(breaks = NULL, minor_breaks = minor_breaks, label = mtext, text = dtext)
 }
 
 gen_reference.monthly <- function(
-  grids, margin, dir = "h", sunday = FALSE, ...
+  grids, margin, dir = "h", week_start = 1, ...
 ) {
   # Month breaks
   grids <- arrange(grids, PANEL)
@@ -569,7 +550,7 @@ gen_reference.monthly <- function(
       y = minor_breaks$y + min_height / 2
     )
   }
-  dtext$day <- gen_wday_index(sunday = sunday)
+  dtext$day <- gen_wday_index(week_start = week_start)
 
   # Day of month text
   mday_text <- dplyr::tibble(

@@ -178,8 +178,12 @@ get_calendar <- function(data) {
   attr(data, "calendar")
 }
 
-gen_wday_index <- function(sunday = FALSE) {
-  if (sunday) 1:7 else c(2:7, 1)
+gen_wday_index <- function(week_start = 1) {
+  if (week_start == 1) {
+    week_start:7
+  } else {
+    c(week_start:7, 1:(week_start - 1))
+  }
 }
 
 gen_day_breaks <- function(grids) {
@@ -211,10 +215,10 @@ pre_plot <- function(calendar, label, text, locale, abbr = TRUE) {
     loc_dn <- readr::locale(date_names = locale)$date_names
   } else {
     loc_dn <- list(
-      mon_ab = month.abb,
-      day_ab = c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"),
+      mon_ab = month.abb[c(7, 1:6)],
+      day_ab = c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"),
       mon = month.name,
-      day = c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" )
+      day = c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
     )
   }
   if (abbr) {

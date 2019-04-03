@@ -1,3 +1,9 @@
+# sugrrants 0.2.3.9000
+
+* Started to issue an warning when the deprecated argument `sunday` is present in `frame_calendar()`.
+* Fixed week day labels in `prettify()` inconsistent with user-specified `week_start`.
+* Added `...` to `frame_calendar()` S3 generic.
+
 # sugrrants 0.2.3
 
 This is a patch release for the changes in **tsibble**.

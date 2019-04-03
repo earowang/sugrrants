@@ -8,13 +8,13 @@ test_that("Multiple y's and NA's", {
     Date = rep(seq(as.Date("2017-01-01"), as.Date("2017-03-31"), by = 1), 100),
     x = rnorm(9000), ymin = rnorm(9000), ymax = rnorm(9000, mean = 4)
   )
-  cal_dat <- dat %>% 
+  cal_dat <- dat %>%
     frame_calendar(x = x, y = vars(ymin, ymax), date = Date)
   cn_cal <- colnames(cal_dat)
   expect_true(all(c(".x", ".ymin", ".ymax") %in% cn_cal))
   dat_na <- dat
   dat_na[sample(1:9000, 100), ] <- NA
-  cal_dat_na <- dat_na %>% 
+  cal_dat_na <- dat_na %>%
     frame_calendar(x = x, y = vars(ymin, ymax), date = Date)
   expect_equal(dim(cal_dat), dim(cal_dat_na))
 })
@@ -113,37 +113,37 @@ test_that("The arguments x, y, date are unquoted variables", {
 })
 
 test_that("The grouped data", {
-  grp_cal <- pedestrian %>% 
-    group_by(Sensor_ID) %>% 
+  grp_cal <- pedestrian %>%
+    group_by(Sensor_ID) %>%
     frame_calendar(x = Time, y = Hourly_Counts, date = Date)
   expect_is(grp_cal, "tbl_cal")
   expect_is(grp_cal, "grouped_df")
 })
 
 test_that("The tsibble data", {
-  ped_ts <- pedestrian %>% 
+  ped_ts <- pedestrian %>%
     tsibble::as_tsibble(key = Sensor_Name, index = Date_Time)
   expect_equal(
-    pedestrian %>% 
+    pedestrian %>%
       frame_calendar(x = Time, y = Hourly_Counts, date = Date),
-    ped_ts %>% 
+    ped_ts %>%
       frame_calendar(x = Time, y = Hourly_Counts, date = Date)
   )
   expect_is(
-    ped_ts %>% 
+    ped_ts %>%
       frame_calendar(x = Time, y = Hourly_Counts, date = Date),
     "tbl_ts"
   )
   expect_is(
-    ped_ts %>% 
-      group_by(Sensor_Name) %>% 
+    ped_ts %>%
+      group_by(Sensor_Name) %>%
       frame_calendar(x = Time, y = Hourly_Counts, date = Date),
     "grouped_ts"
   )
   expect_equal(
-    ped_ts %>% 
-      group_by(Sensor_Name) %>% 
-      frame_calendar(x = Time, y = Hourly_Counts, date = Date) %>% 
+    ped_ts %>%
+      group_by(Sensor_Name) %>%
+      frame_calendar(x = Time, y = Hourly_Counts, date = Date) %>%
       group_vars(),
     "Sensor_Name"
   )
@@ -175,11 +175,11 @@ test_that("The argument sunday", {
       sunday = TRUE
     )
   )
-  expect_is(
+  expect_warning(
     frame_calendar(
       pedestrian, x = Time, y = Hourly_Counts, date = Date, sunday = TRUE
     ),
-    "tbl_cal"
+    "deprecated."
   )
 })
 

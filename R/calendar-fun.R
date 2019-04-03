@@ -52,8 +52,9 @@ setup_calendar.weekly <- function(x, dir = "h", ...) {
   dplyr::tibble(ROW = row_idx, COL = col_idx, PANEL = counter)
 }
 
-setup_calendar.monthly <- function(x, dir = "h", week_start = 1, sunday = FALSE, 
+setup_calendar.monthly <- function(x, dir = "h", week_start = 1,
   nrow = NULL, ncol = NULL, ...) {
+  sunday <- warn_arg_sunday(...)
   # x is a vector of unique dates
   x <- unique(x)
   month_x <- unique(x - mday(x) + 1)
@@ -121,4 +122,14 @@ setup_calendar.monthly <- function(x, dir = "h", week_start = 1, sunday = FALSE,
 
 map2 <- function(.x, .y, .f, ...) {
   Map(.f, .x, .y, ...)
+}
+
+warn_arg_sunday <- function(...) {
+  dots <- dots_list(...)
+  if ("sunday" %in% names(dots)) {
+    warn("Argument `sunday` is deprecated. Please use `week_start` instead.")
+    dots$sunday
+  } else {
+    FALSE
+  }
 }

@@ -8,7 +8,7 @@
 frame_calendar(data, x, y, date, calendar = "monthly", dir = "h",
   week_start = getOption("lubridate.week.start", 1), nrow = NULL,
   ncol = NULL, polar = FALSE, scale = "fixed", width = 0.95,
-  height = 0.95, margin = NULL, sunday = FALSE)
+  height = 0.95, margin = NULL, ...)
 
 prettify(plot, label = c("label", "text"), locale, abbr = TRUE, ...)
 }
@@ -37,7 +37,7 @@ refers to day of month and month of year.}
 vertical.}
 
 \item{week_start}{Day on which week starts following ISO conventions -
-1 means Monday, 7 means Sunday (default). You can set \code{lubridate.week.start}
+1 means Monday (default), 7 means Sunday. You can set \code{lubridate.week.start}
 option to control this parameter globally.}
 
 \item{nrow, ncol}{Number of rows and columns defined for "monthly" calendar
@@ -55,9 +55,7 @@ each glyph.}
 \item{margin}{Numerics of length two between 0 and 1 to specify the horizontal
 and vertical margins between month panels.}
 
-\item{sunday}{Deprecated and use \code{week_start} instead. \code{FALSE} (the default)
-indicating to starting with Monday in a week, or TRUE for Sunday, when
-\code{calendar = "monthly"}.}
+\item{...}{Passed to individual methods.}
 
 \item{plot}{A "ggplot" object or "plotly".}
 
@@ -74,6 +72,10 @@ See \link[readr:locale]{readr::locale} for more details.}
 
 \item{abbr}{Logical to specify if the abbreviated version of label should be
 used.}
+
+\item{sunday}{Deprecated and use \code{week_start} instead. \code{FALSE} (the default)
+indicating to starting with Monday in a week, or TRUE for Sunday, when
+\code{calendar = "monthly"}.}
 
 \item{...}{Extra arguments passed to \code{geom_label()} and \code{geom_text()}}
 }
@@ -118,7 +120,7 @@ prettify(p1, size = 3, label.padding = unit(0.15, "lines"))
 grped_calendar <- pedestrian \%>\%
   filter(Year == "2017", Month == "March") \%>\%
   group_by(Sensor_Name) \%>\%
-  frame_calendar(x = Time, y = Hourly_Counts, date = Date, sunday = TRUE)
+  frame_calendar(x = Time, y = Hourly_Counts, date = Date, week_start = 7)
 
 p2 <- grped_calendar \%>\%
   ggplot(aes(x = .Time, y = .Hourly_Counts, group = Date)) +

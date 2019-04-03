@@ -38,7 +38,7 @@ Suggests:
     rmarkdown,
     testthat,
     tidyr,
-    tsibble (>= 0.7.0),
+    tsibble (>= 0.6.0),
     viridis
 Remotes:
     tidyverts/tsibble
