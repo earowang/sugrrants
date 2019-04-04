@@ -216,19 +216,19 @@ pre_plot <- function(calendar, label, text, locale, abbr = TRUE) {
   } else {
     loc_dn <- list(
       mon_ab = month.abb,
-      day_ab = c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"),
+      day_ab = c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"),
       mon = month.name,
-      day = c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+      day = c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday")
     )
   }
   if (abbr) {
     mtext <- loc_dn$mon_ab
-    dtext <- loc_dn$day_ab
+    dtext <- loc_dn$day_ab[c(2:7, 1)]
     # a single letter
     if (locale == "en") dtext <- substring(dtext, first = 1, last = 1)
   } else {
     mtext <- loc_dn$mon
-    dtext <- loc_dn$day
+    dtext <- loc_dn$day[c(2:7, 1)]
   }
   if (calendar == "monthly") {
     nyr <- unique.default(label$year)
