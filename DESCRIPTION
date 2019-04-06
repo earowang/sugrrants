@@ -40,8 +40,6 @@ Suggests:
     tidyr,
     tsibble (>= 0.6.0),
     viridis
-Remotes:
-    tidyverts/tsibble
 VignetteBuilder: 
     knitr
 Encoding: UTF-8

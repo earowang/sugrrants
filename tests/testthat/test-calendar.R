@@ -121,6 +121,7 @@ test_that("The grouped data", {
 })
 
 test_that("The tsibble data", {
+  skip_if(utils::packageVersion("tsibble") <= "0.7.0")
   ped_ts <- pedestrian %>%
     tsibble::as_tsibble(key = Sensor_Name, index = Date_Time)
   expect_equal(
