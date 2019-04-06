@@ -1,4 +1,4 @@
-# sugrrants 0.2.3.9000
+# sugrrants 0.2.4
 
 * Started to issue an warning when the deprecated argument `sunday` is present in `frame_calendar()`.
 * Fixed week day labels in `prettify()` inconsistent with user-specified `week_start`.

@@ -1,6 +1,6 @@
 Package: sugrrants
 Title: Supporting Graphs for Analysing Time Series
-Version: 0.2.3.9000
+Version: 0.2.4
 Authors@R: 
     c(person(given = "Earo",
              family = "Wang",
