@@ -333,7 +333,7 @@ frame_calendar.default <- function(
       data <- data %>%
         dplyr::mutate_at(
           .vars = vars(!!! y),
-          .funs = funs(zzz = .cy + fn(., .ymax, .ymin))
+          .funs = list(zzz = ~ .cy + fn(., .ymax, .ymin))
         )
     }
   }
