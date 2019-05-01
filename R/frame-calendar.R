@@ -33,7 +33,7 @@ globalVariables(c(
 #' @param dir Direction of calendar: "h" for horizontal (the default) or "v" for
 #' vertical.
 #' @param week_start Day on which week starts following ISO conventions -
-#' 1 means Monday (default), 7 means Sunday. You can set `lubridate.week.start` 
+#' 1 means Monday (default), 7 means Sunday. You can set `lubridate.week.start`
 #' option to control this parameter globally.
 #' @param nrow,ncol Number of rows and columns defined for "monthly" calendar
 #' layout. If `NULL`, it computes a sensible layout.
@@ -100,7 +100,7 @@ globalVariables(c(
 #'   stop("Please install the 'plotly' package to run these following examples.")
 #' }
 #' library(plotly)
-#' pp <- calendar_df %>% 
+#' pp <- calendar_df %>%
 #'   group_by(Date) %>%
 #'   plot_ly(x = ~ .Time, y = ~ .Hourly_Counts) %>%
 #'   add_lines(text = ~ paste("Count: ", Hourly_Counts, "<br> Time: ", Time))
@@ -109,7 +109,7 @@ globalVariables(c(
 #'
 #' @export
 frame_calendar <- function(
-  data, x, y, date, calendar = "monthly", dir = "h", 
+  data, x, y, date, calendar = "monthly", dir = "h",
   week_start = getOption("lubridate.week.start", 1),
   nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed",
   width = 0.95, height = 0.95, margin = NULL, ...
@@ -129,19 +129,19 @@ frame_calendar.tbl_ts <- function(data, x, y, date, ...) {
 
   out <- frame_calendar.default(data, x = !! x, y = !! y, date = !! date, ...)
   if (tsibble::is_grouped_ts(data)) {
-    out <- out %>% 
+    out <- out %>%
       group_by(!!! groups(data))
   }
   if (utils::packageVersion("tsibble") > "0.7.0.1") {
     out <- tsibble::build_tsibble(
-        out, key = !! tsibble::key_vars(data), index = !! tsibble::index(data), 
-        index2 = !! tsibble::index2(data), interval = tsibble::interval(data), 
+        out, key = !! tsibble::key_vars(data), index = !! tsibble::index(data),
+        index2 = !! tsibble::index2(data), interval = tsibble::interval(data),
         ordered = tsibble::is_ordered(data), validate = FALSE
       )
   } else {
     out <- tsibble::build_tsibble(
-        out, key = tsibble::key(data), index = !! tsibble::index(data), 
-        index2 = !! tsibble::index2(data), interval = tsibble::interval(data), 
+        out, key = tsibble::key(data), index = !! tsibble::index(data),
+        index2 = !! tsibble::index2(data), interval = tsibble::interval(data),
         ordered = tsibble::is_ordered(data), validate = FALSE
       )
   }
@@ -163,19 +163,19 @@ frame_calendar.grouped_df <- function(data, x, y, date, ...) {
   out <- group_by(out, !!! grps)
   class(out) <- c("tbl_cal", class(out))
   out
-  
+
 }
 
 #' @export
 frame_calendar.default <- function(
-  data, x, y, date, calendar = "monthly", dir = "h", 
+  data, x, y, date, calendar = "monthly", dir = "h",
   week_start = getOption("lubridate.week.start", 1),
   nrow = NULL, ncol = NULL, polar = FALSE, scale = "fixed",
   width = 0.95, height = 0.95, margin = NULL, ...
 ) {
   if (NROW(data) == 0L) {
     abort("Facet calendar must contain observations.")
-  } 
+  }
   if (identical(between(width, 0, 1) && between(height, 0, 1), FALSE)) {
     abort("`width`/`height` must be between 0 and 1.")
   }
@@ -204,7 +204,7 @@ frame_calendar.default <- function(
   cls <- class(data)
   old_cn <- names(data)
 
-  is_grped <- dplyr::is_grouped_df(data) || tsibble::is_grouped_ts(data)
+  is_grped <- dplyr::is_grouped_df(data)
   grp_vars <- dplyr::groups(data)
 
   # as some variables have been created for the computation,
@@ -291,7 +291,7 @@ frame_calendar.default <- function(
   }
 
   if (is_grped) {
-    data <- data %>% 
+    data <- data %>%
       group_by(!!! grp_vars)
   }
 
