@@ -25,8 +25,8 @@ install.packages("sugrrants")
 You could also install the development version from Github using:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("earowang/sugrrants", build_vignettes = TRUE)
+# install.packages("remotes")
+remotes::install_github("earowang/sugrrants")
 ```
 
 ## Usage
@@ -44,6 +44,7 @@ pedestrian %>%
   ggplot(aes(x = Time, y = Hourly_Counts, colour = Sensor_Name)) +
   geom_line() +
   facet_calendar(~ Date) + # a variable contains dates
+  theme_bw() +
   theme(legend.position = "bottom")
 ```
 
