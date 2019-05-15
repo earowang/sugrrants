@@ -132,19 +132,14 @@ frame_calendar.tbl_ts <- function(data, x, y, date, ...) {
     out <- out %>%
       group_by(!!! groups(data))
   }
-  if (utils::packageVersion("tsibble") > "0.7.0.1") {
-    out <- tsibble::build_tsibble(
-        out, key = !! tsibble::key_vars(data), index = !! tsibble::index(data),
-        index2 = !! tsibble::index2(data), interval = tsibble::interval(data),
-        ordered = tsibble::is_ordered(data), validate = FALSE
-      )
-  } else {
-    out <- tsibble::build_tsibble(
-        out, key = tsibble::key(data), index = !! tsibble::index(data),
-        index2 = !! tsibble::index2(data), interval = tsibble::interval(data),
-        ordered = tsibble::is_ordered(data), validate = FALSE
-      )
+  if (utils::packageVersion("tsibble") < "0.8.0") {
+    abort("tsibble (>= 0.8.0) is required.")
   }
+  out <- tsibble::build_tsibble(
+    out, key = !! tsibble::key_vars(data), index = !! tsibble::index(data),
+    index2 = !! tsibble::index2(data), interval = tsibble::interval(data),
+    ordered = tsibble::is_ordered(data), validate = FALSE
+  )
   class(out) <- c("tbl_cal", class(out))
   out
 }
