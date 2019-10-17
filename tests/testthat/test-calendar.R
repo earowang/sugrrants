@@ -162,27 +162,6 @@ test_that("The arguments width & heigth", {
   )
 })
 
-test_that("The argument sunday", {
-  expect_message(
-    frame_calendar(
-      pedestrian, x = Time, y = Hourly_Counts, date = Date, calendar = "weekly",
-      sunday = TRUE
-    )
-  )
-  expect_message(
-    frame_calendar(
-      pedestrian, x = Time, y = Hourly_Counts, date = Date, calendar = "daily",
-      sunday = TRUE
-    )
-  )
-  expect_warning(
-    frame_calendar(
-      pedestrian, x = Time, y = Hourly_Counts, date = Date, sunday = TRUE
-    ),
-    "deprecated."
-  )
-})
-
 test_that("The arguments nrow & ncol", {
   expect_message(
     frame_calendar(
