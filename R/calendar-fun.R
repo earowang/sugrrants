@@ -35,7 +35,7 @@ setup_calendar.daily <- function(x, dir = "h", ...) {
 setup_calendar.weekly <- function(x, dir = "h", ...) {
   # x is a vector of unique dates
   x <- unique(x)
-  init_counter <- mday(min_na(x))
+  init_counter <- wday(min_na(x), week_start = 1)
   wk_x <- isoweek(x)
 
   # only starts with Monday for ISO week

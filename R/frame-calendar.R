@@ -226,9 +226,6 @@ frame_calendar.default <- function(
   }
 
   if (calendar != "monthly") {
-    if (week_start) {
-      inform("Argument `week_start` only works for the monthly calendar.")
-    }
     if (!is.null(nrow) || !is.null(ncol)) {
       inform("Argument `nrow`/`ncol` only works for the monthly calendar.")
     }
