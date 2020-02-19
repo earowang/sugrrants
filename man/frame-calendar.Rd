@@ -5,10 +5,23 @@
 \alias{prettify}
 \title{Rearrange a temporal data frame to a calendar-based data format using linear algebra}
 \usage{
-frame_calendar(data, x, y, date, calendar = "monthly", dir = "h",
-  week_start = getOption("lubridate.week.start", 1), nrow = NULL,
-  ncol = NULL, polar = FALSE, scale = "fixed", width = 0.95,
-  height = 0.95, margin = NULL, ...)
+frame_calendar(
+  data,
+  x,
+  y,
+  date,
+  calendar = "monthly",
+  dir = "h",
+  week_start = getOption("lubridate.week.start", 1),
+  nrow = NULL,
+  ncol = NULL,
+  polar = FALSE,
+  scale = "fixed",
+  width = 0.95,
+  height = 0.95,
+  margin = NULL,
+  ...
+)
 
 prettify(plot, label = c("label", "text"), locale, abbr = TRUE, ...)
 }
@@ -77,7 +90,7 @@ used.}
 A data frame or a dplyr::tibble with newly added columns of \code{.x}, \code{.y}. \code{.x}
 and \code{.y} together give new coordinates computed for different types of
 calendars. \code{date} groups the same dates in a chronological order, which is
-useful for \code{geom_line} or \code{geom_path}. The basic use is \code{ggplot(aes(x = .x, y = .y, group = date)) + geom_*}. The variable names \code{.x} and \code{.y} reflect
+useful for \code{geom_line} or \code{geom_path}. The basic use is \verb{ggplot(aes(x = .x, y = .y, group = date)) + geom_*}. The variable names \code{.x} and \code{.y} reflect
 the actual \code{x} and \code{y} with a prefix \code{.}.
 }
 \description{
