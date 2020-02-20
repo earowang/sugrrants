@@ -113,7 +113,7 @@ to have their individual scales. For more details, see \code{vignette("frame-cal
 \examples{
 library(dplyr, warn.conflicts = FALSE)
 # compute the calendar layout for the data frame
-calendar_df <- pedestrian \%>\%
+calendar_df <- hourly_peds \%>\%
   filter(Sensor_ID == 13, Year == 2016) \%>\%
   frame_calendar(x = Time, y = Hourly_Counts, date = Date, nrow = 4)
 
@@ -124,7 +124,7 @@ p1 <- calendar_df \%>\%
 prettify(p1, size = 3, label.padding = unit(0.15, "lines"))
 
 # use in conjunction with group_by()
-grped_calendar <- pedestrian \%>\%
+grped_calendar <- hourly_peds \%>\%
   filter(Year == "2017", Month == "March") \%>\%
   group_by(Sensor_Name) \%>\%
   frame_calendar(x = Time, y = Hourly_Counts, date = Date, week_start = 7)

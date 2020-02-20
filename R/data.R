@@ -16,8 +16,8 @@
 #'   \item{Hourly_Counts}{Hourly pedestrian counts}
 #' }
 #' @docType data
-#' @name pedestrian
-#' @usage pedestrian
+#' @name hourly_peds
+#' @usage hourly_peds
 #' @examples
-#'    pedestrian
-"pedestrian"
+#' hourly_peds
+"hourly_peds"

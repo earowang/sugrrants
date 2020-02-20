@@ -70,7 +70,7 @@ to the top row of the block.
 }
 \examples{
 \donttest{
-fs <- pedestrian \%>\%
+fs <- hourly_peds \%>\%
   dplyr::filter(Date < as.Date("2016-05-01"))
 
 fs \%>\%

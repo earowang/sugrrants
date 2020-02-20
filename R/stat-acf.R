@@ -14,7 +14,7 @@
 #'
 #' @examples
 #' library(dplyr)
-#' fstaff <- pedestrian %>%
+#' fstaff <- hourly_peds %>%
 #'   filter(Sensor_ID == 13)
 #' 
 #' # use ggplot2 

@@ -32,7 +32,7 @@ library(tidyr)
 library(dplyr)
 library(viridis)
 library(sugrrants)
-pedestrian17 <- filter(pedestrian, Year == "2017")
+pedestrian17 <- filter(hourly_peds, Year == "2017")
 pedestrian17
 ```
 

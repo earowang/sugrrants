@@ -1,3 +1,7 @@
+# sugrrants 0.2.5
+
+* Renamed dataset `pedestrian` to `hourly_peds` to avoid conflict with `tsibble::pedestrian`. (#18)
+
 # sugrrants 0.2.4
 
 * Started to issue an warning when the deprecated argument `sunday` is present in `frame_calendar()`.
