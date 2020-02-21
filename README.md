@@ -39,7 +39,7 @@ day-to-day stories.
 ``` r
 library(dplyr)
 library(sugrrants)
-pedestrian %>%
+hourly_peds %>%
   filter(Date < as.Date("2016-05-01")) %>% 
   ggplot(aes(x = Time, y = Hourly_Counts, colour = Sensor_Name)) +
   geom_line() +
@@ -56,7 +56,7 @@ the faceting method. It is fast and light-weight, although it does not
 preserve the values.
 
 ``` r
-p <- pedestrian %>%
+p <- hourly_peds %>%
   filter(Sensor_ID == 9, Year == 2016) %>%
   mutate(Weekend = if_else(Day %in% c("Saturday", "Sunday"), "Weekend", "Weekday")) %>%
   frame_calendar(x = Time, y = Hourly_Counts, date = Date) %>% 
@@ -92,10 +92,9 @@ function. [Many unit
 tests](https://github.com/earowang/sugrrants/blob/master/tests/testthat/test-calendar.R)
 have been carried out to ensure the expected performance of this
 function. The function implements non-standard evaluation and highlights
-the [tidy
-evaluation](http://rlang.tidyverse.org/articles/tidy-evaluation.html) in
-action. The initial release (v0.1.0) of the package has been published
-on [CRAN](https://CRAN.R-project.org/package=sugrrants) during the gsoc
+the [tidy evaluation](https://rlang.r-lib.org) in action. The initial
+release (v0.1.0) of the package has been published on
+[CRAN](https://CRAN.R-project.org/package=sugrrants) during the gsoc
 summer time.
 
 I have initialised a new R package
@@ -135,5 +134,5 @@ species of ant endemic to Australia.
 -----
 
 Please note that this project is released with a [Contributor Code of
-Conduct](.github/CODE_OF_CONDUCT.md). By participating in this project
-you agree to abide by its terms.
+Conduct](https://github.com/earowang/sugrrants/blob/master/.github/CODE_OF_CONDUCT.md).
+By participating in this project you agree to abide by its terms.

@@ -1,3 +1,5 @@
+Resubmit for fixing invalid URLs
+
 ## Test environments
 
 * local OS X install, R 3.5.2

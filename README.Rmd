@@ -46,7 +46,7 @@ The fully-fledged faceting calendar `facet_calendar()` unlocks day-to-day storie
 ```{r facet-calendar, echo = TRUE, message = FALSE, fig.height = 9, fig.width = 9}
 library(dplyr)
 library(sugrrants)
-pedestrian %>%
+hourly_peds %>%
   filter(Date < as.Date("2016-05-01")) %>% 
   ggplot(aes(x = Time, y = Hourly_Counts, colour = Sensor_Name)) +
   geom_line() +
@@ -58,7 +58,7 @@ pedestrian %>%
 On the other hand, the `frame_calendar()` provides tools for re-structuring the data into a compact calendar layout, without using the faceting method. It is fast and light-weight, although it does not preserve the values.
 
 ```{r calendar-plot, echo = TRUE, fig.height = 7, fig.width = 7}
-p <- pedestrian %>%
+p <- hourly_peds %>%
   filter(Sensor_ID == 9, Year == 2016) %>%
   mutate(Weekend = if_else(Day %in% c("Saturday", "Sunday"), "Weekend", "Weekday")) %>%
   frame_calendar(x = Time, y = Hourly_Counts, date = Date) %>% 
@@ -73,7 +73,7 @@ prettify(p)
 <details>
 This package is part of the project---[Tidy data structures and visual methods to support exploration of big temporal-context data](https://summerofcode.withgoogle.com/projects/#4790455121215488), which has been participated in Google Summer of Code 2017 (gsoc), for [R project for statistical computing](https://www.r-project.org). 
 
-A new function `frame_calendar()` [[here](https://github.com/earowang/sugrrants/blob/master/R/frame-calendar.R) and [here](https://github.com/earowang/sugrrants/blob/master/R/calendar-fun.R)] in the **sugrrants** package has been developed and documented for calendar-based graphics. I have also written a vignette [[source](https://github.com/earowang/sugrrants/blob/master/vignettes/frame-calendar.Rmd) and [reader view](http://pkg.earo.me/sugrrants/articles/frame-calendar.html)], which introduces and demonstrates the usage of the `frame_calendar()` function. [Many unit tests](https://github.com/earowang/sugrrants/blob/master/tests/testthat/test-calendar.R) have been carried out to ensure the expected performance of this function. The function implements non-standard evaluation and highlights the [tidy evaluation](http://rlang.tidyverse.org/articles/tidy-evaluation.html) in action. The initial release (v0.1.0) of the package has been published on [CRAN](https://CRAN.R-project.org/package=sugrrants) during the gsoc summer time.
+A new function `frame_calendar()` [[here](https://github.com/earowang/sugrrants/blob/master/R/frame-calendar.R) and [here](https://github.com/earowang/sugrrants/blob/master/R/calendar-fun.R)] in the **sugrrants** package has been developed and documented for calendar-based graphics. I have also written a vignette [[source](https://github.com/earowang/sugrrants/blob/master/vignettes/frame-calendar.Rmd) and [reader view](http://pkg.earo.me/sugrrants/articles/frame-calendar.html)], which introduces and demonstrates the usage of the `frame_calendar()` function. [Many unit tests](https://github.com/earowang/sugrrants/blob/master/tests/testthat/test-calendar.R) have been carried out to ensure the expected performance of this function. The function implements non-standard evaluation and highlights the [tidy evaluation](https://rlang.r-lib.org) in action. The initial release (v0.1.0) of the package has been published on [CRAN](https://CRAN.R-project.org/package=sugrrants) during the gsoc summer time.
 
 I have initialised a new R package [**tsibble**](https://github.com/earowang/tsibble) for tidy temporal data, as part of the project. The `tsibble()` function constructs a new `tbl_ts` class for temporal data, and the `as_tsibble()` helps to convert a few `ts` objects into the `tbl_ts` class. Some key verbs (generics) from the **dplyr** package, such as `mutate()`, `summarise()`, `filter()`, have been defined and developed for the `tbl_ts` data class. The **tsibble** package was highly experimental over the period of the gsoc [[commits](https://github.com/earowang/tsibble/commit/aba1cfc2eec88966c43232fe5d249522f88e1e27)], and these functions are very likely to be changed or improved in the future.
 
@@ -85,4 +85,4 @@ A new package [**rwalkr**](https://github.com/earowang/rwalkr) has been created 
 The acronym of *sugrrants* is **SU**pporting **GR**aphs with **R** for **AN**alysing **T**ime **S**eries, pronounced as "sugar ants" that are a species of ant endemic to Australia.
 
 ---
-Please note that this project is released with a [Contributor Code of Conduct](.github/CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
+Please note that this project is released with a [Contributor Code of Conduct](https://github.com/earowang/sugrrants/blob/master/.github/CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
