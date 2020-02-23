@@ -3,8 +3,8 @@
 
 # sugrrants
 
-[![Travis-CI Build
-Status](https://travis-ci.org/earowang/sugrrants.svg?branch=master)](https://travis-ci.org/earowang/sugrrants)
+[![R build
+status](https://github.com/earowang/sugrrants/workflows/R-CMD-check/badge.svg)](https://github.com/earowang/sugrrants/actions?workflow=R-CMD-check)
 [![Coverage
 Status](https://img.shields.io/codecov/c/github/earowang/sugrrants/master.svg)](https://codecov.io/github/earowang/sugrrants?branch=master)
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/sugrrants)](https://cran.r-project.org/package=sugrrants)
