@@ -1,3 +1,7 @@
+# sugrrants 0.2.6
+
+This is a patch release for the changes in **tibble**.
+
 # sugrrants 0.2.5
 
 * Renamed dataset `pedestrian` to `hourly_peds` to avoid conflict with `tsibble::pedestrian`. (#18)
