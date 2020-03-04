@@ -538,7 +538,8 @@ gen_reference.monthly <- function(
       y = minor_breaks$y + min_height / 2
     )
   }
-  dtext$day <- gen_wday_index(week_start = week_start)
+  seq_wday <- gen_wday_index(week_start = week_start)
+  dtext$day <- rep.int(seq_wday, NROW(dtext) / length(seq_wday))
 
   # Day of month text
   mday_text <- dplyr::tibble(
