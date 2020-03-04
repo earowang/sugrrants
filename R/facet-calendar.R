@@ -109,9 +109,9 @@ FacetCalendar <- ggproto("FacetCalendar", FacetWrap,
       x_scales, y_scales, ranges, coord, data, theme, params)
 
     space_x <- theme$panel.spacing.x %||% theme$panel.spacing
-    row_spacer <- unit(as.double(space_x) * 2, attr(space_x, "unit"))
+    row_spacer <- 2 * space_x
     space_y <- theme$panel.spacing.y %||% theme$panel.spacing
-    col_spacer <- unit(as.double(space_y) * 2, attr(space_y, "unit"))
+    col_spacer <- 2 * space_y
 
     # No idea why 28 and 26 are position in gtable (perhaps magic numbers)
     ncol <- max(layout$MCOL)
