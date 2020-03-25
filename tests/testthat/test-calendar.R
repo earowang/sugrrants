@@ -123,8 +123,9 @@ test_that("The grouped data", {
 test_that("The tsibble data", {
   ped_ts <- hourly_peds %>%
     tsibble::as_tsibble(key = Sensor_Name, index = Date_Time)
-  expect_equal(
+  expect_equivalent(
     hourly_peds %>%
+      arrange(Sensor_Name, Date_Time) %>%
       frame_calendar(x = Time, y = Hourly_Counts, date = Date),
     ped_ts %>%
       frame_calendar(x = Time, y = Hourly_Counts, date = Date)
@@ -219,8 +220,4 @@ test_that("The output", {
   expect_is(cal, c("tbl_cal", "tbl_df"))
   expect_equal(nrow(cal), nrow(hourly_peds))
   expect_equal(ncol(cal), ncol(hourly_peds) + 2)
-
-  hourly_peds2 <- sample_frac(hourly_peds)
-  cal2 <- frame_calendar(hourly_peds2, x = Time, y = Hourly_Counts, date = Date)
-  expect_equal(cal, cal2)
 })
