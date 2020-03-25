@@ -1,3 +1,7 @@
+# sugrrants 0.2.7
+
+This is a patch release for the changes in **dplyr**.
+
 # sugrrants 0.2.6
 
 This is a patch release for the changes in **tibble**.
