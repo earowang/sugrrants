@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sugrrants</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.7</span>
       </span>
     </div>
 
@@ -106,7 +106,7 @@
 #&gt; 3 2017-01-01 00:00:00 2017-01-01  2017 Janu…     1 Sund…     0         9
 #&gt; 4 2017-01-01 00:00:00 2017-01-01  2017 Janu…     1 Sund…     0         6
 #&gt; 5 2017-01-01 00:00:00 2017-01-01  2017 Janu…     1 Sund…     0        25
-#&gt; # … with 1.948e+04 more rows, and 2 more variables: Sensor_Name &lt;chr&gt;,
+#&gt; # … with 19,483 more rows, and 2 more variables: Sensor_Name &lt;chr&gt;,
 #&gt; #   Hourly_Counts &lt;dbl&gt;</code></pre>
 <p>We’ll start with one sensor only–Melbourne Convention Exhibition Centre–to explain the basic use of the <code><a href="../reference/frame-calendar.html">frame_calendar()</a></code>. As it attempts to fit into the <em>tidyverse</em> framework, the interface should be straightforward to those who use <em>tidyverse</em> on a daily basis. The first argument is the <code>data</code> so that the data frame can directly be piped into the function using <code><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></code>. A variable indicating time of day could be mapped to <code>x</code>, a value variable of interest mapped to <code>y</code>. <code>date</code> requires a <code>Date</code> variable to organise the data into a correct chronological order . See <code>?frame_calendar()</code> for more options. In this case, <em>Time</em> as hour of day is used for <code>x</code> and <em>Hourly_Counts</em> as value for <code>y</code>. It returns a data frame including newly added columns <em>.Time</em> and <em>.Hourly_Counts</em> with a “.” prefixed to the variable names. These new columns contain the rearranged coordinates for the calendar plots later.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>centre &lt;-<span class="st"> </span>pedestrian17 <span class="op">%&gt;%</span><span class="st"> </span></span>
