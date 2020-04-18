@@ -4,7 +4,8 @@
 \name{hourly_peds}
 \alias{hourly_peds}
 \title{Pedestrian counts in Melbourne city}
-\format{A tibble with 78755 rows and 9 variables:
+\format{
+A tibble with 78755 rows and 9 variables:
 \describe{
 \item{Date_Time}{Date time when the pedestrian counts are recorded}
 \item{Year}{Year associated with Date_Time}
@@ -15,7 +16,8 @@
 \item{Sensor_ID}{Sensor identifiers}
 \item{Sensor_Name}{Sensor names}
 \item{Hourly_Counts}{Hourly pedestrian counts}
-}}
+}
+}
 \usage{
 hourly_peds
 }
