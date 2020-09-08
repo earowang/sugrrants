@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sugrrants</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.2.6.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.2.7.9000</span>
       </span>
     </div>
 
@@ -182,12 +182,13 @@ vertical.</p></td>
       <td><p>A function that takes one data frame of labels and
 returns a list or data frame of character vectors. Each input
 column corresponds to one factor. Thus there will be more than
-one with formulae of the type <code>~cyl + am</code>. Each output
+one with <code><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars(cyl, am)</a></code>. Each output
 column gets displayed as one separate line in the strip
 label. This function should inherit from the "labeller" S3 class
-for compatibility with <code><a href='https://ggplot2.tidyverse.org/reference/labeller.html'>labeller()</a></code>. See
-<code><a href='https://ggplot2.tidyverse.org/reference/labellers.html'>label_value()</a></code> for more details and pointers to other
-options.</p></td>
+for compatibility with <code><a href='https://ggplot2.tidyverse.org/reference/labeller.html'>labeller()</a></code>. You can use different labeling
+functions for different kind of labels, for example use <code><a href='https://ggplot2.tidyverse.org/reference/labellers.html'>label_parsed()</a></code> for
+formatting facet labels. <code><a href='https://ggplot2.tidyverse.org/reference/labellers.html'>label_value()</a></code> is used by default,
+check it for more details and pointers to other options.</p></td>
     </tr>
     <tr>
       <th>strip.position</th>
