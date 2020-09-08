@@ -1,5 +1,3 @@
-globalVariables("facet_wrap")
-
 #' Lay out panels in a calendar format
 #'
 #' @param date A variable that contains dates or an expression that generates 
