@@ -4,8 +4,12 @@ citEntry(entry = "article",
   author = "Earo Wang and Dianne Cook and Rob J Hyndman",
   title = "Calendar-based graphics for visualizing people's daily schedules",
   journal = "Journal of Computational and Graphical Statistics",
+  volume = "29",
+  number = "3",
+  pages = "490-502",
   year = "2020",
+  publisher = "Taylor & Francis",
   doi = "10.1080/10618600.2020.1715226",
   URL = "https://doi.org/10.1080/10618600.2020.1715226",
-  textVersion = "Wang, E, D Cook, and RJ Hyndman (2020). Calendar-based graphics for visualizing people's daily schedules. Journal of Computational and Graphical Statistics. doi:10.1080/10618600.2020.1715226."
+  textVersion = "Wang, E, D Cook, and RJ Hyndman (2020). Calendar-based graphics for visualizing people's daily schedules, Journal of Computational and Graphical Statistics, 29:3, 490-502, doi:10.1080/10618600.2020.1715226."
 )
