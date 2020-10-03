@@ -12,7 +12,7 @@ data.
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://pkg.earo.me/sugrrants}
+  \item \url{https://pkg.earo.me/sugrrants/}
   \item Report bugs at \url{https://github.com/earowang/sugrrants/issues}
 }
 
