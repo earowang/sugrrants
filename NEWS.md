@@ -1,3 +1,7 @@
+# sugrrants 0.2.8
+
+Fixed {ggplot2} function namespace issue for using `facet_calendar()` in packages.
+
 # sugrrants 0.2.7
 
 This is a patch release for the changes in **dplyr**.
