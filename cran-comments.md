@@ -1,3 +1,5 @@
+This is a resubmission, which fixed (possibly) invalid URLs.
+
 ## Test environments
 
 * local OS X install, R 4.0.2
