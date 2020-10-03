@@ -1,12 +1,13 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# sugrrants
+sugrrants
+=========
 
 [![R build
 status](https://github.com/earowang/sugrrants/workflows/R-CMD-check/badge.svg)](https://github.com/earowang/sugrrants/actions?workflow=R-CMD-check)
 [![Coverage
-Status](https://img.shields.io/codecov/c/github/earowang/sugrrants/master.svg)](https://codecov.io/github/earowang/sugrrants?branch=master)
+Status](https://codecov.io/gh/earowang/sugrrants/branch/master/graph/badge.svg)](https://codecov.io/github/earowang/sugrrants?branch=master)
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/sugrrants)](https://cran.r-project.org/package=sugrrants)
 [![Downloads](http://cranlogs.r-pkg.org/badges/sugrrants?color=brightgreen)](https://cran.r-project.org/package=sugrrants)
 
@@ -14,39 +15,35 @@ The goal of *sugrrants* is to provide supporting graphs with R for
 analysing time series data. It aims to fit into the *tidyverse* and
 grammar of graphics framework for handling temporal data.
 
-## Installation
+Installation
+------------
 
 You could install the stable version on CRAN:
 
-``` r
-install.packages("sugrrants")
-```
+    install.packages("sugrrants")
 
 You could also install the development version from Github using:
 
-``` r
-# install.packages("remotes")
-remotes::install_github("earowang/sugrrants")
-```
+    # install.packages("remotes")
+    remotes::install_github("earowang/sugrrants")
 
-## Usage
+Usage
+-----
 
 ### Calendar-based graphics
 
 The fully-fledged faceting calendar `facet_calendar()` unlocks
 day-to-day stories.
 
-``` r
-library(dplyr)
-library(sugrrants)
-hourly_peds %>%
-  filter(Date < as.Date("2016-05-01")) %>% 
-  ggplot(aes(x = Time, y = Hourly_Counts, colour = Sensor_Name)) +
-  geom_line() +
-  facet_calendar(~ Date) + # a variable contains dates
-  theme_bw() +
-  theme(legend.position = "bottom")
-```
+    library(dplyr)
+    library(sugrrants)
+    hourly_peds %>%
+      filter(Date < as.Date("2016-05-01")) %>% 
+      ggplot(aes(x = Time, y = Hourly_Counts, colour = Sensor_Name)) +
+      geom_line() +
+      facet_calendar(~ Date) + # a variable contains dates
+      theme_bw() +
+      theme(legend.position = "bottom")
 
 ![](man/figures/facet-calendar-1.png)<!-- -->
 
@@ -55,20 +52,19 @@ re-structuring the data into a compact calendar layout, without using
 the faceting method. It is fast and light-weight, although it does not
 preserve the values.
 
-``` r
-p <- hourly_peds %>%
-  filter(Sensor_ID == 9, Year == 2016) %>%
-  mutate(Weekend = if_else(Day %in% c("Saturday", "Sunday"), "Weekend", "Weekday")) %>%
-  frame_calendar(x = Time, y = Hourly_Counts, date = Date) %>% 
-  ggplot(aes(x = .Time, y = .Hourly_Counts, group = Date, colour = Weekend)) +
-  geom_line() +
-  theme(legend.position = "bottom")
-prettify(p)
-```
+    p <- hourly_peds %>%
+      filter(Sensor_ID == 9, Year == 2016) %>%
+      mutate(Weekend = if_else(Day %in% c("Saturday", "Sunday"), "Weekend", "Weekday")) %>%
+      frame_calendar(x = Time, y = Hourly_Counts, date = Date) %>% 
+      ggplot(aes(x = .Time, y = .Hourly_Counts, group = Date, colour = Weekend)) +
+      geom_line() +
+      theme(legend.position = "bottom")
+    prettify(p)
 
 ![](man/figures/calendar-plot-1.png)<!-- -->
 
-## Google Summer of Code 2017
+Google Summer of Code 2017
+--------------------------
 
 <details>
 
@@ -86,7 +82,7 @@ in the **sugrrants** package has been developed and documented for
 calendar-based graphics. I have also written a vignette
 \[[source](https://github.com/earowang/sugrrants/blob/master/vignettes/frame-calendar.Rmd)
 and [reader
-view](http://pkg.earo.me/sugrrants/articles/frame-calendar.html)\],
+view](https://pkg.earo.me/sugrrants/articles/frame-calendar.html)\],
 which introduces and demonstrates the usage of the `frame_calendar()`
 function. [Many unit
 tests](https://github.com/earowang/sugrrants/blob/master/tests/testthat/test-calendar.R)
@@ -122,16 +118,16 @@ have been written and documented as the v0.1.0 and v0.2.0 releases on
 CRAN. The majority of the code for the function
 [`run_melb()`](https://github.com/earowang/rwalkr/blob/master/R/soda.R)
 has been done, but the interface needs improving after the gsoc.
-
 </details>
 
-## Miscellaneous
+Miscellaneous
+-------------
 
 The acronym of *sugrrants* is **SU**pporting **GR**aphs with **R** for
 **AN**alysing **T**ime **S**eries, pronounced as “sugar ants” that are a
 species of ant endemic to Australia.
 
------
+------------------------------------------------------------------------
 
 Please note that this project is released with a [Contributor Code of
 Conduct](https://github.com/earowang/sugrrants/blob/master/.github/CODE_OF_CONDUCT.md).
